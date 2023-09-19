@@ -12,12 +12,12 @@ const Menu = () => {
                 </li>
                 <li>
                     <button
-                        className={style.screenshare}
+                        className={style.screen_share}
                         aria-label="화면 공유하기"
                     ></button>
                 </li>
-                <li className={style.active_number}>
-                    <img src="/ghost.svg" alt="접속자 수" />
+                <li className={style.active_user_number}>
+                    <img src="/active_user.svg" alt="접속자 수" />
                     <span className={style.active_circle}>●</span>
                     <span>2</span>
                 </li>

@@ -7,6 +7,18 @@
     box-shadow: $normal-shadow;
 }
 
+@mixin menu_bar_after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    bottom: 8px;
+    right: 8px;
+    background-repeat: no-repeat;
+}
+
+
 .menu_container {
     display: flex;
     position: fixed;
@@ -29,15 +41,8 @@
     height: 40px;
     border-radius: 50%;
     &:after {
-        content: "";
-        display: inline-block;
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        bottom: 8px;
-        right: 8px;
-        background-image: url(/alarm-plus.svg);
-        background-repeat: no-repeat;
+        @include menu_bar_after;
+        background-image: url(/timer-plus.svg);
     }
 
     &:hover {
@@ -45,13 +50,22 @@
         opacity: 0.4;
     }
 }
-.screenshare {
-    @extend .timer;
+.screen_share {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     &:after {
-        background-image: url(/screen-off.svg);
+        @include menu_bar_after;
+        background-image: url(/screen_share-off.svg);
+    }
+
+    &:hover {
+        background-color: white;
+        opacity: 0.4;
     }
 }
-.active_number {
+.active_user_number {
     display: flex;
     align-items: center;
     font-size: 12px;
