@@ -1,10 +1,12 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import Menu from "@/components/menu/menu";
+import style from "./style.module.scss";
 
-export default function Home() {
-  return (
-    <main>
-      <h1>home</h1>
-    </main>
-  )
-}
+const Home = () => {
+    return (
+        <main className={style.main}>
+            <h1>home</h1>
+            <Menu />
+        </main>
+    );
+};
+export default Home;
