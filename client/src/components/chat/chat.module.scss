@@ -1,0 +1,44 @@
+@import "../../styles/variables";
+
+.chat_container {
+    width: 286px;
+    padding: 18px;
+    border: 1px solid $border-color;
+    border-radius: 20px;
+    background-color: $base-color;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.chat_header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 15px;
+
+    span.chat_text {
+        font-weight: 700;
+        font-size: 18px;
+    }
+
+    button.close_button {
+        width: 24px;
+        height: 24px;
+        background-image: url(/close.svg);
+    }
+}
+
+.chat_main {
+    padding-top: 15px;
+    padding-right: 12px;
+    border-top: 1px solid $border-color;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 20px;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.chat_bottom {
+    padding-top: 12px;
+}
