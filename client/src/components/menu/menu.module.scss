@@ -21,9 +21,6 @@
 
 .menu_container {
     display: flex;
-    position: fixed;
-    bottom: 25px;
-    right: 35px;
 }
 
 .menu_bar {
@@ -85,12 +82,11 @@
     &:after {
         content: "";
         display: inline-block;
-        position: absolute;
-        width: 26px;
-        height: 26px;
-        bottom: 11px;
-        right: 12px;
+        width: 50px;
+        height: 50px;
         background-image: url(/chat.svg);
         background-repeat: no-repeat;
+        background-size: 26px;
+        background-position: 12px 11px;
     }
 }

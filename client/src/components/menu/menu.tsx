@@ -1,8 +1,15 @@
 import style from "./menu.module.scss";
 
-const Menu = () => {
+interface IMenu {
+    className : string
+}
+
+const Menu = (props : IMenu) => {
+
+    const { className } = props;
+
     return (
-        <div className={style.menu_container}>
+        <div className={`${className} ${style.menu_container}`}>
             <ul className={style.menu_bar}>
                 <li>
                     <button
