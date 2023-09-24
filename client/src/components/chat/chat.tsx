@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Message from "../message/message";
-import MessageInput from "../message_input/message_input";
+import Message from "./message/message";
 import style from "./chat.module.scss";
 import { socket } from "../../socket";
+import MessageInput from "./messageInput/messageInput";
 
 interface IMessage {
     nickname : string,
