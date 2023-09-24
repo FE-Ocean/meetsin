@@ -1,5 +1,20 @@
 .main {
-    padding: 77px 25px 25px;
+    padding: 25px;
     height: 100vh;
     display: flex;
+    flex-flow: column nowrap;
+    row-gap: 23px;
+}
+
+.container {
+    display: flex;
+    flex-grow: 1;
+}
+
+.chat {
+    margin-top: 52px;
+}
+
+.menu {
+    margin-left: auto;
 }

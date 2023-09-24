@@ -5,9 +5,12 @@ import Chat from "@/components/chat/chat";
 const Home = () => {
     return (
         <main className={style.main}>
-            <h1>home</h1>
-            <Menu />
-            <Chat />
+            <div className={style.container}>
+                {/* 임시로 화면공유 박스 만들어두겠습니다. 추후 삭제해주세요. */}
+                <div style={{ backgroundColor : "gray", flexGrow : 1, marginRight : "26px" }} />
+                <Chat className={style.chat} />
+            </div>
+            <Menu className={style.menu}/>
         </main>
     );
 };

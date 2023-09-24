@@ -6,13 +6,19 @@ import style from "./chat.module.scss";
 import { socket } from "../../socket";
 import MessageInput from "./messageInput/messageInput";
 
+interface IChatProps {
+    className : string
+};
+
 interface IMessage {
     nickname : string,
     message : string,
     time : string
 };
 
-const Chat = () => {
+const Chat = (props : IChatProps) => {
+
+    const { className } = props;
 
     const [messages, setMessages] = useState<IMessage[]>([]);
 
@@ -33,7 +39,7 @@ const Chat = () => {
     },[]);
 
     return (
-        <div className={style.chat_container}>
+        <div className={`${className} ${style.chat_container}`}>
             <div className={style.chat_header}>
                 <span className={style.chat_text}>Chat</span>
                 <button className={style.close_button} />
