@@ -1,24 +1,33 @@
 import style from "./message.module.scss";
 
-const Message = () => {
+interface IMessageProps {
+    nickname : string,
+    message : string,
+    time : string
+}
+
+const Message = (props : IMessageProps) => {
+
+    const { nickname, message, time } = props;
+
     return (
         <div className={style.message_container}>
             <div className={style.avatar} />
             <div className={style.message_wrapper}>
                 <div className={style.message_header}>
                     <span className={style.nickname}>
-                        유저닉네임
+                        {nickname}
                     </span>
                     <span className={style.time}>
-                        23:33
+                        {time}
                     </span>
                 </div>
                 <div className={style.message_main}>
-                    채팅내용
+                    {message}
                 </div>
             </div>
         </div>
-    )
+    );
 };
 
 export default Message;
