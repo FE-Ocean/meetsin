@@ -1,12 +1,10 @@
 @import "../../styles/variables";
-
 @mixin menu_common_ui {
     height: 50px;
     background-color: $base-color;
     border: 1px solid $border-color;
     box-shadow: $normal-shadow;
 }
-
 @mixin menu_bar_after {
     content: "";
     display: inline-block;
@@ -18,9 +16,9 @@
     background-repeat: no-repeat;
 }
 
-
 .menu_container {
     display: flex;
+    margin-right: 10px;
 }
 
 .menu_bar {
@@ -30,6 +28,7 @@
     align-items: center;
     width: 193px;
     padding: 5px 22px 5px 14px;
+    margin: 0 23px 0 40px;
     border-radius: 30px;
 }
 .timer {
@@ -77,7 +76,6 @@
 .chat {
     @include menu_common_ui;
     width: 50px;
-    margin-left: 23px;
     border-radius: 50%;
     &:after {
         content: "";
