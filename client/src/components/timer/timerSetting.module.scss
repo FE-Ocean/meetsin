@@ -1,0 +1,71 @@
+@import "../../styles/variables";
+@mixin button_common_ui {
+    padding: 11px 22px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+.modal_container {
+    background-color: darkgray;
+    width: 350px;
+    height: 240px;
+    padding: 30px 0 30px;
+    border-radius: 15px;
+    border: 1px solid #f6f6f6;
+    text-align: center;
+    background: var(--border-color, #fff);
+    box-shadow: 0px 0px 24px -4px rgba(16, 24, 40, 0.08);
+}
+
+.close_icon {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 30px;
+    background-repeat: no-repeat;
+    background-image: url(/close.svg);
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.time_section {
+    position: relative;
+    padding: 11px 0 16px;
+    font-size: 59px;
+}
+.placeholder {
+    color: lightgray;
+}
+.inputs {
+    position: absolute;
+    top: 12px;
+    left: 101px;
+    line-height: 0;
+    text-align: left;
+    .minute {
+        width: 66px;
+    }
+    .second {
+        width: 66px;
+    }
+}
+
+.buttons {
+    .close {
+        @include button_common_ui;
+        margin-right: 20px;
+        color: $point-color;
+        border: 1px solid var(--point-color, #a1bbee);
+    }
+    .start {
+        @include button_common_ui;
+        background-color: $point-color;
+        color: #ffffff;
+        border: 1px solid var(--point-color, #a1bbee);
+    }
+}
