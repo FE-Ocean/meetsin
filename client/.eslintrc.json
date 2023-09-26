@@ -3,6 +3,11 @@
     "rules": {
         "indent": ["error", 4],
         "quotes": ["error", "double"],
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "no-var": "error",
+        "no-multiple-empty-lines": "error",
+        "no-console": ["error", { "allow": ["warn", "error", "info"] }],
+        "eqeqeq": "error",
+        "no-unused-vars": "warn"
     }
 }
