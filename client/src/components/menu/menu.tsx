@@ -1,8 +1,9 @@
 "use client";
 
-import { useSetAtom } from "jotai";
-import { modalAtom } from "@/jotai/atom";
+import { useAtom, useSetAtom } from "jotai";
+import { modalAtom, isTimerVisibleAtom, timerAtom } from "@/jotai/atom";
 import TimerSetting from "../timer/timerSetting";
+import Timer from "../timer/timer";
 import style from "./menu.module.scss";
 
 interface IMenu {
@@ -12,9 +13,10 @@ interface IMenu {
 const Menu = (props: IMenu) => {
     const { className } = props;
     const setModal = useSetAtom(modalAtom);
+    const [isTimerVisible] = useAtom(isTimerVisibleAtom);
+    const [timer] = useAtom(timerAtom);
 
     const handleTimer = () => {
-        console.log("e돌림");
         setModal({
             open: true,
             content: <TimerSetting />,
@@ -23,6 +25,7 @@ const Menu = (props: IMenu) => {
 
     return (
         <div className={`${className} ${style.menu_container}`}>
+            {isTimerVisible && <Timer minute={timer.minute} second={timer.second} />}
             <ul className={style.menu_bar}>
                 <li>
                     <button
