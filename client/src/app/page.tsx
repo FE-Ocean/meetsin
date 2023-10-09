@@ -1,20 +1,65 @@
-import Menu from "@/components/menu/menu";
+"use client";
 import style from "./style.module.scss";
+import { useAtom } from "jotai";
+import Menu from "@/components/menu/menu";
+import { screenShareAtom } from "@/store/store";
+import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/chat/chat";
-import ModalTestComponent from "@/components/test/test";
+import ScreenWindow from "@/components/screen/window/screenWindow";
 
 const Home = () => {
+    const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [currentStream, setCurrentStream] = useState(null);
+    const stopScreenShare = () => {
+        currentStream.getTracks().forEach((track) => track.stop());
+        setCurrentStream(null);
+    };
+
+    // 공유 중지 시 화면 공유 창 꺼지게
+    useEffect(() => {
+        setScreenShare(!!currentStream);
+        currentStream?.addEventListener("inactive", () => {
+            setScreenShare(false);
+            setCurrentStream(null);
+        });
+    }, currentStream);
+
+    const startScreenShare = async () => {
+        try {
+            if (isScreenShare) {
+                return;
+            }
+            // 스크린 크기를 고정값으로 받고 있는데, 반응형으로 받을 수 있는 방법 고려
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: { width: 640, height: 360 },
+            });
+            setCurrentStream(stream);
+            if (videoRef.current) {
+                videoRef.current.srcObject = currentStream;
+            }
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    };
+
     return (
-        <main className={style.main}>
-            <div className={style.container}>
-                {/* 임시로 화면공유 박스 만들어두겠습니다. 추후 삭제해주세요. */}
-                <div style={{ backgroundColor : "gray", flexGrow : 1, marginRight : "26px" }} />
-                {/* 모달 생성 버튼 예시입니다. 추후 삭제해주세요. */}
-                <ModalTestComponent />
-                <Chat className={style.chat} />
-            </div>
-            <Menu className={style.menu}/>
-        </main>
+        <>
+            <main className={style.main}>
+                <div className={style.container}>
+                    {/* 화면 공유하는 화면을 보이게 할 지, 통상의 맵을 보이게 할 지에 대한 atom 필요할 듯, 우선은 맵이 안 정해져서 화면 공유 화면이 보이도록 함 */}
+                    <ScreenWindow videoRef={videoRef} currentStream={currentStream} />
+                    <Chat className={style.chat} />
+                </div>
+                <Menu
+                    className={style.menu}
+                    onScreenShare={() => {
+                        isScreenShare ? stopScreenShare() : startScreenShare();
+                    }}
+                />
+            </main>
+        </>
     );
 };
 export default Home;
