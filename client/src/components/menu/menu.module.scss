@@ -64,6 +64,7 @@
 .active_user_number {
     display: flex;
     align-items: center;
+    margin-left: 8px;
     font-size: 12px;
     font-weight: 700;
 
@@ -85,6 +86,6 @@
         background-image: url(/chat.svg);
         background-repeat: no-repeat;
         background-size: 26px;
-        background-position: 12px 11px;
+        background-position: 11px 11px;
     }
 }
