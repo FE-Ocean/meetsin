@@ -1,13 +1,15 @@
 import { atom } from "jotai";
 
 interface IModalAtom {
-    open: boolean;
-    content?: React.ReactNode | null;
+    [fileName: string]: {
+        open: boolean;
+    };
 }
 
 export const modalAtom = atom<IModalAtom>({
-    open: false,
-    content: null,
+    testModal: {
+        open: false,
+    },
 });
 
 export const timerAtom = atom({
