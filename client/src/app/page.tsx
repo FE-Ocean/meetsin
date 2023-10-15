@@ -2,7 +2,7 @@
 import style from "./style.module.scss";
 import { useAtom } from "jotai";
 import Menu from "@/components/menu/menu";
-import { screenShareAtom, showModalAtom } from "@/store/store";
+import { screenShareAtom } from "@/store/store";
 import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
@@ -44,8 +44,6 @@ const Home = () => {
         }
     };
 
-    const [isShowModal, setShowModal] = useAtom(showModalAtom);
-
     return (
         <>
             <main className={style.main}>
@@ -54,19 +52,6 @@ const Home = () => {
                     <ScreenWindow videoRef={videoRef} currentStream={currentStream} />
                     <Chat className={style.chat} />
                 </div>
-                <button
-                    onClick={() => {
-                        setShowModal(!isShowModal);
-                    }}
-                    style={{
-                        position: "fixed",
-                        top: 0,
-                        right: 0,
-                        border: "1px solid black",
-                    }}
-                >
-                    modal test button 2
-                </button>
                 <Menu
                     className={style.menu}
                     onScreenShare={() => {

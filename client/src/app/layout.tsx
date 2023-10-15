@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import JotaiProvider from "@/jotai/jotaiProvider";
-import TestModal from "@/components/modal/testModal";
+import Modal from "@/components/modal/modal";
 import "../styles/reset.css";
 import "../styles/global.scss";
 
@@ -18,21 +18,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <body className={noto_Sans_KR.className}>
                 <JotaiProvider>
                     {children}
-                    <TestModal
-                        children={
-                            <div
-                                style={{
-                                    padding: "30px",
-                                    backgroundColor: "black",
-                                    color: "white",
-                                    width: "fit-content",
-                                    margin: "200px auto",
-                                }}
-                            >
-                                modal test
-                            </div>
-                        }
-                    />
+                    <Modal />
                 </JotaiProvider>
             </body>
         </html>
