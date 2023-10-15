@@ -56,6 +56,12 @@
         background-image: url(/screen_share-off.svg);
     }
 
+    &.active {
+        &::after {
+            background-image: url(/device-desktop.svg);
+        }
+    }
+
     &:hover {
         background-color: white;
         opacity: 0.4;
@@ -76,6 +82,7 @@
 .chat {
     @include menu_common_ui;
     width: 50px;
+    margin-left: 23px;
     border-radius: 50%;
     &:after {
         content: "";

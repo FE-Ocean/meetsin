@@ -1,17 +1,22 @@
 "use client";
 
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { modalAtom, isTimerVisibleAtom, timerAtom } from "@/jotai/atom";
 import TimerSetting from "../timer/timerSetting";
 import Timer from "../timer/timer";
 import style from "./menu.module.scss";
+import { screenShareAtom } from "@/store/store";
+import { useRef } from "react";
+import { createPortal } from "react-dom";
 
 interface IMenu {
     className: string;
+    onScreenShare: () => any;
 }
 
 const Menu = (props: IMenu) => {
-    const { className } = props;
+    const { className, onScreenShare } = props;
+    const isScreenShare = useAtomValue(screenShareAtom);
     const setModal = useSetAtom(modalAtom);
     const [isTimerVisible] = useAtom(isTimerVisibleAtom);
     const [timer] = useAtom(timerAtom);
@@ -35,7 +40,11 @@ const Menu = (props: IMenu) => {
                     ></button>
                 </li>
                 <li>
-                    <button className={style.screen_share} aria-label="화면 공유하기"></button>
+                    <button
+                        className={`${style.screen_share} ${isScreenShare && style.active}`}
+                        onClick={onScreenShare}
+                        aria-label="화면 공유하기"
+                    ></button>
                 </li>
                 <li className={style.active_user_number}>
                     <img src="/active_user.svg" alt="접속자 수" />
