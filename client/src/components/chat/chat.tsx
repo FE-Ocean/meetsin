@@ -1,39 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Message from "./message/message";
 import style from "./chat.module.scss";
 import MessageInput from "./messageInput/messageInput";
-import { chatSocket } from "@/socket";
+import useChat from "@/hooks/useChat";
 
 interface IChatProps {
     className: string;
 }
 
-interface IMessage {
-    nickname: string;
-    message: string;
-    time: string;
-}
-
 const Chat = (props: IChatProps) => {
     const { className } = props;
 
-    const [messages, setMessages] = useState<IMessage[]>([]);
-
-    useEffect(() => {
-        const handleNewMessage = (message: IMessage) => {
-            setMessages((prev) => [...prev, message]);
-        };
-
-        chatSocket.connect();
-        chatSocket.on("new_message", handleNewMessage);
-
-        return () => {
-            chatSocket.disconnect();
-            chatSocket.off("new_message", handleNewMessage);
-        };
-    }, []);
+    const { messages } = useChat();
 
     return (
         <div className={`${className} ${style.chat_container}`}>

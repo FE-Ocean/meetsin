@@ -2,46 +2,17 @@
 
 import { useRef, useState } from "react";
 import style from "./messageInput.module.scss";
-import { socket } from "../../../socket";
+import useMessage from "@/hooks/useMessage";
 
 const MessageInput = () => {
-
-    const [isFocused, setIsFocused] = useState(false);
-    const [message, setMessage] = useState("");
-
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const buttonActive = !!message;
+    const { message, onChange, send } = useMessage({
+        inputRef: textareaRef,
+        payload: { nickname: "닉네임" },
+    });
 
-    const initializeHeight = () => {
-        if (textareaRef.current) {
-            textareaRef.current.style.height = "21px";
-        }
-    };
-
-    const adjustHeight = () => {
-        if (textareaRef.current) {
-            textareaRef.current.style.height = "auto";
-            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-        }
-    };
-
-    const getCurrentTime = () => {
-        const now = new Date();
-        let hours: string | number = now.getHours();
-        let minutes: string | number = now.getMinutes();
-
-        hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-
-        return `${hours}:${minutes}`;
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const { target: { value } } = e;
-        setMessage(value);
-        adjustHeight();
-    };
+    const [isFocused, setIsFocused] = useState(false);
 
     const handleFocus = () => {
         setIsFocused(true);
@@ -51,29 +22,12 @@ const MessageInput = () => {
         setIsFocused(false);
     };
 
-    const handleSend = () => {
-
-        if (!message) return;
-
-        const messageInfo = {
-            message,
-            nickname: "닉네임",
-            time: getCurrentTime()
-        };
-
-        socket.emit("new_message", messageInfo);
-        setMessage("");
-        initializeHeight();
-    };
-
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-
         if (!e.shiftKey && e.key === "Enter") {
             e.preventDefault();
-            handleSend();
+            send();
             return;
-        };
-
+        }
     };
 
     return (
@@ -84,15 +38,15 @@ const MessageInput = () => {
                 rows={1}
                 ref={textareaRef}
                 value={message}
-                onChange={handleChange}
+                onChange={onChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
             />
             <button
                 type="button"
-                className={`${style.send_button} ${buttonActive && style.active}`}
-                onClick={handleSend}
+                className={`${style.send_button} ${!!message && style.active}`}
+                onClick={send}
             />
         </div>
     );
