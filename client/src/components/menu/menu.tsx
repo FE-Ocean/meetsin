@@ -2,6 +2,8 @@
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { modalAtom, isTimerVisibleAtom, timerAtom } from "@/jotai/atom";
+import Image from "next/image";
+import active_user_icon from "/public/active_user.svg";
 import TimerSetting from "../timer/timerSetting";
 import Timer from "../timer/timer";
 import style from "./menu.module.scss";
@@ -47,7 +49,7 @@ const Menu = (props: IMenu) => {
                     ></button>
                 </li>
                 <li className={style.active_user_number}>
-                    <img src="/active_user.svg" alt="접속자 수" />
+                    <Image src={active_user_icon} alt="접속자 수" />
                     <span className={style.active_circle}>●</span>
                     <span>2</span>
                 </li>
