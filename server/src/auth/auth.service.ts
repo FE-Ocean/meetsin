@@ -1,21 +1,19 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
 import { LoginRequestDto } from "src/dto/login.request.dto";
-import { User } from "src/schema/user.schema";
+import { UsersRepository } from "src/users/users.repository";
 
 @Injectable()
 export class AuthService {
     constructor(
-        @InjectModel(User.name) private readonly userModel: Model<User>,
+        private readonly usersRepository: UsersRepository,
         private jwtService: JwtService,
     ) {}
 
     async login(data: LoginRequestDto) {
         const { user_id, password } = data;
 
-        const user = await this.userModel.findOne({ user_id });
+        const user = await this.usersRepository.findUserById(user_id);
 
         if (user && user.password === password) {
             const payload = {
