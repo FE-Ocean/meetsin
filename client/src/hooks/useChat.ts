@@ -11,8 +11,16 @@ const useChat = () => {
     const [messages, setMessages] = useState<IMessage[]>([]);
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
         const handleNewMessage = (message: IMessage) => {
             setMessages((prev) => [...prev, message]);
+        };
+
+        chatSocket.io.opts.query = {
+            ...chatSocket.io.opts.query,
+            token,
         };
 
         chatSocket.connect();

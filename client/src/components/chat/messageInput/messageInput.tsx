@@ -1,15 +1,22 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./messageInput.module.scss";
 import useMessage from "@/hooks/useMessage";
 
 const MessageInput = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    const [user_name, setUserName] = useState<string | null>(null);
+
+    useEffect(() => {
+        const name = localStorage.getItem("user_name");
+        setUserName(name);
+    }, []);
+
     const { message, onChange, send } = useMessage({
         inputRef: textareaRef,
-        payload: { nickname: "닉네임" },
+        payload: { nickname: user_name },
     });
 
     const [isFocused, setIsFocused] = useState(false);
