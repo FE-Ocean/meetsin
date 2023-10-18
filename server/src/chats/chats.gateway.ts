@@ -1,4 +1,5 @@
-import { Logger } from "@nestjs/common";
+import { Logger, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import {
     SubscribeMessage,
     WebSocketGateway,
@@ -6,8 +7,13 @@ import {
     ConnectedSocket,
     OnGatewayInit,
     OnGatewayDisconnect,
+    MessageBody,
 } from "@nestjs/websockets";
 import { Socket } from "socket.io";
+
+interface UserSocket extends Socket {
+    user?: any;
+}
 
 @WebSocketGateway({
     cors: {
@@ -21,20 +27,32 @@ import { Socket } from "socket.io";
 export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
     private logger = new Logger("chat");
 
+    constructor(private readonly jwtService: JwtService) {}
+
     afterInit(server: any) {
         this.logger.log("init");
     }
 
-    handleConnection(@ConnectedSocket() socket: Socket) {
+    handleConnection(@ConnectedSocket() socket: UserSocket) {
         this.logger.log(`connect ${socket.id} ${socket.nsp.name}`);
+        const token = socket.handshake.query.token as string;
+
+        try {
+            const user = this.jwtService.verify(token);
+            socket.user = user;
+        } catch (error) {
+            socket.disconnect();
+            throw new UnauthorizedException("UnAuthorized!");
+        }
     }
 
     handleDisconnect(client: any) {
         this.logger.log("disconnect");
     }
 
-    @SubscribeMessage("message")
-    handleMessage(client: any, payload: any): string {
-        return "Hello world!";
+    @SubscribeMessage("new_message")
+    handleMessage(@MessageBody() messageInfo: any, @ConnectedSocket() socket: Socket): void {
+        socket.emit("new_message", { time: new Date(), ...messageInfo });
+        socket.broadcast.emit("new_message", { time: new Date(), ...messageInfo });
     }
 }

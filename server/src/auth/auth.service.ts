@@ -23,7 +23,7 @@ export class AuthService {
                 character: user.character,
             };
             const token = this.jwtService.sign(payload);
-            return { token };
+            return { token, user_name: user.user_name };
         } else {
             throw new UnauthorizedException("아이디나 비밀번호를 확인해주세요.");
         }
