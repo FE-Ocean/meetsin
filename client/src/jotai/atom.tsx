@@ -11,8 +11,8 @@ export const modalAtom = atom<IModalAtom>({
 });
 
 export const timerAtom = atom({
-    minute: "0",
-    second: "0",
+    minute: 0,
+    second: 0,
 });
 
 export const isTimerVisibleAtom = atom(false);

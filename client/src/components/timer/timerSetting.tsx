@@ -1,36 +1,74 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSetAtom } from "jotai";
 import { modalAtom, timerAtom, isTimerVisibleAtom } from "@/jotai/atom";
 import style from "./timerSetting.module.scss";
 
+const numberToString = (num: number) => {
+    return String(num).padStart(2, "0");
+};
+
 const TimerSetting = () => {
-    const minuteRef = useRef<HTMLInputElement>(null);
-    const secondRef = useRef<HTMLInputElement>(null);
     const setTimer = useSetAtom(timerAtom);
     const setModal = useSetAtom(modalAtom);
     const setIsTimerVisible = useSetAtom(isTimerVisibleAtom);
+    const minRef = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const secRef = useRef<HTMLInputElement>({} as HTMLInputElement);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    useEffect(() => {
+        minRef.current.value = "25";
+        secRef.current.value = "00";
+    }, []);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (minRef.current.value === "00" && secRef.current.value === "00") return;
 
         setTimer({
-            minute: minuteRef.current?.value || "0",
-            second: minuteRef.current?.value || "0",
+            minute: parseInt(minRef.current.value) || 0,
+            second: parseInt(secRef.current.value) || 0,
         });
         setModal({ open: false });
         setIsTimerVisible(true);
     };
 
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 2);
+
+        if (parseInt(secRef.current.value) > 59) {
+            secRef.current.value = numberToString(Number(secRef.current.value) - 60);
+            minRef.current.value = numberToString(Number(minRef.current.value) + 1);
+        }
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        e.target.value = e.target.value.padStart(2, "0");
+    };
+
     return (
         <form onSubmit={handleSubmit} className={style.modal_container}>
-            <button className={style.close_icon} />
+            <button type="button" className={style.close_icon} />
             <h2 className={style.title}>Timer Setting</h2>
             <div className={style.time_section}>
                 <span className={style.placeholder}>88:88</span>
                 <div className={style.inputs}>
-                    <input ref={minuteRef} className={style.minute} type="text" maxLength={2} />
+                    <input
+                        type="text"
+                        maxLength={2}
+                        className={style.minute}
+                        ref={minRef}
+                        onChange={handleInput}
+                        onBlur={handleBlur}
+                    />
                     :
-                    <input ref={secondRef} className={style.second} type="text" maxLength={2} />
+                    <input
+                        type="text"
+                        maxLength={2}
+                        className={style.second}
+                        ref={secRef}
+                        onChange={handleInput}
+                        onBlur={handleBlur}
+                    />
                 </div>
             </div>
             <div className={style.buttons}>

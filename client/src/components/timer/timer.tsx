@@ -1,47 +1,44 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import timer_icon from "/public/timer.svg";
+import { useAtom } from "jotai";
+import { timerAtom } from "@/jotai/atom";
 import style from "./timer.module.scss";
-
-interface ITimer {
-    minute: string;
-    second: string;
-}
 
 const numberToString = (num: number) => {
     return String(num).padStart(2, "0");
 };
 
-const Timer = (time: ITimer) => {
-    const min = parseInt(time.minute);
-    const sec = parseInt(time.second);
-
-    const count = useRef(min * 60 + sec);
-    const interval = useRef(null);
-
-    const [minute, setMinute] = useState(numberToString(min));
-    const [second, setSecond] = useState(numberToString(sec));
+const Timer = () => {
+    const [{ minute, second }] = useAtom(timerAtom);
+    const count = useRef(minute * 60 + second);
+    const interval = useRef<NodeJS.Timeout | null>(null);
+    const [min, setMin] = useState(numberToString(minute));
+    const [sec, setSec] = useState(numberToString(second));
 
     useEffect(() => {
         interval.current = setInterval(() => {
             count.current -= 1;
 
-            setMinute(numberToString(parseInt((count.current % 3600) / 60)));
-            setSecond(numberToString(count.current % 60));
+            setMin(numberToString(Math.trunc(count.current / 60)));
+            setSec(numberToString(count.current % 60));
         }, 1000);
     }, []);
 
     useEffect(() => {
         if (count.current <= 0) {
-            clearInterval(interval.current);
+            clearInterval(interval.current!);
+            //여기서? 또 setTimout으로..몇 초 뒤에
         }
-    }, [second]);
+    }, [sec]);
 
     return (
         <div className={style.container} aria-label="남은 시간">
-            <img src="/timer.svg" alt="" />
+            <Image src={timer_icon} alt="" />
             <div className={style.time_container}>
-                <span>{minute}</span>:<span>{second}</span>
+                <span>{min}</span>:<span>{sec}</span>
             </div>
         </div>
     );
