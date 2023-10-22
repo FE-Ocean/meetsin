@@ -2,3 +2,27 @@ a,
 button {
     cursor: pointer;
 }
+
+/* 전체 스크롤바의 너비와 높이 설정 */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* 스크롤바의 트랙 스타일 */
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* 스크롤바의 썸네일 스타일 */
+::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+/* 스크롤바 썸네일이 호버 상태일 때 스타일 */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #b0b0b0;
+}
