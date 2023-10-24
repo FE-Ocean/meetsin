@@ -7,6 +7,7 @@ import useMessage from "@/hooks/useMessage";
 const MessageInput = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    const [isComposing, setIsComposing] = useState<boolean>(false);
     const [user_name, setUserName] = useState<string | null>(null);
 
     useEffect(() => {
@@ -30,11 +31,21 @@ const MessageInput = () => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (isComposing) return;
+
         if (!e.shiftKey && e.key === "Enter") {
             e.preventDefault();
             send();
             return;
         }
+    };
+
+    const handleCompositionStart = () => {
+        setIsComposing(true);
+    };
+
+    const handleCompoistionEnd = () => {
+        setIsComposing(false);
     };
 
     return (
@@ -49,6 +60,8 @@ const MessageInput = () => {
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={handleCompoistionEnd}
             />
             <button
                 type="button"
