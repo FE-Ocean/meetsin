@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import JotaiProvider from "@/jotai/jotaiProvider";
-import Modal from "@/components/modal/modal";
 import "../styles/reset.css";
 import "../styles/global.scss";
+import ModalProvider from "@/components/modal/modalProvider/modalProvider";
 
 const noto_Sans_KR = Noto_Sans_KR({ weight: ["400", "700"], subsets: ["latin"] });
 
@@ -17,8 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <html lang="ko">
             <body className={noto_Sans_KR.className}>
                 <JotaiProvider>
-                    {children}
-                    <Modal />
+                    <ModalProvider>{children}</ModalProvider>
                 </JotaiProvider>
             </body>
         </html>

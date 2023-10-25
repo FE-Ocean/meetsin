@@ -56,6 +56,12 @@
         background-image: url(/screen_share-off.svg);
     }
 
+    &.active {
+        &::after {
+            background-image: url(/device-desktop.svg);
+        }
+    }
+
     &:hover {
         background-color: white;
         opacity: 0.4;
@@ -64,6 +70,7 @@
 .active_user_number {
     display: flex;
     align-items: center;
+    margin-left: 8px;
     font-size: 12px;
     font-weight: 700;
 
@@ -76,6 +83,7 @@
 .chat {
     @include menu_common_ui;
     width: 50px;
+    margin-left: 23px;
     border-radius: 50%;
     &:after {
         content: "";
@@ -85,6 +93,6 @@
         background-image: url(/chat.svg);
         background-repeat: no-repeat;
         background-size: 26px;
-        background-position: 12px 11px;
+        background-position: 11px 11px;
     }
 }
