@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { timerAtom } from "@/jotai/atom";
@@ -23,6 +23,15 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
     const [min, setMin] = useState(minute);
     const [sec, setSec] = useState(second);
 
+    const playSoundEffect = useCallback(() => {
+        const alarm = new Audio("/timer_alarm.wav");
+
+        alarm.play();
+        alarm.onended = () => {
+            setIsTimerVisible(false);
+        };
+    }, [setIsTimerVisible]);
+
     useEffect(() => {
         interval.current = setInterval(() => {
             count.current -= 1;
@@ -33,10 +42,12 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
     }, []);
 
     useEffect(() => {
-        if (count.current <= 0) {
+        if (count.current === 0) {
             clearInterval(interval.current!);
+
+            playSoundEffect();
         }
-    }, [sec]);
+    }, [sec, playSoundEffect]);
 
     return (
         <div className={style.container} aria-label="남은 시간">
