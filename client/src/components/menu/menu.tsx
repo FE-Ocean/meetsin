@@ -21,6 +21,8 @@ const Menu = (props: IMenu) => {
     const { onOpen } = useModal("timerSetting");
 
     const handleTimerSetting = () => {
+        if (isTimerVisible) return;
+
         onOpen();
     };
 
