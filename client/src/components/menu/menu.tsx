@@ -1,15 +1,13 @@
 "use client";
 
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { modalAtom, isTimerVisibleAtom } from "@/jotai/atom";
+import { useAtom, useAtomValue } from "jotai";
+import { isTimerVisibleAtom } from "@/jotai/atom";
 import Image from "next/image";
-import active_user_icon from "/public/active_user.svg";
-import TimerSetting from "../timer/timerSetting";
 import Timer from "../timer/timer";
-import style from "./menu.module.scss";
 import { screenShareAtom } from "@/store/store";
-import { useRef } from "react";
-import { createPortal } from "react-dom";
+import useModal from "@/hooks/useModal";
+import active_user_icon from "/public/active_user.svg";
+import style from "./menu.module.scss";
 
 interface IMenu {
     className: string;
@@ -19,23 +17,20 @@ interface IMenu {
 const Menu = (props: IMenu) => {
     const { className, onScreenShare } = props;
     const isScreenShare = useAtomValue(screenShareAtom);
-    const setModal = useSetAtom(modalAtom);
-    const [isTimerVisible] = useAtom(isTimerVisibleAtom);
+    const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
+    const { onOpen } = useModal("timerSetting");
 
-    const handleTimer = () => {
-        setModal({
-            open: true,
-            content: <TimerSetting />,
-        });
+    const handleTimerSetting = () => {
+        onOpen();
     };
 
     return (
         <div className={`${className} ${style.menu_container}`}>
-            {isTimerVisible && <Timer />}
+            {isTimerVisible && <Timer setIsTimerVisible={setIsTimerVisible} />}
             <ul className={style.menu_bar}>
                 <li>
                     <button
-                        onClick={handleTimer}
+                        onClick={handleTimerSetting}
                         className={style.timer}
                         aria-label="타이머 설정하기"
                     ></button>
