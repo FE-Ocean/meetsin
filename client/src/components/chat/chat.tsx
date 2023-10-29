@@ -1,42 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Message from "./message/message";
 import style from "./chat.module.scss";
-import { socket } from "../../socket";
 import MessageInput from "./messageInput/messageInput";
+import useChat from "@/hooks/useChat";
+import { useEffect, useRef } from "react";
 
 interface IChatProps {
-    className : string
-};
+    className: string;
+}
 
-interface IMessage {
-    nickname : string,
-    message : string,
-    time : string
-};
-
-const Chat = (props : IChatProps) => {
-
+const Chat = (props: IChatProps) => {
     const { className } = props;
 
-    const [messages, setMessages] = useState<IMessage[]>([]);
+    const { messages } = useChat();
+
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView();
+        }
+    };
 
     useEffect(() => {
-
-        const handleNewMessage = (message : IMessage) => {
-            setMessages((prev) => [...prev, message]);
-        };
-
-        socket.connect();
-        socket.on("new_message", handleNewMessage);
-
-        return () => {
-            socket.disconnect();
-            socket.off("new_message", handleNewMessage);
-        };
-
-    },[]);
+        scrollToBottom();
+    }, [messages]);
 
     return (
         <div className={`${className} ${style.chat_container}`}>
@@ -48,11 +37,12 @@ const Chat = (props : IChatProps) => {
                 {messages.map((message, index) => (
                     <Message
                         key={index}
-                        message={message.message} 
+                        message={message.message}
                         nickname={message.nickname}
-                        time={message.time} 
+                        time={message.time}
                     />
                 ))}
+                <div ref={messagesEndRef} />
             </div>
             <div className={style.chat_bottom}>
                 <MessageInput />
