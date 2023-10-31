@@ -4,21 +4,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { timerAtom } from "@/jotai/atom";
+import { numberToString } from "@/utills";
 import timer_icon from "/public/timer.svg";
 import style from "./timer.module.scss";
-
-const numberToString = (num: number) => {
-    return String(num).padStart(2, "0");
-};
 
 interface ITimer {
     setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const SECONDS_PER_MINUTE = 60;
+
 const Timer = ({ setIsTimerVisible }: ITimer) => {
     const [{ minute, second }] = useAtom(timerAtom);
 
-    const count = useRef(minute * 60 + second);
+    const totalSec = useRef(minute * SECONDS_PER_MINUTE + second);
     const interval = useRef<NodeJS.Timeout | null>(null);
     const [min, setMin] = useState(minute);
     const [sec, setSec] = useState(second);
@@ -34,15 +33,15 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
 
     useEffect(() => {
         interval.current = setInterval(() => {
-            count.current -= 1;
+            totalSec.current -= 1;
 
-            setMin(Math.trunc(count.current / 60));
-            setSec(count.current % 60);
+            setMin(Math.trunc(totalSec.current / SECONDS_PER_MINUTE));
+            setSec(totalSec.current % SECONDS_PER_MINUTE);
         }, 1000);
     }, []);
 
     useEffect(() => {
-        if (count.current === 0) {
+        if (totalSec.current === 0) {
             clearInterval(interval.current!);
 
             playSoundEffect();

@@ -2,11 +2,8 @@ import { useEffect, useRef } from "react";
 import { useSetAtom } from "jotai";
 import { timerAtom, isTimerVisibleAtom } from "@/jotai/atom";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
+import { numberToString } from "@/utills";
 import style from "./timerSetting.module.scss";
-
-const numberToString = (num: number) => {
-    return String(num).padStart(2, "0");
-};
 
 interface IModal {
     onClose: () => void;
@@ -39,27 +36,27 @@ const TimerSetting = ({ onClose }: IModal) => {
 
     const handleInput = (
         e: React.ChangeEvent<HTMLInputElement>,
-        ref: React.RefObject<HTMLInputElement>,
+        targetRef: React.RefObject<HTMLInputElement>,
     ) => {
-        ref.current!.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 2);
+        targetRef.current!.value = e.target.value.replace(/[^0-9]/g, "").slice(0, 2);
 
         if (Number(secRef.current.value) > 59) {
-            secRef.current.value = numberToString(Number(secRef.current.value) - 60);
-            minRef.current.value = numberToString(Number(minRef.current.value) + 1);
+            secRef.current.value = numberToString(+secRef.current.value - 60);
+            minRef.current.value = numberToString(+minRef.current.value + 1);
         }
     };
 
-    const handleBlur = (
+    const handleBlurInput = (
         e: React.FocusEvent<HTMLInputElement>,
-        ref: React.RefObject<HTMLInputElement>,
+        targetRef: React.RefObject<HTMLInputElement>,
     ) => {
-        ref.current!.value = e.target.value.padStart(2, "0");
+        targetRef.current!.value = e.target.value.padStart(2, "0");
     };
 
     return (
         <BaseModal onClose={onClose}>
             <form onSubmit={handleSubmit} className={style.modal_container}>
-                <button type="button" className={style.close_icon} />
+                <button type="button" onClick={onClose} className={style.close_icon} />
                 <h2 className={style.title}>Timer Setting</h2>
                 <div className={style.time_section}>
                     <span className={style.placeholder}>88:88</span>
@@ -70,7 +67,7 @@ const TimerSetting = ({ onClose }: IModal) => {
                             className={style.minute}
                             ref={minRef}
                             onChange={(e) => handleInput(e, minRef)}
-                            onBlur={(e) => handleBlur(e, minRef)}
+                            onBlur={(e) => handleBlurInput(e, minRef)}
                         />
                         :
                         <input
@@ -79,12 +76,12 @@ const TimerSetting = ({ onClose }: IModal) => {
                             className={style.second}
                             ref={secRef}
                             onChange={(e) => handleInput(e, secRef)}
-                            onBlur={(e) => handleBlur(e, secRef)}
+                            onBlur={(e) => handleBlurInput(e, secRef)}
                         />
                     </div>
                 </div>
                 <div className={style.buttons}>
-                    <button type="button" className={style.close}>
+                    <button type="button" onClick={onClose} className={style.close}>
                         CLOSE
                     </button>
                     <button type="submit" className={style.start}>
