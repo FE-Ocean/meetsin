@@ -1,4 +1,4 @@
-import { BaseModal } from "../baseModal/baseModal";
+import { BaseModal } from "@/components/modal/baseModal/baseModal";
 
 interface ITestModal {
     onClose: () => void;

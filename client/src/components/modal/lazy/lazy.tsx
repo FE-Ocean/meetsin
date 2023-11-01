@@ -14,13 +14,11 @@ const Lazy = (props: ILazy) => {
 
     const { onClose } = useModal(filename);
 
-    const handleModalClose = () => {
-        onClose();
-    };
+    const Component = dynamic<IDynamicComponent>(
+        () => import(`../../modals/${filename}/${filename}.tsx`),
+    );
 
-    const Component = dynamic<IDynamicComponent>(() => import(`../${filename}/${filename}.tsx`));
-
-    return <Component onClose={handleModalClose} />;
+    return <Component onClose={onClose} />;
 };
 
 export default Lazy;

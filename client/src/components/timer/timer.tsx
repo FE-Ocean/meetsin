@@ -1,47 +1,58 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useAtom } from "jotai";
+import { timerAtom } from "@/jotai/atom";
+import { numberToString } from "@/utills";
+import timer_icon from "/public/timer.svg";
 import style from "./timer.module.scss";
 
 interface ITimer {
-    minute: string;
-    second: string;
+    setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const numberToString = (num: number) => {
-    return String(num).padStart(2, "0");
-};
+const SECONDS_PER_MINUTE = 60;
 
-const Timer = (time: ITimer) => {
-    const min = parseInt(time.minute);
-    const sec = parseInt(time.second);
+const Timer = ({ setIsTimerVisible }: ITimer) => {
+    const [{ minute, second }] = useAtom(timerAtom);
 
-    const count = useRef(min * 60 + sec);
-    const interval = useRef(null);
+    const totalSec = useRef(minute * SECONDS_PER_MINUTE + second);
+    const interval = useRef<NodeJS.Timeout | null>(null);
+    const [min, setMin] = useState(minute);
+    const [sec, setSec] = useState(second);
 
-    const [minute, setMinute] = useState(numberToString(min));
-    const [second, setSecond] = useState(numberToString(sec));
+    const playSoundEffect = useCallback(() => {
+        const alarm = new Audio("/timer_alarm.wav");
+
+        alarm.play();
+        alarm.onended = () => {
+            setIsTimerVisible(false);
+        };
+    }, [setIsTimerVisible]);
 
     useEffect(() => {
         interval.current = setInterval(() => {
-            count.current -= 1;
+            totalSec.current -= 1;
 
-            setMinute(numberToString(parseInt((count.current % 3600) / 60)));
-            setSecond(numberToString(count.current % 60));
+            setMin(Math.trunc(totalSec.current / SECONDS_PER_MINUTE));
+            setSec(totalSec.current % SECONDS_PER_MINUTE);
         }, 1000);
     }, []);
 
     useEffect(() => {
-        if (count.current <= 0) {
-            clearInterval(interval.current);
+        if (totalSec.current === 0) {
+            clearInterval(interval.current!);
+
+            playSoundEffect();
         }
-    }, [second]);
+    }, [sec, playSoundEffect]);
 
     return (
         <div className={style.container} aria-label="남은 시간">
-            <img src="/timer.svg" alt="" />
+            <Image src={timer_icon} alt="" />
             <div className={style.time_container}>
-                <span>{minute}</span>:<span>{second}</span>
+                <span>{numberToString(min)}</span>:<span>{numberToString(sec)}</span>
             </div>
         </div>
     );
