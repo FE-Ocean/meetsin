@@ -8,6 +8,7 @@
     background-color: $base-color;
     display: flex;
     flex-flow: column nowrap;
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
 }
 
 .chat_header {
