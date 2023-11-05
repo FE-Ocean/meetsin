@@ -8,10 +8,11 @@ import { useEffect, useRef } from "react";
 
 interface IChatProps {
     className: string;
+    toggleChat: (shouldClose?: boolean) => void;
 }
 
 const Chat = (props: IChatProps) => {
-    const { className } = props;
+    const { className, toggleChat } = props;
 
     const { messages } = useChat();
 
@@ -31,7 +32,7 @@ const Chat = (props: IChatProps) => {
         <div className={`${className} ${style.chat_container}`}>
             <div className={style.chat_header}>
                 <span className={style.chat_text}>Chat</span>
-                <button className={style.close_button} />
+                <button className={style.close_button} onClick={() => toggleChat(true)} />
             </div>
             <div className={style.chat_main}>
                 {messages.map((message, index) => (

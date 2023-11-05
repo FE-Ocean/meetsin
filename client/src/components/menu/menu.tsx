@@ -11,10 +11,11 @@ import style from "./menu.module.scss";
 interface IMenu {
     className: string;
     onScreenShare: () => any;
+    toggleChat: () => void;
 }
 
 const Menu = (props: IMenu) => {
-    const { className, onScreenShare } = props;
+    const { className, onScreenShare, toggleChat } = props;
     const isScreenShare = useAtomValue(screenShareAtom);
     const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
     const { onOpen } = useModal("timerSetting");
@@ -49,7 +50,7 @@ const Menu = (props: IMenu) => {
                     <span>2</span>
                 </li>
             </ul>
-            <button className={style.chat} />
+            <button className={style.chat} onClick={() => toggleChat()} />
         </div>
     );
 };
