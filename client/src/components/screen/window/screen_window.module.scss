@@ -1,8 +1,10 @@
+@import "../../../styles/variables";
+
 .screen_window {
-  background-color: #d9d9d9;
-  flex-grow: 1;
-  margin-right: 26px;
-  display: grid;
-  padding: 88px 95px;
-  grid-template-columns: repeat(2, 1fr);
+    background-color: $gray;
+    flex-grow: 1;
+    margin-right: 26px;
+    display: grid;
+    padding: 88px 95px;
+    grid-template-columns: repeat(2, 1fr);
 }
