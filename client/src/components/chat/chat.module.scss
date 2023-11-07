@@ -1,11 +1,11 @@
 @import "../../styles/variables";
+@import "../../styles/mixin";
 
 .chat_container {
+    @include common_ui;
     width: 286px;
     padding: 18px;
-    border: 1px solid $border-color;
     border-radius: 20px;
-    background-color: $base-color;
     display: flex;
     flex-flow: column nowrap;
 }
