@@ -18,3 +18,5 @@ export const timerAtom = atom({
 });
 
 export const isTimerVisibleAtom = atom(false);
+
+export const screenShareAtom = atom(false);

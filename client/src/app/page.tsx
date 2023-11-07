@@ -1,11 +1,11 @@
 "use client";
-import style from "./style.module.scss";
-import { useAtom } from "jotai";
-import Menu from "@/components/menu/menu";
-import { screenShareAtom } from "@/store/store";
 import { useEffect, useRef, useState } from "react";
+import { useAtom } from "jotai";
+import { screenShareAtom } from "@/jotai/atom";
+import Menu from "@/components/menu/menu";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
+import style from "./style.module.scss";
 
 const Home = () => {
     const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
