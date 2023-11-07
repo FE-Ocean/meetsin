@@ -1,21 +1,21 @@
 @import "../../styles/variables";
 
 .screen_container {
-  position: relative;
+    position: relative;
 
-  .screen {
-    border: 1px solid $border-color;
-    border-radius: 15px;
-  }
+    .screen {
+        border: 1px solid $border-color;
+        border-radius: 15px;
+    }
 
-  .user_name {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    background-color: rgb(0, 0, 0, 0.2);
-    color: white;
-    padding: 3px 14px;
-    border-radius: 5px;
-    font-size: 9px;
-  }
+    .user_name {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        background-color: $gray;
+        color: $white;
+        padding: 3px 14px;
+        border-radius: 5px;
+        font-size: 9px;
+    }
 }
