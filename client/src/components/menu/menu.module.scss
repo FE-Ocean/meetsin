@@ -1,10 +1,5 @@
 @import "../../styles/variables";
-@mixin menu_common_ui {
-    height: 50px;
-    background-color: $base-color;
-    border: 1px solid $border-color;
-    box-shadow: $normal-shadow;
-}
+@import "../../styles/mixin";
 @mixin menu_bar_after {
     content: "";
     display: inline-block;
@@ -22,11 +17,12 @@
 }
 
 .menu_bar {
-    @include menu_common_ui;
+    @include common_ui;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 193px;
+    height: 50px;
     padding: 5px 22px 5px 14px;
     border-radius: 30px;
 }
@@ -80,8 +76,9 @@
 }
 
 .chat {
-    @include menu_common_ui;
+    @include common_ui;
     width: 50px;
+    height: 50px;
     margin-left: 23px;
     border-radius: 50%;
     &:after {
