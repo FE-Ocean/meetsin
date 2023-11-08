@@ -2,10 +2,16 @@
 
 .screen_container {
     position: relative;
+    width: fit-content;
+    min-height: 0;
+    max-height: fit-content;
 
     .screen {
         border: 1px solid $border-color;
         border-radius: 15px;
+        width: 100%;
+        min-height: 0;
+        max-height: 100%;
     }
 
     .user_name {

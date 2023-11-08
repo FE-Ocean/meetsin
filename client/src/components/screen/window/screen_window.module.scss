@@ -7,4 +7,9 @@
     display: grid;
     padding: 88px 95px;
     grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 8px;
+    justify-items: center;
+    align-items: stretch;
+    max-height: 100%;\
 }
