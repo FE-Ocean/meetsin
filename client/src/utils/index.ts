@@ -7,3 +7,7 @@ export const formatTimeFromISO = (isoString: string) => {
     const minutes = String(date.getMinutes()).padStart(2, "0");
     return `${hours}:${minutes}`;
 };
+
+export const numberToString = (num: number) => {
+    return String(num).padStart(2, "0");
+};
