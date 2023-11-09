@@ -1,13 +1,12 @@
 @import "../../styles/variables";
 
 .chat_container {
-    width: 286px;
-    padding: 18px;
+    padding: 17px;
     border: 1px solid $border-color;
     border-radius: 20px;
     background-color: $base-color;
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: column;
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.15);
 }
 
@@ -37,7 +36,8 @@
     flex-flow: column nowrap;
     row-gap: 20px;
     flex-grow: 1;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .chat_bottom {
