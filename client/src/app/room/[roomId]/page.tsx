@@ -37,7 +37,7 @@ const Home = () => {
             }
             // 스크린 크기를 고정값으로 받고 있는데, 반응형으로 받을 수 있는 방법 고려
             const stream = await navigator.mediaDevices.getDisplayMedia({
-                video: { width: 640, height: 360 },
+                video: true,
             });
             setCurrentStream(stream);
             if (videoRef.current) {
