@@ -3,7 +3,14 @@
 .container {
     display: flex;
     gap: 7px;
-    margin-left: auto;
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-color: $white;
 }
 
 .wrapper {
@@ -15,18 +22,23 @@
 .message_wrapper {
     display: flex;
     gap: 6px;
-    margin-top: 6px;
+    margin-top: 2px;
+}
+
+.nickname {
+    font-size: 13px;
+    font-weight: 700;
+    color: $black-light;
 }
 
 .message_main {
     padding: 5px 10px;
-    background: rgba(161, 187, 238, 1);
+    background: $white;
     border-radius: 15px;
     font-size: 13px;
     font-weight: 400;
-    line-height: normal;
-    text-align: left;
-    max-width: 205px;
+    line-height: 19px;
+    max-width: 176px;
     overflow-wrap: break-word;
     letter-spacing: -0.65px;
 }
@@ -34,8 +46,8 @@
 .time {
     display: flex;
     align-items: flex-end;
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 400;
-    color: #c4c4c4;
+    color: $gray;
     line-height: 13px;
 }

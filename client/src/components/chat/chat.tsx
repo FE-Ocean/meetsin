@@ -4,8 +4,8 @@ import style from "./chat.module.scss";
 import MessageInput from "./messageInput/messageInput";
 import useChat from "@/hooks/useChat";
 import { useEffect, useRef } from "react";
-import ReceivedMessage from "./receivedMessage/receivedMessage";
 import MyMessage from "./myMessage/myMessage";
+import ReceivedMessage from "./receivedMessage/receivedMessage";
 
 interface IChatProps {
     className: string;
@@ -84,17 +84,13 @@ const Chat = (props: IChatProps) => {
             <div className={style.chat_main}>
                 {TEST_MESSAGE_LIST.map((message, index) => {
                     return message.nickname === "me" ? (
+                        <MyMessage key={index} message={message.message} time={message.time} />
+                    ) : (
                         <ReceivedMessage
                             key={index}
                             message={message.message}
                             time={message.time}
-                        />
-                    ) : (
-                        <MyMessage
-                            key={index}
-                            message={message.message}
                             nickname={message.nickname}
-                            time={message.time}
                         />
                     );
                 })}

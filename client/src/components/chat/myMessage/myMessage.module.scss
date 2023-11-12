@@ -3,14 +3,7 @@
 .container {
     display: flex;
     gap: 7px;
-}
-
-.avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background-color: white;
+    margin-left: auto;
 }
 
 .wrapper {
@@ -22,23 +15,16 @@
 .message_wrapper {
     display: flex;
     gap: 6px;
-    margin-top: 6px;
-}
-
-.nickname {
-    font-size: 13px;
-    font-weight: 700;
 }
 
 .message_main {
     padding: 5px 10px;
-    background: rgba(255, 255, 255, 1);
+    background: $point-color;
     border-radius: 15px;
     font-size: 13px;
     font-weight: 400;
-    line-height: normal;
-    text-align: left;
-    max-width: 176px;
+    line-height: 19px;
+    max-width: 205px;
     overflow-wrap: break-word;
     letter-spacing: -0.65px;
 }
