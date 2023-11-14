@@ -4,6 +4,9 @@
     display: flex;
     flex-flow: column nowrap;
     row-gap: 23px;
+    min-width: 1000px;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .container {
@@ -14,6 +17,7 @@
 
 .chat {
     margin-top: 52px;
+    flex-shrink: 0;
 }
 
 .menu {

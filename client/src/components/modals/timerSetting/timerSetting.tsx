@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useSetAtom } from "jotai";
 import { timerAtom, isTimerVisibleAtom } from "@/jotai/atom";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
-import { numberToString } from "@/utills";
+import { numberToString } from "@/utils";
 import Button from "@/components/common/button/button";
 import style from "./timerSetting.module.scss";
 
