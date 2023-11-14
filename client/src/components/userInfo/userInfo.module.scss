@@ -1,0 +1,19 @@
+.wrapper {
+    width: 195px;
+    display: flex;
+    flex-flow: column nowrap;
+    position: relative;
+}
+
+.user_menu {
+    width: 195px;
+    position: absolute;
+}
+
+.top {
+    bottom: 67px;
+}
+
+.bottom {
+    top: 67px;
+}
