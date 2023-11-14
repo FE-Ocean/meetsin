@@ -46,7 +46,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    &:after {
+    &::after {
         @include menu_bar_after;
         background-image: url(/screen_share-off.svg);
     }

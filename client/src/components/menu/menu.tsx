@@ -1,10 +1,9 @@
 "use client";
 
 import { useAtom, useAtomValue } from "jotai";
-import { isTimerVisibleAtom } from "@/jotai/atom";
+import { isTimerVisibleAtom, screenShareAtom } from "@/jotai/atom";
 import Image from "next/image";
 import Timer from "../timer/timer";
-import { screenShareAtom } from "@/store/store";
 import useModal from "@/hooks/useModal";
 import active_user_icon from "/public/active_user.svg";
 import style from "./menu.module.scss";

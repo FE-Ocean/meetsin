@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { timerAtom } from "@/jotai/atom";
-import { numberToString } from "@/utills";
+import { numberToString } from "@/utils";
 import timer_icon from "/public/timer.svg";
 import style from "./timer.module.scss";
 
