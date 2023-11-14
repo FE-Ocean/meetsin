@@ -3,6 +3,7 @@ import { useSetAtom } from "jotai";
 import { timerAtom, isTimerVisibleAtom } from "@/jotai/atom";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 import { numberToString } from "@/utills";
+import Button from "@/components/common/button/button";
 import style from "./timerSetting.module.scss";
 
 interface IModal {
@@ -81,12 +82,8 @@ const TimerSetting = ({ onClose }: IModal) => {
                     </div>
                 </div>
                 <div className={style.buttons}>
-                    <button type="button" onClick={onClose} className={style.close}>
-                        CLOSE
-                    </button>
-                    <button type="submit" className={style.start}>
-                        START
-                    </button>
+                    <Button type="button" onClick={onClose} look="ghost" width={90} text="CLOSE" />
+                    <Button type="submit" look="solid" width={90} text="START" />
                 </div>
             </form>
         </BaseModal>

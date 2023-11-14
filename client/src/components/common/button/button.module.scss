@@ -1,0 +1,20 @@
+@import "./../../../styles/variables";
+
+.common {
+    padding: 11px 0;
+    border: 1px solid $point-color;
+    border-radius: 30px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+}
+
+.solid {
+    background-color: $point-color;
+    color: $white;
+}
+
+.ghost {
+    color: $point-color;
+}
