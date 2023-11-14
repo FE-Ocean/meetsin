@@ -1,5 +1,19 @@
+@import "./variables";
+
 @mixin common_ui {
     background-color: $base-color;
     border: 1px solid $border-color;
     box-shadow: $normal-shadow;
+}
+
+@mixin custom_input {
+    border: 1px solid $point-color;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    line-height: normal;
+
+    &::placeholder {
+        color: $gray;
+    }
 }
