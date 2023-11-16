@@ -1,13 +1,15 @@
 @import "../../styles/variables";
 
 .chat_container {
-    width: 286px;
-    padding: 18px;
+    padding: 17px;
+    width: 250px;
+    box-sizing: content-box;
     border: 1px solid $border-color;
     border-radius: 20px;
     background-color: $base-color;
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: column;
+    box-shadow: $normal-shadow;
 }
 
 .chat_header {
@@ -16,8 +18,10 @@
     padding-bottom: 15px;
 
     span.chat_text {
-        font-weight: 700;
         font-size: 18px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
     }
 
     button.close_button {
@@ -34,9 +38,10 @@
     border-bottom: 1px solid $border-color;
     display: flex;
     flex-flow: column nowrap;
-    row-gap: 20px;
+    row-gap: 10px;
     flex-grow: 1;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .chat_bottom {
