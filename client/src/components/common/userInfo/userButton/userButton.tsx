@@ -1,3 +1,4 @@
+import ProfileImage from "@/components/common/profile_image/ProfileImage";
 import style from "./userButton.module.scss";
 
 interface IUserButton {
@@ -9,7 +10,7 @@ const UserInfoButton = (props: IUserButton) => {
 
     return (
         <button className={style.user_info_button} onClick={onClick}>
-            <div className={style.user_img} />
+            <ProfileImage src="https://picsum.photos/id/237/200/300" />
             <span className={style.user_name}>사용자닉네임열글자임</span>
         </button>
     );

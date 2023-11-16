@@ -9,7 +9,7 @@ interface IUserMenu {
 const USER_MENU = [
     {
         icon: <Image width={24} height={24} src="/setting.svg" alt="환경설정 아이콘" />,
-        label: "something Setting",
+        label: "Setting",
     },
     {
         icon: <Image width={24} height={24} src="/door-exit.svg" alt="로그아웃 아이콘" />,

@@ -1,4 +1,4 @@
-@import "../../../styles/variables";
+@import "../../../../styles/variables";
 
 .wrapper {
     padding: 4px 22px;
@@ -6,6 +6,10 @@
     gap: 7px;
     align-items: center;
     cursor: pointer;
+
+    &:hover {
+        background-color: $hover-color;
+    }
 }
 
 .label {

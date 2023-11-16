@@ -37,8 +37,7 @@
     }
 
     &:hover {
-        background-color: white;
-        opacity: 0.4;
+        background-color: $hover-color;
     }
 }
 .screen_share {
@@ -58,8 +57,7 @@
     }
 
     &:hover {
-        background-color: white;
-        opacity: 0.4;
+        background-color: $hover-color;
     }
 }
 .active_user_number {

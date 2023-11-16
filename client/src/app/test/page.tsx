@@ -1,5 +1,5 @@
 import ProfileImage from "@/components/common/profile_image/ProfileImage";
-import UserInfo from "@/components/userInfo/userInfo";
+import UserInfo from "@/components/common/userInfo/userInfo";
 import { imageSizeType } from "@/constants/ImageSize.type";
 import React from "react";
 import style from "./style.module.scss";
