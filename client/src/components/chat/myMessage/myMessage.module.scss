@@ -1,0 +1,39 @@
+@import "../../../styles/variables";
+
+.container {
+    display: flex;
+    gap: 7px;
+    margin-left: auto;
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.message_wrapper {
+    display: flex;
+    gap: 6px;
+}
+
+.message_main {
+    padding: 5px 10px;
+    background: $point-color;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 19px;
+    max-width: 205px;
+    overflow-wrap: break-word;
+    letter-spacing: -0.65px;
+}
+
+.time {
+    display: flex;
+    align-items: flex-end;
+    font-size: 9px;
+    font-weight: 400;
+    color: $gray;
+    line-height: 13px;
+}

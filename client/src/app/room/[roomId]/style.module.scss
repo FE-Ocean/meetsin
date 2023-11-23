@@ -5,14 +5,11 @@
     flex-flow: column nowrap;
     row-gap: 23px;
     min-width: 1000px;
-    overflow-x: auto;
-    overflow-y: hidden;
 }
 
 .container {
     display: flex;
-    flex-grow: 1;
-    overflow: hidden;
+    height: calc(100% - 73px);
 }
 
 .chat {
