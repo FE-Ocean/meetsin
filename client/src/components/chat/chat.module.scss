@@ -1,15 +1,13 @@
 @import "../../styles/variables";
+@import "../../styles/mixin";
 
 .chat_container {
-    padding: 17px;
-    width: 250px;
-    box-sizing: content-box;
-    border: 1px solid $border-color;
+    @include common_ui;
+    width: 286px;
+    padding: 18px;
     border-radius: 20px;
-    background-color: $base-color;
     display: flex;
-    flex-flow: column;
-    box-shadow: $normal-shadow;
+    flex-flow: column nowrap;
 }
 
 .chat_header {
