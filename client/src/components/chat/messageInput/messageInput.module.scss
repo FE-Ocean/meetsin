@@ -1,33 +1,18 @@
 @import "../../../styles/variables";
+@import "../../../styles/mixin";
 
 .input_container {
-    border: 2px solid $border-color;
-    border-radius: 30px;
-    padding: 3px 3px 3px 14px;
+    @include custom_input(2px, 30px);
     display: flex;
     align-items: center;
     gap: 7px;
-}
-
-.focus {
-    border-color: $point-color;
+    padding-right: 11px;
 }
 
 .message_textarea {
     overflow: hidden;
     resize: none;
-    height: 21px;
     flex-grow: 1;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 19px;
-
-    &::placeholder {
-        font-weight: 400px;
-        font-size: 13px;
-        line-height: 19px;
-        color: $gray;
-    }
 }
 
 .send_button {

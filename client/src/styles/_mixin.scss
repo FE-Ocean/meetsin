@@ -6,14 +6,24 @@
     box-shadow: $normal-shadow;
 }
 
-@mixin custom_input {
-    border: 1px solid $point-color;
-    padding: 8px 16px;
-    border-radius: 20px;
+@mixin custom_input($border-width: 1px, $border-radius: 20px) {
+    box-sizing: border-box;
+    border: $border-width solid $border-color;
+    padding: 8px 0px 8px 16px;
+    border-radius: $border-radius;
     font-size: 13px;
     line-height: normal;
+    font-weight: 400;
 
-    &::placeholder {
+    &:focus,
+    &:has(input:focus),
+    &:has(textarea:focus) {
+        border-color: $point-color;
+    }
+
+    &::placeholder,
+    & input::placeholder,
+    & textarea::placeholder {
         color: $gray;
     }
 }

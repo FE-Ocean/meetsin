@@ -20,16 +20,6 @@ const MessageInput = () => {
         payload: { nickname: user_name },
     });
 
-    const [isFocused, setIsFocused] = useState(false);
-
-    const handleFocus = () => {
-        setIsFocused(true);
-    };
-
-    const handleBlur = () => {
-        setIsFocused(false);
-    };
-
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (isComposing) return;
 
@@ -49,7 +39,7 @@ const MessageInput = () => {
     };
 
     return (
-        <div className={`${style.input_container} ${isFocused && style.focus}`}>
+        <div className={`${style.input_container}`}>
             <textarea
                 className={style.message_textarea}
                 placeholder="메세지를 입력하세요."
@@ -57,8 +47,6 @@ const MessageInput = () => {
                 ref={textareaRef}
                 value={message}
                 onChange={onChange}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
                 onCompositionStart={handleCompositionStart}
                 onCompositionEnd={handleCompoistionEnd}
