@@ -1,4 +1,4 @@
-import ProfileImage from "@/components/common/profile_image/ProfileImage";
+import ProfileImage from "@/components/common/profileImage/profileImage";
 import UserInfo from "@/components/common/userInfo/userInfo";
 import { imageSizeType } from "@/constants/ImageSize.type";
 import React from "react";

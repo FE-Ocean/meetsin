@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import style from "./profile_image.module.scss";
+import style from "./profileImage.module.scss";
 import { imageSizeType } from "@/constants/ImageSize.type";
 
 interface IProps {

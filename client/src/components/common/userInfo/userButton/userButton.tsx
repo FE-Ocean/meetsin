@@ -1,4 +1,4 @@
-import ProfileImage from "@/components/common/profile_image/ProfileImage";
+import ProfileImage from "@/components/common/profileImage/profileImage";
 import style from "./userButton.module.scss";
 
 interface IUserButton {
