@@ -1,0 +1,26 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixin";
+
+.user_info_button {
+    @include common_ui;
+    padding: 12px 21px;
+    border-radius: 30px;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.user_img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: $white;
+}
+
+.user_name {
+    color: $black-light;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}

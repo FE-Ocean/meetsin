@@ -1,0 +1,8 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixin";
+
+.wrapper {
+    @include common_ui;
+    padding: 15px 0;
+    border-radius: 15px;
+}

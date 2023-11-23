@@ -1,0 +1,21 @@
+@import "../../../../styles/variables";
+
+.wrapper {
+    padding: 4px 22px;
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $hover-color;
+    }
+}
+
+.label {
+    color: $black-light;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
