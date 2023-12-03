@@ -5,10 +5,11 @@ import style from "./linkCopyButton.module.scss";
 
 interface IProps {
     disabledTime?: number;
+    className?: string;
 }
 
 const LinkCopyButton = (props: IProps) => {
-    const { disabledTime = 2000 } = props;
+    const { disabledTime = 2000, className } = props;
 
     const [isCopied, setIsCopied] = useState(false);
 
@@ -25,7 +26,13 @@ const LinkCopyButton = (props: IProps) => {
 
     const buttonStyle = isCopied ? style.link_after_copy : style.link_before_copy;
 
-    return <button className={buttonStyle} onClick={handleLinkCopy} disabled={isCopied} />;
+    return (
+        <button
+            className={`${className} ${buttonStyle}`}
+            onClick={handleLinkCopy}
+            disabled={isCopied}
+        />
+    );
 };
 
 export default LinkCopyButton;

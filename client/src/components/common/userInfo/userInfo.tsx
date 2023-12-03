@@ -7,10 +7,11 @@ import style from "./userInfo.module.scss";
 
 interface IUserInfo {
     direction?: "top" | "bottom";
+    className?: string;
 }
 
 const UserInfo = (props: IUserInfo) => {
-    const { direction = "top" } = props;
+    const { direction = "top", className } = props;
 
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -19,7 +20,7 @@ const UserInfo = (props: IUserInfo) => {
     };
 
     return (
-        <div className={style.wrapper}>
+        <div className={`${className} ${style.wrapper}`}>
             <UserButton onClick={handleUserButtonClick} />
             {menuOpen && <UserMenu className={`${style.user_menu} ${style[direction]}`} />}
         </div>
