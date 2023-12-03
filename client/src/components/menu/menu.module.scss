@@ -13,7 +13,16 @@
 
 .menu_container {
     display: flex;
-    margin-right: 10px;
+    padding: 0 10px;
+}
+
+.link_copy_button {
+    margin-left: 10px;
+}
+
+.right_container {
+    display: flex;
+    margin-left: auto;
 }
 
 .menu_bar {

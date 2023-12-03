@@ -7,6 +7,8 @@ import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
 import active_user_icon from "/public/active_user.svg";
 import style from "./menu.module.scss";
+import UserInfo from "../common/userInfo/userInfo";
+import LinkCopyButton from "./linkCopyButton/linkCopyButton";
 
 interface IMenu {
     className: string;
@@ -28,29 +30,34 @@ const Menu = (props: IMenu) => {
 
     return (
         <div className={`${className} ${style.menu_container}`}>
-            {isTimerVisible && <Timer setIsTimerVisible={setIsTimerVisible} />}
-            <ul className={style.menu_bar}>
-                <li>
-                    <button
-                        onClick={handleTimerSetting}
-                        className={style.timer}
-                        aria-label="타이머 설정하기"
-                    ></button>
-                </li>
-                <li>
-                    <button
-                        className={`${style.screen_share} ${isScreenShare && style.active}`}
-                        onClick={onScreenShare}
-                        aria-label="화면 공유하기"
-                    ></button>
-                </li>
-                <li className={style.active_user_number}>
-                    <Image src={active_user_icon} alt="접속자 수" />
-                    <span className={style.active_circle}>●</span>
-                    <span>2</span>
-                </li>
-            </ul>
-            <button className={style.chat} onClick={() => toggleChat()} />
+            <UserInfo />
+            <LinkCopyButton className={style.link_copy_button} />
+
+            <div className={style.right_container}>
+                {isTimerVisible && <Timer setIsTimerVisible={setIsTimerVisible} />}
+                <ul className={style.menu_bar}>
+                    <li>
+                        <button
+                            onClick={handleTimerSetting}
+                            className={style.timer}
+                            aria-label="타이머 설정하기"
+                        ></button>
+                    </li>
+                    <li>
+                        <button
+                            className={`${style.screen_share} ${isScreenShare && style.active}`}
+                            onClick={onScreenShare}
+                            aria-label="화면 공유하기"
+                        ></button>
+                    </li>
+                    <li className={style.active_user_number}>
+                        <Image src={active_user_icon} alt="접속자 수" />
+                        <span className={style.active_circle}>●</span>
+                        <span>2</span>
+                    </li>
+                </ul>
+                <button className={style.chat} onClick={() => toggleChat()} />
+            </div>
         </div>
     );
 };
