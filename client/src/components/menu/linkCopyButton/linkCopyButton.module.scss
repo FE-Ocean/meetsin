@@ -1,0 +1,31 @@
+@import "../../../styles/mixin";
+
+@mixin common_button_style {
+    @include common_ui;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    &:after {
+        content: "";
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+.link_before_copy {
+    @include common_button_style;
+    &:after {
+        background-image: url(/circles-relation.svg);
+    }
+}
+
+.link_after_copy {
+    @include common_button_style;
+    cursor: default;
+    &:after {
+        background-image: url(/double-check.svg);
+    }
+}
