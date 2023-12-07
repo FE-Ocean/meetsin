@@ -6,6 +6,7 @@ import Image from "next/image";
 import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
 import active_user_icon from "/public/active_user.svg";
+import NotiButton from "./notiButton/notiButton";
 import style from "./menu.module.scss";
 
 interface IMenu {
@@ -28,6 +29,7 @@ const Menu = (props: IMenu) => {
 
     return (
         <div className={`${className} ${style.menu_container}`}>
+            <NotiButton />
             {isTimerVisible && <Timer setIsTimerVisible={setIsTimerVisible} />}
             <ul className={style.menu_bar}>
                 <li>
