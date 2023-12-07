@@ -1,0 +1,16 @@
+@import "../../../styles/mixin";
+
+.link_before_copy {
+    @include round_button;
+    &:after {
+        background-image: url(/circles-relation.svg);
+    }
+}
+
+.link_after_copy {
+    @include round_button;
+    cursor: default;
+    &:after {
+        background-image: url(/double-check.svg);
+    }
+}

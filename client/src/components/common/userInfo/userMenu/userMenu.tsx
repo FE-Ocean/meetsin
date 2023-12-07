@@ -9,11 +9,11 @@ interface IUserMenu {
 const USER_MENU = [
     {
         icon: <Image width={24} height={24} src="/setting.svg" alt="환경설정 아이콘" />,
-        label: "Setting",
+        label: "환경설정",
     },
     {
         icon: <Image width={24} height={24} src="/door-exit.svg" alt="로그아웃 아이콘" />,
-        label: "Logout",
+        label: "로그아웃",
     },
 ];
 
