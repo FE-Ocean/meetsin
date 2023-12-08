@@ -31,8 +31,8 @@ const Menu = (props: IMenu) => {
 
     return (
         <div className={`${className} ${style.menu_container}`}>
-            <NotiButton />
             <UserInfo />
+            <NotiButton />
             <LinkCopyButton className={style.link_copy_button} />
 
             <div className={style.right_container}>

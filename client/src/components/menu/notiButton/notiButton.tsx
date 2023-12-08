@@ -1,4 +1,5 @@
 import { useState } from "react";
+import style from "./NotiButton.module.scss";
 
 async function saveSubscriptionToDB(subscription: PushSubscription) {
     console.log(subscription, "이거 디비에 저장할 것..");
@@ -53,9 +54,9 @@ const NotiButton = () => {
     const [hasSubscription, setHasSubscription] = useState(false);
 
     return hasSubscription ? (
-        <button onClick={cancelSubscription}>on</button>
+        <button className={style.on} onClick={cancelSubscription} />
     ) : (
-        <button onClick={startSubscription}>off</button>
+        <button className={style.off} onClick={startSubscription} />
     );
 };
 export default NotiButton;

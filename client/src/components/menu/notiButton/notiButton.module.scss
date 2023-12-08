@@ -1,0 +1,37 @@
+@import "../../../styles/mixin";
+
+// .container {
+//     @include common_ui;
+//     width: 50px;
+//     height: 50px;
+//     border-radius: 50%;
+//     margin-left: 10px;
+//     margin-right: 10px;
+//     &::after {
+//         content: "";
+//         display: inline-block;
+//         position: absolute;
+//         width: 24px;
+//         height: 24px;
+//         bottom: 13px;
+//         right: 8px;
+//         background-repeat: no-repeat;
+//         background-image: url(/noti_on.svg);
+//     }
+// }
+
+.on {
+    @include round_button;
+    margin-left: 10px;
+    &::after {
+        background-image: url(/noti_on.svg);
+    }
+}
+
+.off {
+    @include round_button;
+    margin-left: 10px;
+    &::after {
+        background-image: url(/noti_off.svg);
+    }
+}
