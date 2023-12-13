@@ -1,0 +1,17 @@
+@import "../../../styles/mixin";
+
+.on {
+    @include round_button;
+    margin-left: 10px;
+    &::after {
+        background-image: url(/noti_on.svg);
+    }
+}
+
+.off {
+    @include round_button;
+    margin-left: 10px;
+    &::after {
+        background-image: url(/noti_off.svg);
+    }
+}
