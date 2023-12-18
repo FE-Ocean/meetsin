@@ -6,9 +6,10 @@ import Image from "next/image";
 import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
 import active_user_icon from "/public/active_user.svg";
-import style from "./menu.module.scss";
+import NotificationSwitch from "./notificationSwitch/notificationSwitch";
 import UserInfo from "../common/userInfo/userInfo";
 import LinkCopyButton from "./linkCopyButton/linkCopyButton";
+import style from "./menu.module.scss";
 
 interface IMenu {
     className: string;
@@ -31,6 +32,7 @@ const Menu = (props: IMenu) => {
     return (
         <div className={`${className} ${style.menu_container}`}>
             <UserInfo />
+            <NotificationSwitch />
             <LinkCopyButton className={style.link_copy_button} />
 
             <div className={style.right_container}>
