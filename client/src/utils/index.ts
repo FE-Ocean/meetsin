@@ -11,3 +11,15 @@ export const formatTimeFromISO = (isoString: string) => {
 export const numberToString = (num: number) => {
     return String(num).padStart(2, "0");
 };
+
+export const setLocalStorage = (key: string, value: string) => {
+    localStorage.setItem(key, value);
+};
+
+export const getLocalStorage = (key: string) => {
+    return localStorage.getItem(key);
+};
+
+export const removeLocalStorage = (key: string) => {
+    return localStorage.removeItem(key);
+};
