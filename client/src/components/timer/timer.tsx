@@ -1,10 +1,9 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { timerAtom } from "@/jotai/atom";
 import { numberToString } from "@/utils";
+import { postNotification } from "../menu/notificationSwitch/notification";
 import timer_icon from "/public/timer.svg";
 import style from "./timer.module.scss";
 
@@ -45,6 +44,7 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
             clearInterval(interval.current!);
 
             playSoundEffect();
+            postNotification();
         }
     }, [sec, playSoundEffect]);
 
