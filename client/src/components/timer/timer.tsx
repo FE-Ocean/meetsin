@@ -22,7 +22,7 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
     const [sec, setSec] = useState(second);
 
     const playSoundEffect = useCallback(() => {
-        const alarm = new Audio("/timer_alarm.wav");
+        const alarm = new Audio("/timer_alarm.mp3");
 
         alarm.play();
         alarm.onended = () => {
