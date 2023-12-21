@@ -16,7 +16,7 @@ export const POST = async () => {
             webpush.sendNotification(
                 subscribers[userId],
                 JSON.stringify({
-                    title: `${userId}님 시간이 종료되었습니다.`,
+                    title: "시간이 종료되었습니다.",
                     body: "타이머 설정 시간이 종료되었습니다.",
                     icon: "/timer.svg",
                 }),
