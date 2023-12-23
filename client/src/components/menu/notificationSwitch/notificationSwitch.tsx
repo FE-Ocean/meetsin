@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { cancelSubscription, getExistingSubscription, startSubscription } from "./subscription";
+import { cancelSubscription, getExistingSubscription, startSubscription } from "./notification";
 import style from "./notificationSwitch.module.scss";
 
 const NotificationSwitch = () => {
