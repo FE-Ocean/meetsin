@@ -64,3 +64,15 @@ const deleteSubscriptionFromDB = async () => {
 
     removeLocalStorage("firebaseUserKey");
 };
+
+export const postNotification = async () => {
+    const response = await fetch("/api/notification", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    if (!response.ok) {
+        throw Error("Failed to send push subscription to server");
+    }
+};
