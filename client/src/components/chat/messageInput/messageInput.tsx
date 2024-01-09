@@ -1,62 +1,65 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import style from "./messageInput.module.scss";
 import useMessage from "@/hooks/useMessage";
+import { useSearchParams } from "next/navigation";
+import useAdjustHeight from "@/hooks/useAdjustHeight";
+import useResetHeight from "@/hooks/useResetHeight";
 
 const MessageInput = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const [isComposing, setIsComposing] = useState<boolean>(false);
-    const [user_name, setUserName] = useState<string | null>(null);
 
-    useEffect(() => {
-        const name = localStorage.getItem("user_name");
-        setUserName(name);
-    }, []);
+    const searchParams = useSearchParams();
+    const userName = searchParams.get("username");
 
-    const { message, onChange, send } = useMessage({
+    const { message, onChange, sendMessage } = useMessage({
         inputRef: textareaRef,
-        payload: { nickname: user_name },
+        payload: { nickname: userName },
     });
+
+    const adjustHeight = useAdjustHeight({ inputRef: textareaRef });
+    const resetHeight = useResetHeight({ inputRef: textareaRef });
+
+    const submitMessage = () => {
+        sendMessage();
+        resetHeight();
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        submitMessage();
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (isComposing) return;
-
         if (!e.shiftKey && e.key === "Enter") {
             e.preventDefault();
-            send();
+            submitMessage();
             return;
         }
     };
 
-    const handleCompositionStart = () => {
-        setIsComposing(true);
-    };
-
-    const handleCompoistionEnd = () => {
-        setIsComposing(false);
-    };
-
     return (
-        <div className={`${style.input_container}`}>
+        <form className={`${style.input_container}`} onSubmit={handleSubmit}>
             <textarea
                 className={style.message_textarea}
                 placeholder="메세지를 입력하세요."
                 rows={1}
                 ref={textareaRef}
                 value={message}
-                onChange={onChange}
+                onChange={(e) => {
+                    onChange(e);
+                    adjustHeight();
+                }}
                 onKeyDown={handleKeyDown}
-                onCompositionStart={handleCompositionStart}
-                onCompositionEnd={handleCompoistionEnd}
+                onCompositionStart={() => setIsComposing(true)}
+                onCompositionEnd={() => setIsComposing(false)}
             />
-            <button
-                type="button"
-                className={`${style.send_button} ${!!message && style.active}`}
-                onClick={send}
-            />
-        </div>
+            <button type="submit" className={`${style.send_button} ${!!message && style.active}`} />
+        </form>
     );
 };
 
