@@ -10,8 +10,8 @@ export class UsersController {
         private readonly authService: AuthService,
     ) {}
 
-    @Post("/login")
-    login(@Body() data: LoginRequestDto) {
-        return this.authService.login(data);
-    }
+    // @Post("/login")
+    // login(@Body() data: LoginRequestDto) {
+    //     return this.authService.login(data);
+    // }
 }

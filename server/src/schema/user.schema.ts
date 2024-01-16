@@ -19,18 +19,24 @@ export class User {
     @Prop({
         required: true,
     })
-    password: string;
+    user_name: string;
 
     @Prop({
         required: true,
     })
-    user_name: string;
+    email: string;
 
     @Prop()
-    character: string;
+    character?: string;
 
     @Prop()
     profile_img: string;
+
+    @Prop()
+    accessToken: string;
+
+    @Prop()
+    refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

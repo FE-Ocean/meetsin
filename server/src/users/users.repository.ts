@@ -7,8 +7,20 @@ import { User } from "src/schema/user.schema";
 export class UsersRepository {
     constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
+    createUser(userData) {
+        return {
+            ...userData,
+        } as User
+    }
+
     async findUserById(user_id: string) {
         const user = await this.userModel.findOne({ user_id });
+        console.log(user)
         return user;
     }
+
+    async saveUser(userData) {
+        await this.userModel.create(userData)
+    }
+    
 }
