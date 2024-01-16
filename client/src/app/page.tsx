@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import style from "./style.module.scss";
 import Login from "@/components/modals/login/login";
+import LoginButton from "@/components/button/login/LoginButton";
 
 const Home = () => {
     useEffect(() => {
@@ -19,7 +20,7 @@ const Home = () => {
     return (
         <>
             <button>임시 로그인 버튼 추가 예정</button>
-            <Login />
+            <LoginButton loginType="google" />
         </>
     );
 };
