@@ -1,4 +1,4 @@
-import { Logger, UnauthorizedException } from "@nestjs/common";
+import { Logger } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import {
     SubscribeMessage,
@@ -8,8 +8,10 @@ import {
     OnGatewayInit,
     OnGatewayDisconnect,
     MessageBody,
+    WebSocketServer,
 } from "@nestjs/websockets";
-import { Socket } from "socket.io";
+import { Server, Socket } from "socket.io";
+import { MessageInfoDTO } from "./dto/messageInfo.dto";
 
 interface UserSocket extends Socket {
     user?: any;
@@ -29,30 +31,27 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
 
     constructor(private readonly jwtService: JwtService) {}
 
+    @WebSocketServer() server: Server;
+
     afterInit(server: any) {
         this.logger.log("init");
     }
 
     handleConnection(@ConnectedSocket() socket: UserSocket) {
         this.logger.log(`connect ${socket.id} ${socket.nsp.name}`);
-        const token = socket.handshake.query.token as string;
-
-        try {
-            const user = this.jwtService.verify(token);
-            socket.user = user;
-        } catch (error) {
-            socket.disconnect();
-            throw new UnauthorizedException("UnAuthorized!");
-        }
     }
 
     handleDisconnect(client: any) {
         this.logger.log("disconnect");
     }
 
+    @SubscribeMessage("join_room")
+    handleJoin(@MessageBody() roomId : string, @ConnectedSocket() socket : Socket) {
+        socket.join(roomId)
+    }
+
     @SubscribeMessage("new_message")
-    handleMessage(@MessageBody() messageInfo: any, @ConnectedSocket() socket: Socket): void {
-        socket.emit("new_message", { time: new Date(), ...messageInfo });
-        socket.broadcast.emit("new_message", { time: new Date(), ...messageInfo });
+    handleMessage(@MessageBody() messageInfo: MessageInfoDTO): void {
+        this.server.to(messageInfo.roomId).emit("new_message", { time: new Date(), ...messageInfo })
     }
 }
