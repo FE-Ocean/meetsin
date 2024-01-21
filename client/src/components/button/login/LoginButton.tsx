@@ -18,7 +18,8 @@ const LoginButton = ({ loginType }: IProps) => {
         //     credentials: "include",
         // });
         // console.log(test);
-        window.location.href = "http://localhost:8000/auth/login/google";
+        // window.location.href = "http://localhost:8000/auth/login/google";
+        window.location.href = "http://localhost:8000/auth/login/google2";
         return;
     };
 

@@ -15,7 +15,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         super({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:8000/auth/redirect/google",
+            // callbackURL: "http://localhost:8000/auth/redirect/google",
+            callbackURL: "http://localhost:8000/auth/login/google2",
             scope: ["email", "profile"],
         });
     }
@@ -31,8 +32,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             accessToken,
             refreshToken,
         }
-        const user = await this.authService.testSignin(userInfo)
+        // const user = await this.authService.testSignin(userInfo)
         // done(null, user);
-        return user;
+        // return user;
+
+        // 여기서 return 하는 값이 Request 객체의 user 속성으로 저장됨.
+        return userInfo;
     }
 }

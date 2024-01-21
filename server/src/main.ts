@@ -22,6 +22,10 @@ async function bootstrap() {
     app.use(passport.initialize())
     app.use(passport.session())
 
+    passport.serializeUser((user, done) => {
+        done(null, user); 
+    });
+
     await app.listen(8000);
 }
 bootstrap();

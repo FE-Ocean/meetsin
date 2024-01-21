@@ -66,6 +66,34 @@ export class AuthService {
         }
     }
 
+    async googleSignIn2(userData : any, res : any) {
+        try {
+
+            if(!userData){
+                throw new BadRequestException('Unauthenticated')
+            }
+
+            const user = await this.usersRepository.findUserById(userData.user_id)
+            if(!user) {
+                return this.googleSignUp(userData);
+            }
+
+            const token = this.jwtService.sign({sub:user.user_id, email:user.email})
+            res.status(HttpStatus.OK).cookie('token_test', token, {
+                maxAge: 60 * 60 * 24 * 30,
+                sameSite: true,
+                secure: false,
+            })
+
+            res.redirect('http://localhost:3000')
+        } catch(error) {
+            throw new HttpException({
+                status: HttpStatus.CONFLICT,
+                error: 'signin issue'
+            }, HttpStatus.CONFLICT)
+        }
+    }
+
     async googleSignUp(userData) {
         const user = this.usersRepository.createUser(userData)
         await this.usersRepository.saveUser(user)
