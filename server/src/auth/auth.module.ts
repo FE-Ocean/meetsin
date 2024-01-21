@@ -3,6 +3,13 @@ import { AuthService } from "./auth.service";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { UsersModule } from "src/users/users.module";
+import { PassportModule } from "@nestjs/passport";
+import { GoogleStrategy } from "./google.strategy";
+import { AuthController } from "./auth.controller";
+import { UsersService } from "src/users/users.service";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 @Module({
     imports: [
@@ -16,8 +23,10 @@ import { UsersModule } from "src/users/users.module";
             },
         }),
         forwardRef(() => UsersModule),
+        PassportModule.register({session: true}),
     ],
-    providers: [AuthService],
+    providers: [AuthService, GoogleStrategy, UsersService],
+    controllers: [AuthController],
     exports: [AuthService],
 })
 export class AuthModule {}
