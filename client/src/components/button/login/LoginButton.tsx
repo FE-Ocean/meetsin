@@ -12,7 +12,7 @@ interface IProps {
 
 const LoginButton = ({ loginType }: IProps) => {
     const login = async (loginType: socialLoginType) => {
-        window.location.href = "http://localhost:8000/auth/login/google";
+        window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login/${loginType}`;
     };
 
     return (

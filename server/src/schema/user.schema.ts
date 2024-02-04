@@ -12,6 +12,7 @@ const options: SchemaOptions = {
 export class User {
     @Prop({
         required: true,
+        unique: true,
     })
     user_id: string;
 
@@ -19,6 +20,9 @@ export class User {
         required: true,
     })
     user_name: string;
+
+    @Prop()
+    email: string;
 
     @Prop()
     character?: string;

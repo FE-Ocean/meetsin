@@ -9,26 +9,26 @@ dotenv.config();
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    // CORS 설정
-    app.enableCors({
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
-        credentials: true,
-    });
-
     app.use(session({
-        secret: process.env.JWT_SECRET, // temp
+        secret: process.env.SESSION_SECRET, // temp
         resave: false,
         saveUninitialized: false,
-    }),)
+        cookie: {
+            httpOnly: true,
+            secure: false,
+            maxAge: 30000,
+        },
+    }))
 
     app.use(passport.initialize())
     app.use(passport.session())
 
-    passport.serializeUser((user, done) => {
-        done(null, user); 
+    // CORS 설정
+    app.enableCors({
+        origin: process.env.SERVER_URL,
+        methods: ["GET", "POST"],
+        credentials: true,
     });
-
     await app.listen(8000);
 }
 bootstrap();

@@ -19,16 +19,27 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         });
     }
 
-    async validate(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
-        const {id, name, emails, photos} = profile;
-        const userInfo: User = {
-            user_id: emails[0].value,
-            profile_img: photos[0].value,
-            user_name: `${name.familyName || ''}${name.givenName}`,
-            access_token: accessToken,
-            refresh_token: refreshToken,
+    authorizationParams(options: any): object {
+        return {
+            access_type: 'offline'
         }
-        done(null, userInfo);
-        return userInfo;
+    }
+
+    async validate(accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
+        try {
+            const {id, emails, photos, displayName} = profile;
+            const userInfo: User = {
+                user_id: id,
+                email: emails[0].value,
+                profile_img: photos[0].value,
+                user_name: displayName,
+                access_token: accessToken,
+                refresh_token: refreshToken,
+            };
+            return done(null, userInfo);
+        } catch (error) {
+            done(error);
+        }
+        
     }
 }
