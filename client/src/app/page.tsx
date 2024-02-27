@@ -1,5 +1,7 @@
 "use client";
 import { useEffect } from "react";
+import style from "./style.module.scss";
+import Login from "@/components/modals/login/login";
 
 const Home = () => {
     useEffect(() => {
@@ -14,6 +16,11 @@ const Home = () => {
         registerServiceWorker();
     }, []);
 
-    return <button>임시 로그인 버튼 추가 예정</button>;
+    return (
+        <>
+            {/* TODO: 모달 toggle 버튼 및 state 추가 */}
+            <Login />
+        </>
+    );
 };
 export default Home;

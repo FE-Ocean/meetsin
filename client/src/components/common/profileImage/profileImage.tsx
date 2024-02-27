@@ -1,17 +1,17 @@
 import React from "react";
 import Image from "next/image";
 import style from "./profileImage.module.scss";
-import { imageSizeType } from "@/constants/ImageSize.type";
+import { IMAGE_SIZE_TYPE } from "@/constants/imageSize.const";
 
 interface IProps {
     src: string;
     alt?: string;
-    size?: imageSizeType;
+    size?: IMAGE_SIZE_TYPE;
 }
 
 const ProfileImage = ({ src, alt, size }: IProps) => {
     if (!size) {
-        size = imageSizeType.middle;
+        size = IMAGE_SIZE_TYPE.middle;
     }
     // TODO: src = "" 이면 기본 이미지 추가
     return <Image src={src} alt={alt || ""} className={style.profile} width={size} height={size} />;
