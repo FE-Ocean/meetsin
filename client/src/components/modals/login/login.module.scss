@@ -1,0 +1,40 @@
+@import "../../../styles/variables";
+
+.login_modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 270px;
+    padding: 32px;
+    border-radius: 15px;
+    border: 1px solid $gray-light;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 30px;
+
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0 auto;
+    }
+
+    .close_button {
+        position: absolute;
+        top: 32px;
+        right: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button_list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        justify-content: center;
+        align-items: stretch;
+    }
+}
