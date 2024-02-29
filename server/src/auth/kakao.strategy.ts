@@ -1,4 +1,3 @@
-import { UsersRepository } from './../users/users.repository';
 import { PassportStrategy } from "@nestjs/passport";
 import { Profile, Strategy } from "passport-kakao";
 import { User } from "src/schema/user.schema";
@@ -23,7 +22,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
                 access_token: accessToken,
                 refresh_token: refreshToken,
             };
-            return done(null, userInfo);
+            done(null, userInfo);
         } catch (error) {
             done(error);   
         }

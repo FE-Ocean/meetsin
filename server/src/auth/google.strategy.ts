@@ -36,7 +36,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
                 access_token: accessToken,
                 refresh_token: refreshToken,
             };
-            return done(null, userInfo);
+            done(null, userInfo);
         } catch (error) {
             done(error);
         }

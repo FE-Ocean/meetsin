@@ -1,36 +1,34 @@
-import { Controller, Get, Req, Res, Session, UseGuards } from "@nestjs/common";
-import { GoogleAuthGuard, KakaoAuthGuard } from "./auth.guard";
+import { Controller, Get, Req, Res, UseGuards } from "@nestjs/common"
 import { AuthService } from "./auth.service";
-import { CurrentUser } from "src/common/decorators/user.decorator";
 import { Response } from "express";
+import { AuthGuard } from "@nestjs/passport";
+import { LoginRequest } from "src/types/request.type";
 
 @Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Get("/login/google")
-    @UseGuards(GoogleAuthGuard)
+    @UseGuards(AuthGuard("google"))
     googleAuth(@Req() req) {}
 
     @Get("/redirect/google")
-    @UseGuards(GoogleAuthGuard)
-    // googleAuthRedirect(@CurrentUser() user, @Res() res: Response, @Session() session) {
-        // console.log("user on controller: " + JSON.stringify(user))
-        // return this.authService.signIn(user, res);
-    googleAuthRedirect(@Req() req, @Res() res: Response, @Session() session) {
-        console.log(req.user)
-        req.session.user = req.user
-        this.authService.signIn(req.user, res);
-        // return {user, sessionId: session.id}
+    @UseGuards(AuthGuard('google'))
+    async googleAuthRedirect(@Req() req: LoginRequest, @Res() res: Response) {
+        const token = await this.authService.signIn(req, res)
+        res.cookie('access_token', token.access_token, {httpOnly: true})
+        res.redirect(process.env.CLIENT_URL)
     }
 
     @Get("/login/kakao")
-    @UseGuards(KakaoAuthGuard)
+    @UseGuards(AuthGuard("kakao"))
     kakaoAuth(@Req() req) {}
 
     @Get("/redirect/kakao")
-    @UseGuards(KakaoAuthGuard)
-    kakaoAuthRedirect(@CurrentUser() user, @Res() res: Response) {
-        return this.authService.signIn(user, res);
+    @UseGuards(AuthGuard("kakao"))
+    async kakaoAuthRedirect(@Req() req: LoginRequest, @Res() res: Response) {
+        const token = await this.authService.signIn(req, res)
+        res.cookie('access_token', token.access_token, {httpOnly: true})
+        res.redirect(process.env.CLIENT_URL)
     }
 }
