@@ -3,7 +3,7 @@ import { User } from "src/schema/user.schema";
 import { UsersRepository } from "src/users/users.repository";
 import dotenv from "dotenv";
 import { Response } from "express";
-import { JwtModule } from "@nestjs/jwt";
+import { JwtService } from "@nestjs/jwt";
 import { LoginRequest } from "src/types/request.type";
 
 dotenv.config();
@@ -12,6 +12,7 @@ dotenv.config();
 export class AuthService {
     constructor(
         private readonly usersRepository: UsersRepository,
+        private readonly jwtService: JwtService,
     ) {}
 
     async signIn(req: LoginRequest, res: Response) {
@@ -35,7 +36,7 @@ export class AuthService {
             }
             
             return {
-                access_token: JwtModule.register({secret: 'test'})
+                access_token: this.jwtService.sign(jwtPayload)
             }
         } catch(error) {
             throw new ForbiddenException("Signin Failed");
