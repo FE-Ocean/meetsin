@@ -3,10 +3,12 @@ import { AuthService } from "./auth.service";
 import { Response } from "express";
 import { AuthGuard } from "@nestjs/passport";
 import { LoginRequest } from "src/types/request.type";
+import { JwtGuard } from "./auth.guard";
+import { UsersService } from "src/users/users.service";
 
 @Controller("auth")
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(private readonly authService: AuthService, private readonly userService: UsersService) {}
 
     @Get("/login/google")
     @UseGuards(AuthGuard("google"))
@@ -15,8 +17,8 @@ export class AuthController {
     @Get("/redirect/google")
     @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(@Req() req: LoginRequest, @Res() res: Response) {
-        const token = await this.authService.signIn(req, res)
-        res.cookie('access_token', token.access_token, {httpOnly: true})
+        const { access_token } = await this.authService.signIn(req, res)
+        res.cookie('access_token', access_token)
         res.redirect(process.env.CLIENT_URL)
     }
 
@@ -27,8 +29,16 @@ export class AuthController {
     @Get("/redirect/kakao")
     @UseGuards(AuthGuard("kakao"))
     async kakaoAuthRedirect(@Req() req: LoginRequest, @Res() res: Response) {
-        const token = await this.authService.signIn(req, res)
-        res.cookie('access_token', token.access_token, {httpOnly: true})
+        const { access_token } = await this.authService.signIn(req, res)
+        res.cookie('access_token', access_token)
         res.redirect(process.env.CLIENT_URL)
+    }
+
+    // 토큰으로 유저 정보 가져오기
+    @Get("/user")
+    @UseGuards(JwtGuard)
+    async login(@Req() req: LoginRequest, @Res() res: Response) {
+        const user = this.userService.entityToDto(req.user);
+        res.json(user)
     }
 }

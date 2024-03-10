@@ -1,6 +1,6 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Profile, Strategy } from "passport-kakao";
-import { User } from "src/schema/user.schema";
+import { UserEntity } from "src/schema/user.schema";
 
 export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
     constructor() {
@@ -11,10 +11,10 @@ export class KakaoStrategy extends PassportStrategy(Strategy, 'kakao') {
         })
     }
 
-    async validate(accessToken: string, refreshToken: string, profile: Profile, done: (error: Error, user?: User) => void) {
+    async validate(accessToken: string, refreshToken: string, profile: Profile, done: (error: Error, user?: UserEntity) => void) {
         try {
             const {id, _json:json, displayName} = profile;
-            const userInfo: User = {
+            const userInfo: UserEntity = {
                 user_id: id,
                 email: json.kakao_account.email,
                 profile_img: json.kakao_account.profile.profile_image_url,

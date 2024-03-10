@@ -1,5 +1,5 @@
 import { BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { User } from "src/schema/user.schema";
+import { UserEntity } from "src/schema/user.schema";
 import { UsersRepository } from "src/users/users.repository";
 import dotenv from "dotenv";
 import { Response } from "express";
@@ -17,33 +17,38 @@ export class AuthService {
 
     async signIn(req: LoginRequest, res: Response) {
         try {
-            const userData = req.user as User
+            const userData = req.user as UserEntity
+
+            let user: UserEntity;
 
             if(!userData){
                 throw new BadRequestException('Unauthenticated');
             }
 
-            const user = await this.usersRepository.findUserById(userData.user_id);
+            user = await this.usersRepository.findUserById(userData.user_id);
 
             if(!user) {
-                return this.signUp(userData);
+                user = await this.signUp(userData);
             }
             
             const jwtPayload = {
                 id: user.user_id,
-                email: user.email,
-                userName: user.user_name
+                email: user.email
             }
+
+            const accessToken = this.jwtService.sign(jwtPayload)
+
+            await this.usersRepository.updateAccessToken(user, accessToken)
             
             return {
-                access_token: this.jwtService.sign(jwtPayload)
+                access_token: accessToken
             }
         } catch(error) {
             throw new ForbiddenException("Signin Failed");
         }
     }
 
-    async signUp(userData: User) {
+    async signUp(userData: UserEntity) {
         const user = this.usersRepository.createUser(userData);
         await this.usersRepository.saveUser(user);
         return user;

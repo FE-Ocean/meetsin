@@ -1,3 +1,4 @@
+import { UsersService } from './../users/users.service';
 import { Module, forwardRef } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { ConfigModule } from "@nestjs/config";
@@ -29,7 +30,7 @@ dotenv.config();
             }
         })
     ],
-    providers: [AuthService, GoogleStrategy, KakaoStrategy, JwtStrategy],
+    providers: [AuthService, UsersService, GoogleStrategy, KakaoStrategy, JwtStrategy],
     controllers: [AuthController],
     exports: [AuthService],
 })
