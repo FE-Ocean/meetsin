@@ -1,3 +1,4 @@
+import { IUser } from "@/types/user.type";
 import { atom } from "jotai";
 
 interface IModalAtom {
@@ -10,6 +11,9 @@ export const modalAtom = atom<IModalAtom>({
     testModal: {
         open: false,
     },
+    login: {
+        open: false,
+    }
 });
 
 export const timerAtom = atom({
@@ -20,3 +24,5 @@ export const timerAtom = atom({
 export const isTimerVisibleAtom = atom(false);
 
 export const screenShareAtom = atom(false);
+
+export const userAtom = atom<IUser | null>(null);
