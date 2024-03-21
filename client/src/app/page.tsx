@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import style from "./style.module.scss";
 import Button from "@/components/common/button/button";
 import { baseClient } from "@/modules/fetchClient";
-import { userAtom } from "@/jotai/atom";
+import { accessTokenAtom, userAtom } from "@/jotai/atom";
 import { useAtom } from "jotai";
 import { IUser, IUserModel } from "@/types/user.type";
 import useModal from "@/hooks/useModal";
@@ -22,7 +22,7 @@ const Home = () => {
         registerServiceWorker();
     }, []);
 
-    const [accessToken, setAccessToken] = useState("");
+    const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
     
     const [user, setUser] = useAtom(userAtom);
 
@@ -30,14 +30,20 @@ const Home = () => {
         const token = document.cookie.split("; ").find(cookie => cookie.includes("access_token="))?.replace("access_token=", "");
         if(token){
             setAccessToken(token);
+            document.cookie = document.cookie.split("; ").map(cookie => {
+                if(cookie.includes("access_token=")){
+                    return cookie+"=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                }
+                else {
+                    return cookie;
+                }
+            }).join("; ");
         }
-        // console.log(document.cookie);
     
         const getUserInfo = async () => {
             if(!accessToken){
                 return;
             }
-            // 토큰이 있으면 다시 로그인 요청하는 api 호출?
             const data = await baseClient.get("/auth/user", {
                 headers: {
                     "Authorization": `Bearer ${accessToken}`
@@ -66,7 +72,7 @@ const Home = () => {
                 user 
                     ?
                     <>
-                        <UserInfo className={style.user_info} /> 
+                        <UserInfo className={style.user_info} direction="bottom" /> 
                         <div className={style.make_room_wrapper}>
                             <p className={style.make_room_description}>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa, dolore asperiores repudiandae tempore quisquam doloremque. Laborum hic necessitatibus impedit molestias reiciendis, provident officiis quod quas labore? Dicta quam dignissimos deserunt?</p>
                             <Button type="button" look="solid" text="방 만들기" width={135} />
