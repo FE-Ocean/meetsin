@@ -2,12 +2,11 @@
 import { useEffect } from "react";
 import style from "./style.module.scss";
 import Button from "@/components/common/button/button";
-import { baseClient } from "@/modules/fetchClient";
 import { accessTokenAtom, userAtom } from "@/jotai/atom";
 import { useAtom } from "jotai";
-import { IUser, IUserModel } from "@/types/user.type";
 import useModal from "@/hooks/useModal";
 import UserInfo from "@/components/common/userInfo/userInfo";
+import { useGetUserInfo } from "./api/service/user.service";
 
 const Home = () => {
     useEffect(() => {
@@ -30,40 +29,20 @@ const Home = () => {
         const token = document.cookie.split("; ").find(cookie => cookie.includes("access_token="))?.replace("access_token=", "");
         if(token){
             setAccessToken(token);
-            document.cookie = document.cookie.split("; ").map(cookie => {
-                if(cookie.includes("access_token=")){
-                    return cookie+"=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-                }
-                else {
-                    return cookie;
-                }
-            }).join("; ");
         }
-    
-        const getUserInfo = async () => {
-            if(!accessToken){
-                return;
-            }
-            const data = await baseClient.get("/auth/user", {
-                headers: {
-                    "Authorization": `Bearer ${accessToken}`
-                }
-            }).then(res => {
-                const userData = res as IUserModel;
-                return {
-                    userName: userData.user_name,
-                    userId: userData.user_id,
-                    profileImg: userData.profile_img,
-                    email: userData.email
-                } as IUser;
-            });
+        else {
+            setAccessToken("");
+        }
+    }, [accessToken, setAccessToken]);
 
-            setUser(data);
-        };
-
-        getUserInfo();
-    }, [accessToken, setAccessToken, setUser]);
+    const isEnable = !!accessToken;
     
+    const { data } = useGetUserInfo(accessToken, isEnable);
+    useEffect(() => {
+        if(data) {
+            data && setUser(data);
+        }
+    }, [data, setUser]);
     const { onOpen } = useModal("login");
 
     return (

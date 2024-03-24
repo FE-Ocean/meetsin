@@ -25,6 +25,6 @@ export const isTimerVisibleAtom = atom(false);
 
 export const screenShareAtom = atom(false);
 
-export const accessTokenAtom = atom<string | null>(null);
+export const accessTokenAtom = atom<string>("");
 
 export const userAtom = atom<IUser | null>(null);

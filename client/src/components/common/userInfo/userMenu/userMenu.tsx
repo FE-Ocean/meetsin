@@ -15,7 +15,15 @@ const UserMenu = (props: IUserMenu) => {
     
     const logout = () => {
         setUser(null);
-        setAccessToken(null);
+        setAccessToken("");
+        document.cookie = document.cookie.split("; ").map(cookie => {
+            if(cookie.includes("access_token=")){
+                return cookie+"=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            }
+            else {
+                return cookie;
+            }
+        }).join("; ");
     };
 
     const USER_MENU = [
