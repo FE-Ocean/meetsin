@@ -3,6 +3,7 @@ import UserMenuItem from "../userMenuItem/userMenuItem";
 import style from "./userMenu.module.scss";
 import { useSetAtom } from "jotai";
 import { accessTokenAtom, userAtom } from "@/jotai/atom";
+import { useRouter } from "next/navigation";
 
 interface IUserMenu {
     className?: string;
@@ -12,10 +13,8 @@ const UserMenu = (props: IUserMenu) => {
 
     const setUser = useSetAtom(userAtom);
     const setAccessToken = useSetAtom(accessTokenAtom);
-    
+    const router = useRouter();
     const logout = () => {
-        setUser(null);
-        setAccessToken("");
         document.cookie = document.cookie.split("; ").map(cookie => {
             if(cookie.includes("access_token=")){
                 return cookie+"=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
@@ -24,6 +23,10 @@ const UserMenu = (props: IUserMenu) => {
                 return cookie;
             }
         }).join("; ");
+        setUser(null);
+        setAccessToken("");
+        
+        router.push("/");
     };
 
     const USER_MENU = [
