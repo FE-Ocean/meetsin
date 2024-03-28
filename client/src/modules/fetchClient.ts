@@ -66,7 +66,7 @@ export class FetchClient {
 }
 
 export const baseClient = FetchClient.create({
-    baseURL: "http://localhost:8000",
+    baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
     config: {
         headers: {
             "Content-Type": "application/json",

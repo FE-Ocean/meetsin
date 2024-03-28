@@ -20,7 +20,7 @@ const UserInfo = (props: IUserInfo) => {
     };
 
     return (
-        <div className={`${className} ${style.wrapper}`}>
+        <div className={`${style.wrapper}${className && " " + className}`}>
             <UserButton onClick={handleUserButtonClick} />
             {menuOpen && <UserMenu className={`${style.user_menu} ${style[direction]}`} />}
         </div>
