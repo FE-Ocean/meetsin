@@ -6,6 +6,7 @@ import { screenShareAtom } from "@/jotai/atom";
 import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
+import { useScreenShare } from "@/hooks/useScreenShare";
 
 const Home = () => {
     const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
@@ -49,6 +50,8 @@ const Home = () => {
         }
     };
 
+    const {startScreenShare: testScreenShare} = useScreenShare();
+
     return (
         <>
             <main className={style.main}>
@@ -60,7 +63,7 @@ const Home = () => {
                 <Menu
                     className={style.menu}
                     onScreenShare={() => {
-                        isScreenShare ? stopScreenShare() : startScreenShare();
+                        isScreenShare ? stopScreenShare() : testScreenShare();
                     }}
                     toggleChat={toggleChat}
                 />

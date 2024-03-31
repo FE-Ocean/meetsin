@@ -30,6 +30,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cbor-extract/cbor-extract-darwin-arm64@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@cbor-extract/cbor-extract-darwin-arm64@npm:2.2.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-darwin-x64@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@cbor-extract/cbor-extract-darwin-x64@npm:2.2.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-arm64@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@cbor-extract/cbor-extract-linux-arm64@npm:2.2.0"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-arm@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@cbor-extract/cbor-extract-linux-arm@npm:2.2.0"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-x64@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@cbor-extract/cbor-extract-linux-x64@npm:2.2.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-win32-x64@npm:2.2.0":
+  version: 2.2.0
+  resolution: "@cbor-extract/cbor-extract-win32-x64@npm:2.2.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@eslint-community/eslint-utils@npm:^4.2.0":
   version: 4.4.0
   resolution: "@eslint-community/eslint-utils@npm:4.4.0"
@@ -651,6 +693,13 @@ __metadata:
     wrap-ansi: ^8.1.0
     wrap-ansi-cjs: "npm:wrap-ansi@^7.0.0"
   checksum: 4a473b9b32a7d4d3cfb7a614226e555091ff0c5a29a1734c28c72a182c2f6699b26fc6b5c2131dfd841e86b185aea714c72201d7c98c2fba5f17709333a67aeb
+  languageName: node
+  linkType: hard
+
+"@msgpack/msgpack@npm:^2.8.0":
+  version: 2.8.0
+  resolution: "@msgpack/msgpack@npm:2.8.0"
+  checksum: bead9393f57239007a2fe455df5277cbc03b125f14f310162a652b81471dcf3ab6780eaa24b36e20aa742998910a6840147d08b7267063b8e2de5d40c624360e
   languageName: node
   linkType: hard
 
@@ -1484,6 +1533,49 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cbor-extract@npm:^2.1.1":
+  version: 2.2.0
+  resolution: "cbor-extract@npm:2.2.0"
+  dependencies:
+    "@cbor-extract/cbor-extract-darwin-arm64": 2.2.0
+    "@cbor-extract/cbor-extract-darwin-x64": 2.2.0
+    "@cbor-extract/cbor-extract-linux-arm": 2.2.0
+    "@cbor-extract/cbor-extract-linux-arm64": 2.2.0
+    "@cbor-extract/cbor-extract-linux-x64": 2.2.0
+    "@cbor-extract/cbor-extract-win32-x64": 2.2.0
+    node-gyp: latest
+    node-gyp-build-optional-packages: 5.1.1
+  dependenciesMeta:
+    "@cbor-extract/cbor-extract-darwin-arm64":
+      optional: true
+    "@cbor-extract/cbor-extract-darwin-x64":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-arm":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-arm64":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-x64":
+      optional: true
+    "@cbor-extract/cbor-extract-win32-x64":
+      optional: true
+  bin:
+    download-cbor-prebuilds: bin/download-prebuilds.js
+  checksum: 0953e849e01885746d9433d81eef54f333feb39bfdd721f7c8fd639f1ca5ae0c6644cb5306d200241380013bae3edd858333173ef6a65a7816f39d179ce5372e
+  languageName: node
+  linkType: hard
+
+"cbor-x@npm:1.5.4":
+  version: 1.5.4
+  resolution: "cbor-x@npm:1.5.4"
+  dependencies:
+    cbor-extract: ^2.1.1
+  dependenciesMeta:
+    cbor-extract:
+      optional: true
+  checksum: 589513dcfae2255c3c0da6733b3f90af159b254871d5835c85ae506a5190aeecb747222ae1f2f6edde7413dc7c80af247e7578d541470cf31965f782172d9158
+  languageName: node
+  linkType: hard
+
 "chalk@npm:^4.0.0":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
@@ -1687,6 +1779,13 @@ __metadata:
   version: 2.0.3
   resolution: "dequal@npm:2.0.3"
   checksum: 8679b850e1a3d0ebbc46ee780d5df7b478c23f335887464023a631d1b9af051ad4a6595a44220f9ff8ff95a8ddccf019b5ad778a976fd7bbf77383d36f412f90
+  languageName: node
+  linkType: hard
+
+"detect-libc@npm:^2.0.1":
+  version: 2.0.3
+  resolution: "detect-libc@npm:2.0.3"
+  checksum: 2ba6a939ae55f189aea996ac67afceb650413c7a34726ee92c40fb0deb2400d57ef94631a8a3f052055eea7efb0f99a9b5e6ce923415daa3e68221f963cfc27d
   languageName: node
   linkType: hard
 
@@ -2195,6 +2294,13 @@ __metadata:
   version: 2.0.3
   resolution: "esutils@npm:2.0.3"
   checksum: 22b5b08f74737379a840b8ed2036a5fb35826c709ab000683b092d9054e5c2a82c27818f12604bfc2a9a76b90b6834ef081edbc1c7ae30d1627012e067c6ec87
+  languageName: node
+  linkType: hard
+
+"eventemitter3@npm:^4.0.7":
+  version: 4.0.7
+  resolution: "eventemitter3@npm:4.0.7"
+  checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
   languageName: node
   linkType: hard
 
@@ -3352,6 +3458,7 @@ __metadata:
     firebase: ^10.7.1
     jotai: ^2.4.2
     next: 13.4.19
+    peerjs: ^1.5.2
     react: 18.2.0
     react-dom: 18.2.0
     react-query: ^3.39.3
@@ -3630,6 +3737,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-gyp-build-optional-packages@npm:5.1.1":
+  version: 5.1.1
+  resolution: "node-gyp-build-optional-packages@npm:5.1.1"
+  dependencies:
+    detect-libc: ^2.0.1
+  bin:
+    node-gyp-build-optional-packages: bin.js
+    node-gyp-build-optional-packages-optional: optional.js
+    node-gyp-build-optional-packages-test: build-test.js
+  checksum: f3cb197862516e6879377adaa58142ae9013ab69c86cf2645f8b008db339354145d8ebd9140a13ec7ece5ce28a372ca7e14660379d3a3dd7b908a6f2743606e9
+  languageName: node
+  linkType: hard
+
 "node-gyp@npm:latest":
   version: 9.4.0
   resolution: "node-gyp@npm:9.4.0"
@@ -3877,6 +3997,26 @@ __metadata:
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
   checksum: 5b1e2daa247062061325b8fdbfd1fb56dde0a448fb1455453276ea18c60685bdad23a445dc148cf87bc216be1573357509b7d4060494a6fd768c7efad833ee45
+  languageName: node
+  linkType: hard
+
+"peerjs-js-binarypack@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "peerjs-js-binarypack@npm:2.1.0"
+  checksum: 84cd28314b4376e668d10ee38316d89a6fb35f04f61c57766e254ac748ccd21fea46f0d62461d40b9bb6cfc6cc12a88d6900aab57bf4dae823354779dbf11e9e
+  languageName: node
+  linkType: hard
+
+"peerjs@npm:^1.5.2":
+  version: 1.5.2
+  resolution: "peerjs@npm:1.5.2"
+  dependencies:
+    "@msgpack/msgpack": ^2.8.0
+    cbor-x: 1.5.4
+    eventemitter3: ^4.0.7
+    peerjs-js-binarypack: ^2.1.0
+    webrtc-adapter: ^8.0.0
+  checksum: 5436b80a62bf9a5e2ec644cc33cf44601eecc258fb2bec964ef4e8087c431e2d6edc55e71e39e2d40c260c25e8bbd37935f392ef4992de89a47ec82355f9b13a
   languageName: node
   linkType: hard
 
@@ -4235,6 +4375,13 @@ __metadata:
   dependencies:
     loose-envify: ^1.1.0
   checksum: d79192eeaa12abef860c195ea45d37cbf2bbf5f66e3c4dcd16f54a7da53b17788a70d109ee3d3dde1a0fd50e6a8fc171f4300356c5aee4fc0171de526bf35f8a
+  languageName: node
+  linkType: hard
+
+"sdp@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "sdp@npm:3.2.0"
+  checksum: 227885bddab9a5845e56ae184ff51e43ec7bc155e7f1ed2f17ca1b012e6767011d5bd01b6c4064ded8e3b6f6bf3c9b26b2cf754b9c8662285988ed27b54f37b1
   languageName: node
   linkType: hard
 
@@ -4822,6 +4969,15 @@ __metadata:
   bin:
     web-push: src/cli.js
   checksum: 2c5788bb8f4f1233246c3a4fdd78f9b844a3d1b8cf8751918ef0c8671241d577f37fc1ef669881356c5dde7dfe3dd3af3962b77977e55e8aea4024a1a70c46a4
+  languageName: node
+  linkType: hard
+
+"webrtc-adapter@npm:^8.0.0":
+  version: 8.2.3
+  resolution: "webrtc-adapter@npm:8.2.3"
+  dependencies:
+    sdp: ^3.2.0
+  checksum: 8239c9452c489c9aad2584b5d00af22462c3e0f1b7885c6e4036b518d2b9411d94c00d2ceadbed987459a3647cfc4ce04c0eb75dd5ae7c3d7df9b810525e6a07
   languageName: node
   linkType: hard
 
