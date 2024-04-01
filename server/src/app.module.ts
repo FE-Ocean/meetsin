@@ -3,6 +3,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ChatsModule } from "./chats/chats.module";
 import { AuthModule } from "./auth/auth.module";
+import { RoomsModule } from "./rooms/rooms.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
 import * as mongoose from "mongoose";
@@ -13,13 +14,12 @@ dotenv.config();
 
 @Module({
     imports: [
-        ConfigModule.forRoot({
-            isGlobal: true,
-        }),
+        ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRoot(process.env.MONGODB_URI),
         ChatsModule,
         AuthModule,
-        PassportModule.register({session: true}),
+        PassportModule.register({ session: true }),
+        RoomsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
@@ -28,6 +28,6 @@ export class AppModule implements NestModule {
     private readonly isDev: boolean = process.env.MODE === "dev" ? true : false;
     configure(consumer: MiddlewareConsumer) {
         mongoose.set("debug", this.isDev);
-        mongoose.connect(process.env.MONGODB_URI)
+        mongoose.connect(process.env.MONGODB_URI);
     }
 }
