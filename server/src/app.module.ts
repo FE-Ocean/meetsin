@@ -8,7 +8,6 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
 import * as mongoose from "mongoose";
 import dotenv from "dotenv";
-import { PassportModule } from "@nestjs/passport";
 
 dotenv.config();
 
@@ -18,7 +17,6 @@ dotenv.config();
         MongooseModule.forRoot(process.env.MONGODB_URI),
         ChatsModule,
         AuthModule,
-        PassportModule.register({ session: true }),
         RoomsModule,
     ],
     controllers: [AppController],
