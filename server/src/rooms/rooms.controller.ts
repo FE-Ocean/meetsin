@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/auth/auth.guard";
+import { CurrentUser } from "src/common/decorators/user.decorator";
+import { UserEntity } from "src/schema/user.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
 import { RoomsService } from "./rooms.service";
 
@@ -9,8 +11,8 @@ export class RoomsController {
     constructor(private readonly roomsService: RoomsService) {}
 
     @Post()
-    createRoom(@Body("roomData") roomData: CreateRoomDto) {
-        return this.roomsService.createRoom(roomData);
+    createRoom(@Body("roomData") roomData: CreateRoomDto, @CurrentUser() user: UserEntity) {
+        return this.roomsService.createRoom(roomData, user);
     }
 
     @Get("/:id")

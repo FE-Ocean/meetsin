@@ -5,8 +5,8 @@ export class Room {
     @Prop({ required: true })
     room_name: string;
 
-    // @Prop()
-    // admin: string;
+    @Prop()
+    admin: string;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);
