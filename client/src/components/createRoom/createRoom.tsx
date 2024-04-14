@@ -1,4 +1,8 @@
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { accessTokenAtom } from "@/jotai/atom";
+import { usePostRoom } from "@/app/api/service/room.service";
 import Button from "@/components/common/button/button";
 import style from "./createRoom.module.scss";
 
@@ -8,9 +12,16 @@ interface ICreateRoomProps {
 
 const CreateRoom = ({ setCreateRoomVisible }: ICreateRoomProps) => {
     const roomNameRef = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const accessToken = useAtomValue(accessTokenAtom);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const router = useRouter();
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        const { roomId } = await usePostRoom(roomNameRef.current.value, accessToken);
+
+        router.push(`/room/${roomId}`);
     };
 
     return (
