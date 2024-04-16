@@ -6,6 +6,13 @@ import { screenShareAtom } from "@/jotai/atom";
 import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
+import dynamic from "next/dynamic";
+import Skeleton from "@/components/common/skeleton/skeleton";
+
+const Map = dynamic(() => import("../../../components/phaser/map/map"), {
+    ssr: false,
+    loading: () => <Skeleton />,
+});
 
 const Home = () => {
     const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
@@ -54,7 +61,8 @@ const Home = () => {
             <main className={style.main}>
                 <div className={style.container}>
                     {/* 화면 공유하는 화면을 보이게 할 지, 통상의 맵을 보이게 할 지에 대한 atom 필요할 듯, 우선은 맵이 안 정해져서 화면 공유 화면이 보이도록 함 */}
-                    <ScreenWindow videoRef={videoRef} currentStream={currentStream} />
+                    {/* <ScreenWindow videoRef={videoRef} currentStream={currentStream} /> */}
+                    <Map />
                     {chatOpen && <Chat className={style.chat} toggleChat={toggleChat} />}
                 </div>
                 <Menu
