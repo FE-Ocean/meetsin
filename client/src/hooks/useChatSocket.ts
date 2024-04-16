@@ -16,7 +16,7 @@ const useChatSocket = (params: Params) => {
     };
 
     useEffect(() => {
-        chatSocket.connect();
+        if (!roomId) return;
 
         chatSocket.emit("join_room", roomId);
         chatSocket.on("new_message", handleNewMessage);
