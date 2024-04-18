@@ -1,0 +1,28 @@
+name: Server Deployment (develop branch)
+
+on:
+    push:
+        branches:
+            - develop
+        paths:
+            - "server/**"
+
+jobs:
+    server-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: SSH Commands
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  script_stop: true
+                  script: |
+                      cd github/meetsin/server
+                      git pull origin develop
+                      pm2 kill
+                      yarn install
+                      yarn deploy:dev
