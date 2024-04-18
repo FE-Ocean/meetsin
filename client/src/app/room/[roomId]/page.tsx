@@ -7,7 +7,8 @@ import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
 
-const Home = () => {
+const Room = () => {
+    // 들어가자마자 get [roomId] 해야함
     const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [currentStream, setCurrentStream] = useState(null);
@@ -68,4 +69,4 @@ const Home = () => {
         </>
     );
 };
-export default Home;
+export default Room;
