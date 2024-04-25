@@ -22,7 +22,8 @@ jobs:
                   script_stop: true
                   script: |
                       cd github/meetsin/server
-                      git pull origin develop
+                      git branch --show-current
+                      git switch develop
                       pm2 kill
                       yarn --version
                       yarn install
