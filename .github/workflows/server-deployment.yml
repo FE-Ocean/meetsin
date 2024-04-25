@@ -12,11 +12,13 @@ jobs:
         runs-on: ubuntu-latest
        
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout
+              uses: actions/checkout@v4
             - name: Node version check
-            - uses: actions/setup-node@v4
+              uses: actions/setup-node@v4
               with: 
                 node-version: 18
+            - run: node --version
             - name: SSH Commands
               uses: appleboy/ssh-action@master
               with:
