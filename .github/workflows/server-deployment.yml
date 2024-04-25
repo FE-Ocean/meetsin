@@ -22,6 +22,7 @@ jobs:
                   script_stop: true
                   script: |
                       cd github/meetsin/server
+                      git stash
                       git pull origin develop
                       pm2 kill
                       yarn install
