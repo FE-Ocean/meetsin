@@ -10,12 +10,16 @@ on:
 jobs:
     server-deploy:
         runs-on: ubuntu-latest
+        
+        strategy: // 5
+          matrix:
+            node-version: [18.x]
 
         steps:
             - name: Node version check
               uses: actions/setup-node@v4
               with: 
-                node-version: '18.x'
+                node-version: ${{ matrix.node-version }}
             - name: SSH Commands
               uses: appleboy/ssh-action@master
               with:
@@ -27,8 +31,7 @@ jobs:
                   script: |
                       node --version
                       cd github/meetsin/server
-                      git branch --show-current
-                      git switch develop
+                      git pull
                       pm2 kill
                       yarn --version
                       yarn install --immutable
