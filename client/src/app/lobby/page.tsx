@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Button from "@/components/common/button/button";
 import UserInfo from "@/components/common/userInfo/userInfo";
-import CreateRoom from "@/components/createRoom/createRoom";
+import CreateRoom from "@/components/room/createRoom/createRoom";
 import style from "./style.module.scss";
 
 const Lobby = () => {
