@@ -12,8 +12,8 @@ jobs:
         runs-on: ubuntu-latest
        
         steps:
-            - name: Node version check
             - uses: actions/checkout@v4
+            - name: Node version check
             - uses: actions/setup-node@v4
               with: 
                 node-version: 18
