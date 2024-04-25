@@ -1,0 +1,28 @@
+@import "../../../styles/mixin";
+
+.modal_container {
+    @include modal_container;
+}
+
+.close_icon {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    right: 30px;
+    background-repeat: no-repeat;
+    background-image: url(/close.svg);
+}
+
+.title {
+    padding-top: 50px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    padding-top: 55px;
+    margin: 0 auto;
+}
