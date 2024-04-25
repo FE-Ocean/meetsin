@@ -24,5 +24,6 @@ jobs:
                       cd github/meetsin/server
                       git pull origin develop
                       pm2 kill
+                      yarn --version
                       yarn install
                       yarn deploy:dev
