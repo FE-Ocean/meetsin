@@ -26,4 +26,4 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   username: ${{ secrets.SSH_USERNAME }}
                   port: ${{ secrets.SSH_PORT }}
-            - run: node --version && cd github/meetsin/server && pm2 kill && yarn --version && yarn install --frozen-lockfile && yarn build && pm2 start ./dist/main.js
+            - run: pm2 kill && yarn --version && yarn install --frozen-lockfile && yarn build && pm2 start ./dist/main.js
