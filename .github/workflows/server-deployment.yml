@@ -11,7 +11,7 @@ jobs:
     server-deploy:
         runs-on: ubuntu-latest
         
-        strategy: // 5
+        strategy:
           matrix:
             node-version: [18.x]
 
