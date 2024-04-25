@@ -26,5 +26,6 @@ jobs:
                       git switch develop
                       pm2 kill
                       yarn --version
-                      yarn install
-                      yarn deploy:dev
+                      yarn install --frozen-lockfile
+                      yarn build
+                      pm2 start ./dist/main.js
