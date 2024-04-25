@@ -10,16 +10,13 @@ on:
 jobs:
     server-deploy:
         runs-on: ubuntu-latest
-        
-        strategy:
-          matrix:
-            node-version: [18.x]
-
+       
         steps:
             - name: Node version check
-              uses: actions/setup-node@v4
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
               with: 
-                node-version: ${{ matrix.node-version }}
+                node-version: 18
             - name: SSH Commands
               uses: appleboy/ssh-action@master
               with:
