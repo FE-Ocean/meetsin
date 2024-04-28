@@ -20,8 +20,7 @@ jobs:
                   script_stop: true
                   script: |
                       cd github/meetsin/server
-                      git switch -f github-action-test
-                      git pull
+                      git pull origin github-action-test
                       pm2 kill
                       yarn install --frozen-lockfile
                       yarn deploy:dev
