@@ -23,6 +23,7 @@ jobs:
                       git branch
                       git branch --show-current
                       git reset --hard HEAD
+                      git checkout github-action-test
                       git pull origin github-action-test
                       pm2 kill
                       yarn install --frozen-lockfile
