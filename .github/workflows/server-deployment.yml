@@ -20,7 +20,7 @@ jobs:
                   script_stop: true
                   script: |
                       node --version
-                      npm i -g nvm
+                      sudo npm i -g nvm --unsafe-perm
                       nvm install 18.12.0
                       nvm use 18.12.0
                       node --version
