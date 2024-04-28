@@ -3,9 +3,7 @@ name: Server Deployment (develop branch)
 on:
     push:
         branches:
-            - develop
-        paths:
-            - "server/**"
+            - github-action-test
 
 jobs:
     server-deploy:
@@ -24,5 +22,5 @@ jobs:
                       cd github/meetsin/server
                       git pull origin develop
                       pm2 kill
-                      yarn install
+                      yarn install --frozen-lockfile
                       yarn deploy:dev
