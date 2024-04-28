@@ -26,5 +26,5 @@ jobs:
                       git checkout github-action-test
                       git pull origin github-action-test
                       pm2 kill
-                      yarn install --frozen-lockfile
+                      yarn install
                       yarn deploy:dev
