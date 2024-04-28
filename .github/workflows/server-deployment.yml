@@ -20,17 +20,6 @@ jobs:
                   script_stop: true
                   script: |
                       node --version
-                      npm uninstall -g nvm
-                      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-                      nvm install 18.12.0
-                      nvm use 18.12.0
-                      node --version
-                      cd github/meetsin/server
-                      git branch
-                      git branch --show-current
-                      git reset --hard HEAD
-                      git checkout github-action-test
-                      git pull origin github-action-test
-                      pm2 kill
-                      yarn install
-                      yarn deploy:dev
+                      sudo npm uninstall -g nvm
+                      which nvm
+                      rm -rf ~/.nvm
