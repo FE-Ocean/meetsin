@@ -20,6 +20,9 @@ jobs:
                   script_stop: true
                   script: |
                       cd github/meetsin/server
+                      git branch
+                      git branch --show-current
+                      git reset --hard HEAD
                       git pull origin github-action-test
                       pm2 kill
                       yarn install --frozen-lockfile
