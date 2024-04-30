@@ -1,0 +1,55 @@
+@import "../../../styles/variables";
+
+@mixin button($icon) {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: no-repeat center $icon;
+    background-color: $gray-light;
+    &:hover {
+        background-color: $hover-color;
+    }
+}
+
+.container {
+    position: relative;
+    width: 245px;
+    padding: 13px 15px;
+    border: 1px solid $gray;
+    border-radius: 10px;
+    margin: 10px;
+
+    &:hover {
+        .button_container {
+            position: absolute;
+            right: 15px;
+            bottom: 9px;
+            display: flex;
+            gap: 5px;
+
+            .rename_button {
+                @include button(url(/icon/pencil.svg));
+            }
+            .delete_button {
+                @include button(url(/icon/trash.svg));
+            }
+        }
+    }
+}
+
+.name_container {
+    width: 194px;
+    height: 44px;
+}
+
+.name {
+    margin-bottom: 7px;
+    color: $black-light;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.created_at {
+    color: $gray-dark;
+    font-size: 13px;
+}
