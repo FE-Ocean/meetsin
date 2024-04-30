@@ -1,10 +1,58 @@
+@import "../../styles/mixin";
+@import "../../styles/variables";
+
 .header {
-    margin: 25px 0 0 60px;
+    display: flex;
+    justify-content: space-between;
+    width: 1000px;
+    margin: 0 auto;
+    padding: 25px 60px 0;
+
+    .create_room {
+        @include common_ui;
+        padding: 14px 30px;
+        background-color: $point-color;
+        color: $white;
+        font-size: 15px;
+        letter-spacing: 1.5px;
+        border-radius: 30px;
+    }
 }
 
 .main {
+    position: relative;
     min-width: 1000px;
+    height: 87vh;
+    text-align: center;
     padding: 0 60px;
     margin: 0 auto;
-    text-align: center;
+}
+
+.no_room_container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.room_container {
+    margin-top: 80px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 700;
+}
+.description {
+    // white-space: pre-wrap;
+    margin: 15px 0 30px;
+    color: $black-light;
+}
+
+.room_cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 600px;
+    margin: 0 auto;
+    text-align: left;
 }

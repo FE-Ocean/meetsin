@@ -11,6 +11,18 @@ export const getRoomInfo = async (roomId: string, accessToken: string) => {
     });
 };
 
+export const getUserRooms = async (accessToken: string) => {
+    if (!accessToken) {
+        throw new Error("access token이 없거나 올바르지 않습니다.");
+    }
+
+    return await baseClient.get("/rooms/user", {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
 export const postRoom = async (roomNameInput: string, accessToken: string) => {
     try {
         const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`;
