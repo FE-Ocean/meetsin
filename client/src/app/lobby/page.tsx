@@ -5,11 +5,14 @@ import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "@/jotai/atom";
 import { useGetUserRooms } from "../api/service/room.service";
 import { IRoom } from "@/types/room";
+import useModal from "@/hooks/useModal";
 import UserInfo from "@/components/common/userInfo/userInfo";
 import RoomCard from "@/components/room/roomCard/roomCard";
 import style from "./style.module.scss";
 
 const Lobby = () => {
+    const { onOpen } = useModal("createRoom");
+
     const accessToken = useAtomValue(accessTokenAtom);
     const [userRooms, setUserRoom] = useState<IRoom[]>([]);
 
@@ -25,7 +28,7 @@ const Lobby = () => {
         <>
             <header className={style.header}>
                 <UserInfo direction="bottom" />
-                <button className={style.create_room} type="button">
+                <button className={style.create_room} type="button" onClick={onOpen}>
                     방 만들기
                 </button>
             </header>
