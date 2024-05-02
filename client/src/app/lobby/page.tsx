@@ -16,13 +16,13 @@ const Lobby = () => {
     const accessToken = useAtomValue(accessTokenAtom);
     const [userRooms, setUserRoom] = useState<IRoom[]>([]);
 
+    const { data } = useGetUserRooms(accessToken);
+
     useEffect(() => {
-        const getRooms = async () => {
-            const roomsArr: IRoom[] = (await useGetUserRooms(accessToken)) as IRoom[];
-            setUserRoom(roomsArr);
-        };
-        getRooms();
-    }, []);
+        if (data) {
+            setUserRoom(data);
+        }
+    }, [data]);
 
     return (
         <>
@@ -40,6 +40,7 @@ const Lobby = () => {
                         </p>
                     </div>
                 )}
+
                 {userRooms.length > 0 && (
                     <div className={style.room_container}>
                         <h2 className={style.title}>내가 만든 방들</h2>
@@ -52,7 +53,7 @@ const Lobby = () => {
                         <ul className={style.room_cards}>
                             {userRooms.map((room: IRoom) => {
                                 return (
-                                    <li key={room._id}>
+                                    <li key={room.id}>
                                         <RoomCard room={room} />
                                     </li>
                                 );
