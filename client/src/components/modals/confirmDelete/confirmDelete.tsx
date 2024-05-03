@@ -1,16 +1,21 @@
+import { useAtomValue } from "jotai";
+import { accessTokenAtom, roomIdAtom } from "@/jotai/atom";
+import { useDeleteRoom } from "@/app/api/service/room.service";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 import Button from "@/components/common/button/button";
 import style from "./confirmDelete.module.scss";
 
-interface IModal {
-    onClose: () => void;
-}
+const ConfirmDelete = ({ onClose }: { onClose: () => void }) => {
+    const accessToken = useAtomValue(accessTokenAtom);
+    const roomId = useAtomValue(roomIdAtom);
 
-const ConfirmDelete = ({ onClose }: IModal) => {
+    const { mutate } = useDeleteRoom(roomId, accessToken);
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //삭제 api~
-        // onClose();
+
+        mutate();
+        onClose();
     };
 
     return (

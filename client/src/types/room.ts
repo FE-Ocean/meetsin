@@ -11,3 +11,9 @@ export interface IRoomModel {
     admin: string;
     created_at: string;
 }
+
+export interface IPatchRoom {
+    roomName: string;
+    roomId: string;
+    accessToken: string;
+}

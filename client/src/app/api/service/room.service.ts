@@ -1,11 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { getRoomInfo, getUserRooms, postRoom } from "../repository/room.repository";
-import { IRoomModel } from "@/types/room";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+    deleteRoom,
+    getRoomInfo,
+    getUserRooms,
+    patchRoom,
+    postRoom,
+} from "../repository/room.repository";
+import { IPatchRoom, IRoomModel } from "@/types/room";
 import { QUERY_KEY } from "@/constants/queryKey.const";
-
-// export const fetchgetRoomInfo = async (roomId: string, accessToken: string) => {
-//     const response = await getRoomInfo(roomId, accessToken);
-// };
+import { queryClient } from "@/query/queryProvider";
 
 export const usePostRoom = async (roomNameInput: string, accessToken: string) => {
     const res = await postRoom(roomNameInput, accessToken);
@@ -14,6 +17,49 @@ export const usePostRoom = async (roomNameInput: string, accessToken: string) =>
         roomName: res.room_name,
         admin: res.admin,
     };
+};
+
+export const useGetRoomData = (roomId: string, accessToken: string) => {
+    const formatRoomData = async () => {
+        const res = (await getRoomInfo(roomId, accessToken)) as IRoomModel;
+        return {
+            id: res._id,
+            roomName: res.room_name,
+            admin: res.admin,
+            createdAt: res.created_at,
+        };
+    };
+
+    return useQuery({ queryKey: QUERY_KEY.room(roomId), queryFn: formatRoomData });
+};
+
+export const formatRoomData = async ({ roomName, roomId, accessToken }: any) => {
+    const res = (await patchRoom({ roomName, roomId, accessToken })) as IRoomModel;
+    return {
+        id: res._id,
+        roomName: res.room_name,
+        admin: res.admin,
+        createdAt: res.created_at,
+    };
+};
+
+export const usePatchRoomData = () => {
+    const formatRoomData = async ({ roomName, roomId, accessToken }: IPatchRoom) => {
+        const res = (await patchRoom({ roomName, roomId, accessToken })) as IRoomModel;
+        return {
+            id: res._id,
+            roomName: res.room_name,
+            admin: res.admin,
+            createdAt: res.created_at,
+        };
+    };
+
+    return useMutation({
+        mutationFn: formatRoomData,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: QUERY_KEY.rooms });
+        },
+    });
 };
 
 export const useGetUserRooms = (accessToken: string) => {
@@ -27,5 +73,14 @@ export const useGetUserRooms = (accessToken: string) => {
         }));
     };
 
-    return useQuery({ queryKey: [...QUERY_KEY.room], queryFn: formatRoomsData });
+    return useQuery({ queryKey: QUERY_KEY.rooms, queryFn: formatRoomsData });
+};
+
+export const useDeleteRoom = (roomId: string, accessToken: string) => {
+    return useMutation({
+        mutationFn: () => deleteRoom(roomId, accessToken),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: QUERY_KEY.rooms });
+        },
+    });
 };

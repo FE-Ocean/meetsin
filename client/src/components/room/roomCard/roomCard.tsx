@@ -1,21 +1,48 @@
 import Link from "next/link";
 import { IRoom } from "@/types/room";
+import { useSetAtom } from "jotai";
+import { roomIdAtom } from "@/jotai/atom";
+import useModal from "@/hooks/useModal";
 import style from "./roomCard.module.scss";
 
+const ROOM_ACTION = {
+    rename: "rename",
+    delete: "delete",
+} as const;
+
 const RoomCard = ({ room }: { room: IRoom }) => {
-    const { roomName, createdAt } = room;
-    const created = createdAt ? createdAt.slice(0, 10) + " 개설" : "여긴 없음"; // 현재 DB 내 옛 데이터들 때문에 "여긴 없음" 표시함 지울 예정
+    const { id, roomName, createdAt } = room;
+    const created = createdAt.slice(0, 10) + " 개설";
+
+    const setRoomId = useSetAtom(roomIdAtom);
+    const { onOpen: openRenameModal } = useModal("renameRoom");
+    const { onOpen: openDeleteModal } = useModal("confirmDelete");
+
+    const handleRoomAction = (action: string, e: React.MouseEvent<HTMLButtonElement>) => {
+        // e.stopPropagation();
+        e.preventDefault();
+        setRoomId(id);
+
+        if (action === ROOM_ACTION.rename) openRenameModal();
+        if (action === ROOM_ACTION.delete) openDeleteModal();
+    };
 
     return (
-        <Link href="/">
+        <Link href={`/room/${id}`}>
             <div className={style.container}>
                 <div className={style.name_container}>
                     <p className={style.name}>{roomName}</p>
                 </div>
                 <span className={style.created_at}>{created}</span>
                 <span className={style.button_container}>
-                    <button className={style.rename_button} />
-                    <button className={style.delete_button} />
+                    <button
+                        className={style.rename_button}
+                        onClick={(e) => handleRoomAction(ROOM_ACTION.rename, e)}
+                    />
+                    <button
+                        className={style.delete_button}
+                        onClick={(e) => handleRoomAction(ROOM_ACTION.delete, e)}
+                    />
                 </span>
             </div>
         </Link>

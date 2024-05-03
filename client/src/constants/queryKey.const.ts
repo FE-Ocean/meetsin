@@ -1,4 +1,5 @@
 export const QUERY_KEY = {
     user: ["auth", "user", "info"],
-    room: ["room"],
+    rooms: ["rooms"],
+    room: (roomId: string) => ["room", roomId],
 };
