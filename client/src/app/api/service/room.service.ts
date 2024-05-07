@@ -33,16 +33,6 @@ export const useGetRoomData = (roomId: string, accessToken: string) => {
     return useQuery({ queryKey: QUERY_KEY.room(roomId), queryFn: formatRoomData });
 };
 
-export const formatRoomData = async ({ roomName, roomId, accessToken }: any) => {
-    const res = (await patchRoom({ roomName, roomId, accessToken })) as IRoomModel;
-    return {
-        id: res._id,
-        roomName: res.room_name,
-        admin: res.admin,
-        createdAt: res.created_at,
-    };
-};
-
 export const usePatchRoomData = () => {
     const formatRoomData = async ({ roomName, roomId, accessToken }: IPatchRoom) => {
         const res = (await patchRoom({ roomName, roomId, accessToken })) as IRoomModel;
