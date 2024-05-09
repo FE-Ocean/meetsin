@@ -10,6 +10,8 @@ const ROOM_ACTION = {
     delete: "delete",
 } as const;
 
+type ROOM_ACTION_TYPE = keyof typeof ROOM_ACTION;
+
 const RoomCard = ({ room }: { room: IRoom }) => {
     const { id, roomName, createdAt } = room;
     const created = createdAt.slice(0, 10) + " 개설";
@@ -18,7 +20,7 @@ const RoomCard = ({ room }: { room: IRoom }) => {
     const { onOpen: openRenameModal } = useModal("renameRoom");
     const { onOpen: openDeleteModal } = useModal("confirmDelete");
 
-    const handleRoomAction = (action: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleRoomAction = (action: ROOM_ACTION_TYPE, e: React.MouseEvent<HTMLButtonElement>) => {
         // e.stopPropagation();
         e.preventDefault();
         setRoomId(id);
