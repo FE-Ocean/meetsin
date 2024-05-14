@@ -5,6 +5,7 @@ import { UserEntity } from "src/schema/user.schema";
 import { Room } from "./rooms.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
 
+
 @Injectable()
 export class RoomsService {
     constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
