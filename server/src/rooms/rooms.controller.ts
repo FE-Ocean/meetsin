@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/user.decorator";
 import { UserEntity } from "src/schema/user.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
+import { UpdateRoomDto } from "./dto/update-room.dto";
 import { RoomsService } from "./rooms.service";
 
 @Controller("rooms")
@@ -15,15 +16,23 @@ export class RoomsController {
         return this.roomsService.createRoom(roomData, user);
     }
 
-    @Get("/:id")
-    getRoomById(@Param("id") id: string) {
-        return this.roomsService.getRoomById(id);
+    @Get("user")
+    getRoomsByUserId(@CurrentUser() user: UserEntity) {
+        return this.roomsService.getRoomsByUserId(user.user_id);
     }
 
-    // 수정하는건 방이름?...방장?.. 근데 이건 이걸 수정하는 UI?기능?이 정의되면?
+    @Get(":roomId")
+    getRoomById(@Param("roomId") roomId: string) {
+        return this.roomsService.getRoomById(roomId);
+    }
 
-    @Delete("/:id")
-    deleteRoom(@Param("id") id: string) {
-        return this.roomsService.deleteRoom(id);
+    @Patch(":roomId")
+    updateRoom(@Param("roomId") roomId: string, @Body("roomData") roomData: UpdateRoomDto) {
+        return this.roomsService.updateRoom(roomId, roomData.roomName);
+    }
+
+    @Delete(":roomId")
+    deleteRoom(@Param("roomId") roomId: string) {
+        return this.roomsService.deleteRoom(roomId);
     }
 }

@@ -5,6 +5,7 @@ const options = {
     versionKey: false,
     timestamps: { createdAt: "created_at", updatedAt: false },
 };
+
 @Schema(options)
 export class Room {
     @Prop({ required: true })

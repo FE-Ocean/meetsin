@@ -1,16 +1,9 @@
 @import "../../../styles/variables";
+@import "../../../styles/mixin";
 
 .login_modal {
-    position: fixed;
-    background-color: white;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 400px;
-    height: 270px;
+    @include modal_container(400px, 270px);
     padding: 32px;
-    border-radius: 15px;
-    border: 1px solid $gray-light;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
