@@ -1,21 +1,20 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { UserEntity } from "src/schema/user.schema";
+import { Model, Types } from "mongoose";
 import { Room } from "./rooms.schema";
+import { UserEntity } from "src/schema/user.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
-
 
 @Injectable()
 export class RoomsService {
     constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
 
     createRoom(roomData: CreateRoomDto, user: UserEntity) {
-        const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user.user_id });
+        const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user._id });
         return newRoom.save();
     }
 
-    async getRoomsByUserId(userId: string) {
+    async getRoomsByUserId(userId: Types.ObjectId) {
         const rooms = await this.roomModel.find({ admin: userId }).exec();
 
         if (!rooms) {

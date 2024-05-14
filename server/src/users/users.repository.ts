@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { UserEntity } from "src/schema/user.schema";
 
 @Injectable()
@@ -10,19 +10,19 @@ export class UsersRepository {
     createUser(userData: UserEntity) {
         return {
             ...userData,
-        } as UserEntity
+        } as UserEntity;
     }
 
-    async findUserById(user_id: string) {
-        const user = await this.userModel.findOne({ user_id });
+    async findUserById(_id: Types.ObjectId) {
+        const user = await this.userModel.findOne({ _id });
         return user;
     }
 
     async saveUser(userData: UserEntity) {
         await this.userModel.create(userData);
     }
-    
+
     async updateAccessToken(user: UserEntity, accessToken: string) {
-        await this.userModel.updateOne({user_id: user.user_id}, {access_token: accessToken})
+        await this.userModel.updateOne({ _id: user._id }, { access_token: accessToken });
     }
 }
