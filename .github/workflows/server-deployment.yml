@@ -22,7 +22,7 @@ jobs:
                   script_stop: true
                   script: |
                       cd github/meetsin/server
-                      git pull origin develop
+                      git pull origin testAction
                       pm2 kill
                       yarn install
                       yarn deploy:dev
