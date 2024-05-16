@@ -3,7 +3,7 @@ name: Server Deployment (develop branch)
 on:
     push:
         branches:
-            - develop
+            - testAction
         paths:
             - "server/**"
 
