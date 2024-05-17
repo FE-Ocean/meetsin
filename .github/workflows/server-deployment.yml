@@ -25,4 +25,5 @@ jobs:
                       git pull origin testAction
                       pm2 kill
                       yarn install
+                      yarn run clean
                       yarn deploy:dev
