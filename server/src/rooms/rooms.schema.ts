@@ -13,6 +13,9 @@ export class Room {
 
     @Prop({ required: true })
     admin: string;
+
+    @Prop({ required: true })
+    userIds: string[];
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

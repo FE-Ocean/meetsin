@@ -39,6 +39,30 @@ export class RoomsService {
         return await room.save();
     }
 
+    async addUserToRoom(roomId: string, newUserId: Types.ObjectId) {
+        // user.decorator에 CurrentUser로 사용자 아이디(newUserId)를 가져와주세요
+        const updatedRoom = await this.roomModel
+            .updateOne({ _id: roomId }, { $push: { users: newUserId } })
+            .exec();
+
+        if (!updatedRoom) {
+            throw new Error("Room에 사용자가 추가되지 않았습니다.");
+        }
+
+        return updatedRoom;
+    }
+    async removeUserFromRoom(roomId: string, removeUserId: string) {
+        const updatedRoom = await this.roomModel
+            .findOneAndUpdate({ _id: roomId }, { $pull: { users: removeUserId } }, { new: true })
+            .exec();
+
+        if (!updatedRoom) {
+            throw new Error("Room에 사용자가 제거되지 않았습니다.");
+        }
+
+        return updatedRoom;
+    }
+
     async deleteRoom(roomId: string) {
         const room = await this.getRoomById(roomId);
 
