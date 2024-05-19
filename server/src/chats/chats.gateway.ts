@@ -11,6 +11,7 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { RoomsService } from "src/rooms/rooms.service";
 import { MessageInfoDTO } from "./dto/messageInfo.dto";
 
 interface UserSocket extends Socket {
@@ -29,7 +30,7 @@ interface UserSocket extends Socket {
 export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
     private logger = new Logger("chat");
 
-    constructor(private readonly jwtService: JwtService) {}
+    constructor(private readonly roomsService: RoomsService) {}
 
     @WebSocketServer() server: Server;
 
@@ -46,12 +47,15 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
     }
 
     @SubscribeMessage("join_room")
-    handleJoin(@MessageBody() roomId : string, @ConnectedSocket() socket : Socket) {
-        socket.join(roomId)
+    handleJoin(@MessageBody() roomId: string, @ConnectedSocket() socket: Socket) {
+        socket.join(roomId);
+        // this.roomsService.addUserToRoom(roomId)
     }
 
     @SubscribeMessage("new_message")
     handleMessage(@MessageBody() messageInfo: MessageInfoDTO): void {
-        this.server.to(messageInfo.roomId).emit("new_message", { time: new Date(), ...messageInfo })
+        this.server
+            .to(messageInfo.roomId)
+            .emit("new_message", { time: new Date(), ...messageInfo });
     }
 }

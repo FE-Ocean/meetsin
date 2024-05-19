@@ -15,5 +15,6 @@ import { RoomsService } from "./rooms.service";
     ],
     controllers: [RoomsController],
     providers: [RoomsService, JwtGuard],
+    exports: [RoomsService],
 })
 export class RoomsModule {}
