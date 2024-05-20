@@ -32,10 +32,9 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
                   script: |
-                      cd github/meetsin/server
-                      git stash
+                      cd github && rm -rf meetsin
                       git pull origin testAction
-                      git stash pop || true
+                      cd github/meetsin/server
                       pm2 kill
                       yarn install
                       yarn run clean
