@@ -34,7 +34,7 @@ jobs:
                   script: |
                       cd github/meetsin/server
                       pm2 kill
-                      cd .. && rm -rf meetsin
+                      cd ../.. && rm -rf meetsin
                       git clone https://github.com/FE-Ocean/meetsin.git
                       cd github/meetsin/server
                       yarn install
