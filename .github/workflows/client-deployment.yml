@@ -2,14 +2,15 @@ name: git push into another repo to deploy to vercel
 
 on:
   push:
-    branches: [main]
+    branches:
+        - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container: pandoc/latex
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: creates output
         run: sh ./build.sh
       - name: Pushes to another repository
