@@ -11,7 +11,8 @@ export const useGetUserInfo = (accessToken: string, isEnable: boolean) => {
             const userData = res as IUserModel;
             return {
                 userName: userData.user_name,
-                userId: userData.user_id,
+                // userId: userData.user_id,
+                userId: userData._id,
                 profileImg: userData.profile_img,
                 email: userData.email,
             } as IUser;
