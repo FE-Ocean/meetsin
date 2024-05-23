@@ -47,9 +47,25 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
     }
 
     @SubscribeMessage("join_room")
-    handleJoin(@MessageBody() roomId: string, @ConnectedSocket() socket: Socket) {
+    handleJoin(
+        @MessageBody() data: { roomId: string; userId: string },
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const { roomId, userId } = data;
+
         socket.join(roomId);
-        // this.roomsService.addUserToRoom(roomId)
+        this.roomsService.addUserToRoom(roomId, userId);
+    }
+
+    @SubscribeMessage("leave_room")
+    handleLeave(
+        @MessageBody() data: { roomId: string; userId: string },
+        @ConnectedSocket() socket: Socket,
+    ) {
+        const { roomId, userId } = data;
+
+        socket.leave(roomId);
+        this.roomsService.removeUserFromRoom(roomId, userId);
     }
 
     @SubscribeMessage("new_message")
