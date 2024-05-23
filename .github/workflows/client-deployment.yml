@@ -1,9 +1,11 @@
-name: git push into another repo to deploy to vercel
+name: Client Deploy
 
 on:
   push:
     branches:
         - main
+    paths: 
+        - "client/**"
 
 jobs:
   build:
@@ -11,6 +13,8 @@ jobs:
     container: pandoc/latex
     steps:
       - uses: actions/checkout@v4
+      - name: Install mustache (to update the date)
+        run: apk add ruby && gem install mustache
       - name: creates output
         run: sh ./build.sh
       - name: Pushes to another repository
