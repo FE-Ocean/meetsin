@@ -25,7 +25,7 @@ export const getUserRooms = async (accessToken: string) => {
     });
 };
 
-export const postRoom = async (roomNameInput: string, accessToken: string) => {
+export const createRoom = async (roomNameInput: string, accessToken: string) => {
     try {
         if (!accessToken) {
             throw new Error("access token이 없거나 올바르지 않습니다.");

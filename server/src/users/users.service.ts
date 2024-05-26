@@ -8,7 +8,6 @@ export class UsersService {
 
     entityToDto(user: UserEntity) {
         const userDto = new UserDto();
-        // userDto.user_id = user.user_id;
         userDto._id = user._id;
         userDto.email = user.email;
         userDto.user_name = user.user_name;

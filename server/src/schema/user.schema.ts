@@ -15,12 +15,6 @@ export class UserEntity {
 
     @Prop({
         required: true,
-        unique: true,
-    })
-    user_id: string;
-
-    @Prop({
-        required: true,
     })
     user_name: string;
 

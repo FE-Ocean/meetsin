@@ -32,12 +32,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
         done: VerifyCallback,
     ) {
         try {
-            const { id, emails, photos, displayName } = profile;
+            const { emails, photos, displayName } = profile;
             const objectId = new Types.ObjectId();
 
             const userInfo: UserEntity = {
                 _id: objectId,
-                user_id: id, // 이거 social_id로 이름 바꾸는 거 어떤지
                 email: emails[0].value,
                 profile_img: photos[0].value,
                 user_name: displayName,

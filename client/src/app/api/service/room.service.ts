@@ -4,19 +4,28 @@ import {
     getRoomInfo,
     getUserRooms,
     patchRoom,
-    postRoom,
+    createRoom,
 } from "../repository/room.repository";
 import { IPatchRoom, IRoomModel } from "@/types/room";
 import { QUERY_KEY } from "@/constants/queryKey.const";
 import { queryClient } from "@/query/queryProvider";
 
-export const usePostRoom = async (roomNameInput: string, accessToken: string) => {
-    const res = await postRoom(roomNameInput, accessToken);
-    return {
-        roomId: res._id,
-        roomName: res.room_name,
-        admin: res.admin,
+interface ICreateRoom {
+    roomNameInput: string;
+    accessToken: string;
+}
+
+export const useCreateRoom = () => {
+    const formatRoomData = async ({ roomNameInput, accessToken }: ICreateRoom) => {
+        const res = await createRoom(roomNameInput, accessToken);
+        return {
+            roomId: res._id,
+            roomName: res.room_name,
+            admin: res.admin,
+        };
     };
+
+    return useMutation({ mutationFn: formatRoomData });
 };
 
 export const useGetRoomData = (roomId: string, accessToken: string) => {
