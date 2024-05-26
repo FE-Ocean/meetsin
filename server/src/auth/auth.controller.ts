@@ -15,11 +15,15 @@ export class AuthController {
     googleAuth(@Req() req) {}
 
     @Get("/redirect/google")
-    @UseGuards(AuthGuard('google'))
+    @UseGuards(AuthGuard("google"))
     async googleAuthRedirect(@Req() req: LoginRequest, @Res() res: Response) {
-        const { access_token } = await this.authService.signIn(req, res)
-        res.cookie('access_token', access_token)
-        res.redirect(process.env.CLIENT_URL)
+        const { access_token } = await this.authService.signIn(req, res);
+        res.cookie('access_token', access_token, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+        });
+        res.redirect(process.env.CLIENT_URL);
     }
 
     @Get("/login/kakao")
@@ -29,9 +33,13 @@ export class AuthController {
     @Get("/redirect/kakao")
     @UseGuards(AuthGuard("kakao"))
     async kakaoAuthRedirect(@Req() req: LoginRequest, @Res() res: Response) {
-        const { access_token } = await this.authService.signIn(req, res)
-        res.cookie('access_token', access_token)
-        res.redirect(process.env.CLIENT_URL)
+        const { access_token } = await this.authService.signIn(req, res);
+        res.cookie('access_token', access_token, {
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+        });
+        res.redirect(process.env.CLIENT_URL);
     }
 
     // 토큰으로 유저 정보 가져오기
@@ -39,6 +47,6 @@ export class AuthController {
     @UseGuards(JwtGuard)
     async login(@Req() req: LoginRequest, @Res() res: Response) {
         const user = this.userService.entityToDto(req.user);
-        res.json(user)
+        res.json(user);
     }
 }
