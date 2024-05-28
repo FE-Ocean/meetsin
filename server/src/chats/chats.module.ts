@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ChatsGateway } from "./chats.gateway";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
+import { RoomsModule } from "src/rooms/rooms.module";
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { ConfigModule } from "@nestjs/config";
                 expiresIn: "1y",
             },
         }),
+        RoomsModule,
     ],
     providers: [ChatsGateway],
 })

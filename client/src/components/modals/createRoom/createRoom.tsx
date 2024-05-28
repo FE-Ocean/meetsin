@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useAtomValue } from "jotai";
 import { accessTokenAtom } from "@/jotai/atom";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
-import { usePostRoom } from "@/app/api/service/room.service";
+import { useCreateRoom } from "@/app/api/service/room.service";
 import useModal from "@/hooks/useModal";
 import Button from "@/components/common/button/button";
 import style from "./createRoom.module.scss";
@@ -15,13 +15,20 @@ const CreateRoom = () => {
     const accessToken = useAtomValue(accessTokenAtom);
     const router = useRouter();
 
+    const { mutate } = useCreateRoom();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const { roomId } = await usePostRoom(roomNameRef.current.value, accessToken);
-
-        onClose();
-        router.push(`/room/${roomId}`);
+        mutate(
+            { roomNameInput: roomNameRef.current.value, accessToken },
+            {
+                onSuccess: (data) => {
+                    onClose();
+                    router.push(`/room/${data?.roomId}`);
+                },
+            },
+        );
     };
 
     return (

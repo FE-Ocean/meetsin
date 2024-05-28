@@ -6,13 +6,13 @@ import { UsersRepository } from "./users.repository";
 export class UsersService {
     constructor(private readonly usersRepository: UsersRepository) {}
 
-    entityToDto (user: UserEntity) {
+    entityToDto(user: UserEntity) {
         const userDto = new UserDto();
-        userDto.user_id = user.user_id;
+        userDto._id = user._id;
         userDto.email = user.email;
         userDto.user_name = user.user_name;
         userDto.profile_img = user.profile_img;
         userDto.character = user.character;
-        return userDto
+        return userDto;
     }
 }

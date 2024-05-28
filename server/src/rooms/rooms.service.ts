@@ -1,21 +1,20 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { UserEntity } from "src/schema/user.schema";
+import { Model, Types } from "mongoose";
 import { Room } from "./rooms.schema";
+import { UserEntity } from "src/schema/user.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
-
 
 @Injectable()
 export class RoomsService {
     constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
 
     createRoom(roomData: CreateRoomDto, user: UserEntity) {
-        const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user.user_id });
+        const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user._id });
         return newRoom.save();
     }
 
-    async getRoomsByUserId(userId: string) {
+    async getRoomsByUserId(userId: Types.ObjectId) {
         const rooms = await this.roomModel.find({ admin: userId }).exec();
 
         if (!rooms) {
@@ -38,6 +37,30 @@ export class RoomsService {
         room.room_name = roomName;
 
         return await room.save();
+    }
+
+    async addUserToRoom(roomId: string, newUserId: string) {
+        // user.decorator에 CurrentUser로 사용자 아이디(newUserId)를 가져와주세요
+        const updatedRoom = await this.roomModel
+            .updateOne({ _id: roomId }, { $push: { userIds: newUserId } })
+            .exec();
+
+        if (!updatedRoom) {
+            throw new Error("Room에 사용자가 추가되지 않았습니다.");
+        }
+
+        return updatedRoom;
+    }
+    async removeUserFromRoom(roomId: string, removeUserId: string) {
+        const updatedRoom = await this.roomModel
+            .findOneAndUpdate({ _id: roomId }, { $pull: { userIds: removeUserId } }, { new: true })
+            .exec();
+
+        if (!updatedRoom) {
+            throw new Error("Room에 사용자가 제거되지 않았습니다.");
+        }
+
+        return updatedRoom;
     }
 
     async deleteRoom(roomId: string) {
