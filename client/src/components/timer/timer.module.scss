@@ -4,12 +4,21 @@
 .container {
     @include common_ui;
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     width: 130px;
     height: 50px;
     margin-right: 36px;
     border-radius: 30px;
+
+    &:hover {
+        .stop_button {
+            @include hover_button(34px, url(/icon/stop.svg));
+            position: absolute;
+            left: 12px;
+        }
+    }
 }
 
 .time_container {

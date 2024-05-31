@@ -51,6 +51,7 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
     return (
         <div className={style.container} aria-label="남은 시간">
             <Image src={timer_icon} alt="" />
+            <button className={style.stop_button} />
             <div className={style.time_container}>
                 <span>{numberToString(min)}</span>:<span>{numberToString(sec)}</span>
             </div>
