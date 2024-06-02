@@ -13,9 +13,14 @@ export class UsersRepository {
         } as UserEntity;
     }
 
-    async findUserById(_id: Types.ObjectId) {
-        const user = await this.userModel.findOne({ _id });
+    async findUserById(id: Types.ObjectId) {
+        const user = await this.userModel.findById(id);
         return user;
+    }
+
+    async findUserByEmailAndProvider(email: string, provider: string) {
+        const user = await this.userModel.findOne({email: email, provider: provider})
+        return user
     }
 
     async saveUser(userData: UserEntity) {
@@ -23,6 +28,6 @@ export class UsersRepository {
     }
 
     async updateAccessToken(user: UserEntity, accessToken: string) {
-        await this.userModel.updateOne({ _id: user._id }, { access_token: accessToken });
+        await this.userModel.findByIdAndUpdate(user.id, { access_token: accessToken });
     }
 }

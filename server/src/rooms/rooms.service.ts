@@ -15,7 +15,7 @@ export class RoomsService {
     }
 
     async getRoomsByUserId(userId: Types.ObjectId) {
-        const rooms = await this.roomModel.find({ admin: userId }).exec();
+        const rooms = await this.roomModel.find({ admin: userId });
 
         if (!rooms) {
             throw new NotFoundException(`사용자 아이디(${userId})를 찾을 수 없습니다.`);

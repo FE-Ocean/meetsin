@@ -46,7 +46,7 @@ export class AuthController {
     @Get("/user")
     @UseGuards(JwtGuard)
     async login(@Req() req: LoginRequest, @Res() res: Response) {
-        const user = this.userService.entityToDto(req.user);
+        const user = this.userService.entityToDto(req.signUser);
         res.json(user);
     }
 }

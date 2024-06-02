@@ -20,7 +20,7 @@ export class JwtGuard extends AuthGuard("jwt") {
             throw new UnauthorizedException("token is not valid");
         }
         const user = await this.usersRepository.findUserById(userInfoByToken.id);
-        req.user = user;
+        req.signUser = user;
         return true;
     }
 
