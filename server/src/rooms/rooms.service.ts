@@ -10,7 +10,7 @@ export class RoomsService {
     constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
 
     createRoom(roomData: CreateRoomDto, user: UserEntity) {
-        const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user._id });
+        const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user.id });
         return newRoom.save();
     }
 

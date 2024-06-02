@@ -1,9 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
-import { Document } from "mongoose";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/user.decorator";
 import { UserEntity } from "src/schema/user.schema";
-import { LoginRequest } from "src/types/request.type";
 import { CreateRoomDto } from "./dto/create-room.dto";
 import { UpdateRoomDto } from "./dto/update-room.dto";
 import { RoomsService } from "./rooms.service";
@@ -19,9 +17,8 @@ export class RoomsController {
     }
 
     @Get("user")
-    getRoomsByUserId(@Req() req: LoginRequest) {
-        console.log('user: ', req.signUser)
-        return this.roomsService.getRoomsByUserId(req.signUser.id);
+    getRoomsByUserId(@CurrentUser() user: UserEntity) {
+        return this.roomsService.getRoomsByUserId(user.id);
     }
 
     @Get(":roomId")
