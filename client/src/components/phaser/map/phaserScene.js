@@ -82,11 +82,17 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     getCurrentDirection() {
         if (this.keyboardInput.left.isDown) {
             return "left";
-        } else if (this.keyboardInput.right.isDown) {
+        }
+
+        if (this.keyboardInput.right.isDown) {
             return "right";
-        } else if (this.keyboardInput.up.isDown) {
+        }
+
+        if (this.keyboardInput.up.isDown) {
             return "up";
-        } else if (this.keyboardInput.down.isDown) {
+        }
+
+        if (this.keyboardInput.down.isDown) {
             return "down";
         }
         return null; // 혹은 마지막 방향을 유지할 수 있도록 처리
