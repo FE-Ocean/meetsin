@@ -10,11 +10,17 @@ import dotenv from "dotenv";
 import { JwtStrategy } from "./jwt.strategy";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
+import { UserSchema } from 'src/schema/user.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 dotenv.config();
 
 @Module({
     imports: [
+        MongooseModule.forFeature([{
+            name: 'Users',
+            schema: UserSchema
+        }]),
         ConfigModule.forRoot({
             isGlobal: true,
         }),

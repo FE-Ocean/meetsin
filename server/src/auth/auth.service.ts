@@ -17,7 +17,7 @@ export class AuthService {
 
     async signIn(req: LoginRequest, res: Response) {
         try {
-            const userData = req.user as UserEntity;
+            const userData = req.signUser as UserEntity;
 
             let user: UserEntity;
 
@@ -25,14 +25,14 @@ export class AuthService {
                 throw new BadRequestException("Unauthenticated");
             }
 
-            user = await this.usersRepository.findUserById(userData._id);
+            user = await this.usersRepository.findUserByEmailAndProvider(userData.email, userData.provider);
 
             if (!user) {
                 user = await this.signUp(userData);
             }
 
             const jwtPayload = {
-                id: user._id,
+                id: user.id,
                 email: user.email,
             };
 
@@ -44,7 +44,7 @@ export class AuthService {
                 access_token: accessToken,
             };
         } catch (error) {
-            throw new ForbiddenException("Signin Failed");
+            throw new ForbiddenException(error);
         }
     }
 

@@ -18,7 +18,7 @@ export class RoomsController {
 
     @Get("user")
     getRoomsByUserId(@CurrentUser() user: UserEntity) {
-        return this.roomsService.getRoomsByUserId(user._id);
+        return this.roomsService.getRoomsByUserId(user.id);
     }
 
     @Get(":roomId")

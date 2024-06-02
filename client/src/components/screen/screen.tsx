@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import style from "./screen.module.scss";
 
-const Screen = ({ videoRef, stream }) => {
+const Screen = ({ videoRef, stream }: {videoRef: React.RefObject<HTMLVideoElement>, stream: MediaStream}) => {
     useEffect(() => {
         if (videoRef && videoRef.current && stream) {
             videoRef.current.srcObject = stream;
