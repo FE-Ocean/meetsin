@@ -1,5 +1,4 @@
 import { Logger } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import {
     SubscribeMessage,
     WebSocketGateway,
@@ -13,9 +12,15 @@ import {
 import { Server, Socket } from "socket.io";
 import { RoomsService } from "src/rooms/rooms.service";
 import { MessageInfoDTO } from "./dto/messageInfo.dto";
+import { TimerDto } from "./dto/timer.dto";
 
 interface UserSocket extends Socket {
     user?: any;
+}
+
+interface ITimer {
+    roomId: string;
+    duration: TimerDto;
 }
 
 @WebSocketGateway({
@@ -73,5 +78,19 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
         this.server
             .to(messageInfo.roomId)
             .emit("new_message", { time: new Date(), ...messageInfo });
+    }
+
+    @SubscribeMessage("start_timer")
+    handleStartTimer(@MessageBody() data: ITimer) {
+        const { roomId, duration } = data;
+
+        this.server.to(roomId).emit("start_timer", duration);
+        // this.server.in(roomId).emit("start_timer", duration); // 방장 포함
+    }
+
+    @SubscribeMessage("stop_timer")
+    handleStopTimer(@MessageBody() roomId: string) {
+        this.server.to(roomId).emit("stop_timer");
+        // this.server.in(roomId).emit("start_timer"); // 방장 포함
     }
 }

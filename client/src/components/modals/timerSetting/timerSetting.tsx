@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useParams } from "next/navigation";
 import { useSetAtom } from "jotai";
 import { timerAtom, isTimerVisibleAtom } from "@/jotai/atom";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
+import { chatSocket } from "@/socket";
 import { numberToString } from "@/utils";
 import Button from "@/components/common/button/button";
 import style from "./timerSetting.module.scss";
@@ -11,6 +13,7 @@ interface IModal {
 }
 
 const TimerSetting = ({ onClose }: IModal) => {
+    const { roomId } = useParams();
     const setTimer = useSetAtom(timerAtom);
     const setIsTimerVisible = useSetAtom(isTimerVisibleAtom);
 
@@ -27,12 +30,12 @@ const TimerSetting = ({ onClose }: IModal) => {
 
         if (minRef.current.value === "00" && secRef.current.value === "00") return;
 
-        setTimer({
-            minute: Number(minRef.current.value) || 0,
-            second: Number(secRef.current.value) || 0,
-        });
-        onClose();
-        setIsTimerVisible(true);
+        const minute = Number(minRef.current.value) || 0;
+        const second = Number(secRef.current.value) || 0;
+
+        setTimer({ minute, second });
+
+        chatSocket.emit("start_timer", { roomId, duration: { minute, second } });
     };
 
     const handleInput = (
@@ -53,6 +56,19 @@ const TimerSetting = ({ onClose }: IModal) => {
     ) => {
         targetRef.current!.value = e.target.value.padStart(2, "0");
     };
+
+    const handleStartTimer = () => {
+        onClose();
+        setIsTimerVisible(true);
+    };
+
+    useEffect(() => {
+        chatSocket.on("start_timer", handleStartTimer);
+
+        return () => {
+            chatSocket.off("start_timer");
+        };
+    }, [handleStartTimer]);
 
     return (
         <BaseModal onClose={onClose}>
