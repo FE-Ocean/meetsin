@@ -1,4 +1,5 @@
 import { Logger } from "@nestjs/common";
+
 import {
     SubscribeMessage,
     WebSocketGateway,
@@ -10,6 +11,7 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { MoveInfoDto, StopPlayerInfoDto } from "src/dto/phaser.dto";
 
 @WebSocketGateway({
     cors: {
@@ -79,20 +81,20 @@ export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGate
     }
 
     @SubscribeMessage("move")
-    handleMove(@MessageBody() moveInfo : any, @ConnectedSocket() socket: Socket) {
-
-        const {x, y, roomId } = moveInfo;     
+    handleMove(@MessageBody() moveInfo : MoveInfoDto, @ConnectedSocket() socket: Socket) {
+        const { x, y, roomId, direction } = moveInfo;
 
         this.gameRooms[roomId].players[socket.id].x = x;
         this.gameRooms[roomId].players[socket.id].y = y;
+        this.gameRooms[roomId].players[socket.id].direction = direction;
 
         socket.to(roomId).emit('move', this.gameRooms[roomId].players[socket.id])
-
     }
 
     @SubscribeMessage("stop")
-    handleStop(@MessageBody() roomId : string, @ConnectedSocket() socket: Socket) {
-        socket.to(roomId).emit('stop', socket.id)
+    handleStop(@MessageBody() info : StopPlayerInfoDto, @ConnectedSocket() socket: Socket) {
+        const { roomId } = info;
 
+        socket.to(roomId).emit('stop', this.gameRooms[roomId].players[socket.id])
     }
 }

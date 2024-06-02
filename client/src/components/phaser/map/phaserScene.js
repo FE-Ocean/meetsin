@@ -24,6 +24,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
 
     update() {
         if (this.player) this.handlePlayerMovement(this.player);
+
         this.updateNameTags();
     }
 
@@ -36,6 +37,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.socket.on("roomInfo", (roomInfo) => this.handleRoomInfo(roomInfo));
         this.socket.on("newPlayer", ({ playerInfo }) => this.addOtherPlayers(playerInfo));
         this.socket.on("move", (info) => this.moveOtherPlayer(info));
+        this.socket.on("stop", (info) => this.stopOtherPlayer(info)); // 움직임 멈춤 이벤트 추가
         this.socket.on("userDisconnected", (info) => this.removePlayer(info.user.userId));
     }
 
@@ -62,16 +64,32 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     handlePlayerMovement(player) {
+        this.updatePlayerPosition(player);
         if (this.isAnyCursorKeyDown()) {
             if (!player.moving) player.play("player_anims");
             player.moving = true;
-            this.emitPlayerMovement();
+            this.emitPlayerMovement(player, this.getCurrentDirection());
         } else {
             if (player.moving) player.play("player_idle");
             player.moving = false;
         }
 
-        this.updatePlayerPosition(player);
+        if (this.isAllCursorKeyUp()) {
+            this.emitStopMovement();
+        }
+    }
+
+    getCurrentDirection() {
+        if (this.keyboardInput.left.isDown) {
+            return "left";
+        } else if (this.keyboardInput.right.isDown) {
+            return "right";
+        } else if (this.keyboardInput.up.isDown) {
+            return "up";
+        } else if (this.keyboardInput.down.isDown) {
+            return "down";
+        }
+        return null; // 혹은 마지막 방향을 유지할 수 있도록 처리
     }
 
     isAnyCursorKeyDown() {
@@ -83,9 +101,23 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         );
     }
 
-    emitPlayerMovement() {
-        if (!this.player || !this.socket) return;
-        this.socket.emit("move", { x: this.player.x, y: this.player.y, roomId: this.roomId });
+    isAllCursorKeyUp() {
+        return (
+            this.keyboardInput.left.isUp &&
+            this.keyboardInput.right.isUp &&
+            this.keyboardInput.up.isUp &&
+            this.keyboardInput.down.isUp
+        );
+    }
+
+    emitPlayerMovement(player, direction) {
+        if (!player || !this.socket) return;
+        this.socket.emit("move", { x: player.x, y: player.y, roomId: this.roomId, direction });
+    }
+
+    emitStopMovement() {
+        if (!this.socket) return;
+        this.socket.emit("stop", { playerId: this.player.playerId, roomId: this.roomId });
     }
 
     updatePlayerPosition(player) {
@@ -127,15 +159,38 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         });
     }
 
+    stopOtherPlayer(info) {
+        if (!this.otherPlayers) return;
+
+        this.otherPlayers.getChildren().forEach((otherPlayer) => {
+            if (info.playerId === otherPlayer.playerId) {
+                this.animateOtherPlayerStop(otherPlayer);
+            }
+        });
+    }
+
     animateOtherPlayerMovement(otherPlayer, info) {
         if (!otherPlayer.moving) otherPlayer.play("player_anims");
         otherPlayer.moving = true;
-        otherPlayer.flipX = otherPlayer.x < info.x;
+
+        // 방향 정보를 기반으로 flipX 설정
+        if (info.direction === "left") {
+            otherPlayer.flipX = false;
+        } else if (info.direction === "right") {
+            otherPlayer.flipX = true;
+        }
+
         otherPlayer.setPosition(info.x, info.y);
+    }
+
+    animateOtherPlayerStop(otherPlayer) {
+        if (otherPlayer.moving) otherPlayer.play("player_idle");
+        otherPlayer.moving = false;
     }
 
     addPlayer(playerInfo) {
         const player = this.physics.add.sprite(playerInfo.x, playerInfo.y, "player");
+        player.setCollideWorldBounds(true);
         player.nameTag = this.createNameTag(
             playerInfo.x,
             playerInfo.y - 50,
@@ -149,6 +204,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         if (!this.otherPlayers) return;
 
         const otherPlayer = this.physics.add.sprite(playerInfo.x, playerInfo.y, "player");
+        otherPlayer.setCollideWorldBounds(true);
         otherPlayer.playerId = playerInfo.playerId;
         otherPlayer.nameTag = this.createNameTag(
             playerInfo.x,
