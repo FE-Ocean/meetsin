@@ -1,21 +1,16 @@
 import { OmitType } from "@nestjs/mapped-types";
 import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { Document, Types } from "mongoose";
 
 const options: SchemaOptions = {
     timestamps: true,
     collection: "Users",
+    versionKey: false,
 };
 
 // DB에 저장되는 유저 정보 (토큰 포함)
 @Schema(options)
-export class UserEntity {
-    @Prop({
-        required: true,
-        unique: true,
-    })
-    user_id: string;
-
+export class UserEntity extends Document {
     @Prop({
         required: true,
     })
@@ -37,9 +32,12 @@ export class UserEntity {
 
     @Prop()
     refresh_token: string;
+
+    @Prop({required: true})
+    provider: string;
 }
 
 // 클라이언트에 제공되는 유저 정보 (토큰 미포함)
-export class UserDto extends OmitType(UserEntity, ['access_token', 'refresh_token']) {}
+export class UserDto extends OmitType(UserEntity, ["access_token", "refresh_token"]) {}
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

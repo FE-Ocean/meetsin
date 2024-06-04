@@ -5,8 +5,8 @@ import style from "./messageInput.module.scss";
 import useMessage from "@/hooks/useMessage";
 import useAdjustHeight from "@/hooks/useAdjustHeight";
 import useResetHeight from "@/hooks/useResetHeight";
-import { userAtom } from "@/jotai/atom";
 import { useAtomValue } from "jotai";
+import { userAtom } from "@/jotai/atom";
 
 const MessageInput = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);

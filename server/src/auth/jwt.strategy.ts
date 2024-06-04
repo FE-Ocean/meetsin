@@ -9,20 +9,19 @@ import { JwtPayload } from "jsonwebtoken";
 dotenv.config();
 
 @Injectable()
-
-export class JwtStrategy extends PassportStrategy(Strategy){
+export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(private readonly config: ConfigService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: process.env.JWT_SECRET,
-        })
+        });
     }
 
     async validate(payload: JwtPayload) {
         return {
-            user_id: payload.id,
+            id: payload.id,
             email: payload.email,
-        }
+        };
     }
 }
