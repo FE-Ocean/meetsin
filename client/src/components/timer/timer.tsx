@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { useAtom } from "jotai";
-import { timerAtom } from "@/jotai/atom";
-import { numberToString } from "@/utils";
 import { postNotification } from "../menu/notificationSwitch/notification";
 import { chatSocket } from "@/socket";
+import useTimer from "../../hooks/useTimer";
+import { numberToString } from "@/utils";
 import timer_icon from "/public/timer.svg";
 import style from "./timer.module.scss";
 
@@ -13,16 +12,8 @@ interface ITimer {
     setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SECONDS_PER_MINUTE = 60;
-
 const Timer = ({ setIsTimerVisible }: ITimer) => {
     const { roomId } = useParams();
-    const [{ minute, second }] = useAtom(timerAtom);
-
-    const totalSec = useRef(minute * SECONDS_PER_MINUTE + second);
-    const interval = useRef<NodeJS.Timeout | null>(null);
-    const [min, setMin] = useState(minute);
-    const [sec, setSec] = useState(second);
 
     const playSoundEffect = useCallback(() => {
         const alarm = new Audio("/timer_alarm.mp3");
@@ -33,23 +24,14 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
         };
     }, [setIsTimerVisible]);
 
-    useEffect(() => {
-        interval.current = setInterval(() => {
-            totalSec.current -= 1;
+    const handleTimerEnd = () => {
+        playSoundEffect();
+        // postNotification();
+        console.log("이권한 노티랑 푸시가 통합됐다고함", Notification.permission);
+        // new Notification("시간 끝");
+    };
 
-            setMin(Math.trunc(totalSec.current / SECONDS_PER_MINUTE));
-            setSec(totalSec.current % SECONDS_PER_MINUTE);
-        }, 1000);
-    }, []);
-
-    useEffect(() => {
-        if (totalSec.current === 0) {
-            clearInterval(interval.current!);
-
-            playSoundEffect();
-            // postNotification();
-        }
-    }, [sec, playSoundEffect]);
+    const { min, sec } = useTimer({ timerEnd: handleTimerEnd });
 
     const handleClickStop = () => {
         chatSocket.emit("stop_timer", roomId);
