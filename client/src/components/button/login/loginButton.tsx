@@ -15,7 +15,6 @@ const LoginButton = ({ loginType }: IProps) => {
 
     };
 
-
     return (
         <button className={`${style.button} ${style[loginType]}`} onClick={() => login(loginType)}>
             <Image
