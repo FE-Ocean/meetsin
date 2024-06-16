@@ -20,7 +20,6 @@ export class AuthController {
         const { access_token } = await this.authService.signIn(req, res);
         res.cookie('access_token', access_token, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
-            httpOnly: true,
             secure: true,
         });
         res.redirect(process.env.CLIENT_URL);
@@ -36,7 +35,6 @@ export class AuthController {
         const { access_token } = await this.authService.signIn(req, res);
         res.cookie('access_token', access_token, {
             maxAge: 30 * 24 * 60 * 60 * 1000,
-            httpOnly: true,
             secure: true,
         });
         res.redirect(process.env.CLIENT_URL);
@@ -46,7 +44,7 @@ export class AuthController {
     @Get("/user")
     @UseGuards(JwtGuard)
     async login(@Req() req: LoginRequest, @Res() res: Response) {
-        const user = this.userService.entityToDto(req.signUser);
+        const user = this.userService.entityToDto(req.user);
         res.json(user);
     }
 }

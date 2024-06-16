@@ -16,7 +16,8 @@ export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
         accessToken: string,
         refreshToken: string,
         profile: Profile,
-        done: (error: Error, signUser?) => void,
+        // done: (error: Error, signUser?) => void,
+        done: (error: Error, user?: Express.User) => void,
     ) {
         try {
             const { _json: json, displayName } = profile;

@@ -19,7 +19,7 @@ export class UsersRepository {
     }
 
     async findUserByEmailAndProvider(email: string, provider: string) {
-        const user = await this.userModel.findOne({email: email, provider: provider})
+        const user = await this.userModel.findOne({email: email, provider: provider});
         return user
     }
 

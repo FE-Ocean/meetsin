@@ -17,7 +17,7 @@ export class AuthService {
 
     async signIn(req: LoginRequest, res: Response) {
         try {
-            const userData = req.signUser as UserEntity;
+            const userData = req.user as UserEntity;
 
             let user: UserEntity;
 
