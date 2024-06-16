@@ -70,6 +70,7 @@ export const useGetUserRooms = (accessToken: string) => {
             roomName: room.room_name,
             admin: room.admin,
             createdAt: room.created_at,
+            userIds: room.userIds,
         }));
     };
 
