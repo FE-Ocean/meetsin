@@ -54,7 +54,7 @@ const Home = () => {
         if (user && accessToken) {
             router.push("/lobby");
         }
-    }, [user, accessToken]);
+    }, [user, accessToken, router]);
 
     return (
         <div className={style.home_wrapper}>

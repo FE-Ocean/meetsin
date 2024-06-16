@@ -3,6 +3,7 @@ export interface IRoom {
     roomName: string;
     admin: string;
     createdAt: string;
+    userIds: string[];
 }
 
 export interface IRoomModel {
@@ -10,6 +11,7 @@ export interface IRoomModel {
     room_name: string;
     admin: string;
     created_at: string;
+    userIds: string[];
 }
 
 export interface IPatchRoom {
