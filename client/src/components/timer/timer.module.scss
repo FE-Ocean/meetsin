@@ -13,7 +13,7 @@
     border-radius: 30px;
 
     &:hover {
-        .stop_button {
+        .pre_stop_button {
             @include hover_button(34px, url(/icon/stop.svg));
             position: absolute;
             left: 12px;
@@ -27,4 +27,29 @@
     font-size: 18px;
     font-weight: 700;
     letter-spacing: 1.8px;
+}
+
+// ----- 종료 확인 -----
+.back_button {
+    position: absolute;
+    width: 8px;
+    height: 12px;
+    left: -15px;
+    background: no-repeat center url(/icon/arrow.svg);
+}
+
+.stop_confirmation {
+    width: 77px;
+    position: absolute;
+    left: 13px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 14px;
+}
+
+.stop_button {
+    @include hover_button(32px, url(/icon/stop_warning.svg));
+    position: absolute;
+    right: 7px;
 }

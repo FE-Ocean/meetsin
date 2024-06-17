@@ -33,7 +33,7 @@ const Menu = (props: IMenu) => {
 
     const setTimer = useSetAtom(timerAtom);
 
-    const handleStartTimer = (duration: any) => {
+    const handleStartTimer = (duration: { minute: number; second: number }) => {
         setTimer(duration);
         setIsTimerVisible(true);
     };
