@@ -9,7 +9,7 @@ export interface IUser {
 // 서버의 응답 모델
 export interface IUserModel {
     // user_id: string
-    _id: string;
+    id: string;
     user_name: string;
     profile_img: string;
     email: string;

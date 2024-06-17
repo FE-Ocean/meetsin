@@ -36,6 +36,7 @@ export const useGetRoomData = (roomId: string, accessToken: string) => {
             roomName: res.room_name,
             admin: res.admin,
             createdAt: res.created_at,
+            userIds: res.userIds,
         };
     };
 
@@ -69,6 +70,7 @@ export const useGetUserRooms = (accessToken: string) => {
             roomName: room.room_name,
             admin: room.admin,
             createdAt: room.created_at,
+            userIds: room.userIds,
         }));
     };
 

@@ -29,19 +29,19 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
         accessToken: string,
         refreshToken: string,
         profile: Profile,
+        // done: (error: Error, signUser?) => void,
         done: VerifyCallback,
     ) {
         try {
             const { emails, photos, displayName } = profile;
-            const objectId = new Types.ObjectId();
 
-            const userInfo: UserEntity = {
-                _id: objectId,
+            const userInfo = {
                 email: emails[0].value,
                 profile_img: photos[0].value,
                 user_name: displayName,
                 access_token: accessToken,
                 refresh_token: refreshToken,
+                provider: "google",
             };
             done(null, userInfo);
         } catch (error) {

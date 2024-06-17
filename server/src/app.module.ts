@@ -6,6 +6,7 @@ import { AuthModule } from "./auth/auth.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
+import { PhaserModule } from './phaser/phaser.module';
 import * as mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -17,6 +18,7 @@ dotenv.config();
         MongooseModule.forRoot(process.env.MONGODB_URI),
         ChatsModule,
         AuthModule,
+        PhaserModule,
         RoomsModule,
     ],
     controllers: [AppController],
