@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import style from "./screen.module.scss";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/jotai/atom";
 interface IProps {
-    videoRef: React.RefObject<HTMLVideoElement>,
     currentStream: MediaStream
 }
 
-const Screen = ({ videoRef, currentStream }: IProps) => {
+const Screen = ({ currentStream }: IProps) => {
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     const user = useAtomValue(userAtom);
     useEffect(() => {
         if (videoRef && videoRef.current && currentStream) {
@@ -17,7 +17,7 @@ const Screen = ({ videoRef, currentStream }: IProps) => {
 
     return (
         <div className={style.screen_container}>
-            <video className={style.screen} autoPlay={true} ref={videoRef}></video>
+            <video className={style.screen} autoPlay={true} ref={videoRef} />
             <span className={style.user_name}>{user?.userName}</span>
         </div>
     );
