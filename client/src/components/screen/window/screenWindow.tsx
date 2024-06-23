@@ -5,16 +5,18 @@ import Screen from "@/components/screen/screen";
 import style from "./screenWindow.module.scss";
 
 interface IProps {
-    videoRef: React.RefObject<HTMLVideoElement>,
-    currentStream: MediaStream | null
+    streamList: Array<MediaStream>
 }
 
-const ScreenWindow = ({ videoRef, currentStream }: IProps) => {
+const ScreenWindow = ({ streamList }: IProps) => {
     const isScreenShare = useAtomValue(screenShareAtom);
+    const gridCols = streamList.length > 4 ? "over" : "under";
     return (
-        <div className={style.screen_window}>
-            {isScreenShare && currentStream && <Screen videoRef={videoRef} currentStream={currentStream} />}
-        </div>
+        <div className={`${style.screen_window} ${style[gridCols]}`}>
+            {isScreenShare && streamList.map((stream, index) => {
+                return <Screen currentStream={stream} key={index} />;
+            })
+            }</div>
     );
 };
 
