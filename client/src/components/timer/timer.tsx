@@ -1,25 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
-import { useAtom } from "jotai";
-import { timerAtom } from "@/jotai/atom";
-import { numberToString } from "@/utils";
 import { postNotification } from "../menu/notificationSwitch/notification";
+import useTimer from "../../hooks/useTimer";
+import { numberToString } from "@/utils";
 import timer_icon from "/public/timer.svg";
+import useStopTimer from "@/hooks/useStopTimer";
 import style from "./timer.module.scss";
 
 interface ITimer {
     setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SECONDS_PER_MINUTE = 60;
-
 const Timer = ({ setIsTimerVisible }: ITimer) => {
-    const [{ minute, second }] = useAtom(timerAtom);
-
-    const totalSec = useRef(minute * SECONDS_PER_MINUTE + second);
-    const interval = useRef<NodeJS.Timeout | null>(null);
-    const [min, setMin] = useState(minute);
-    const [sec, setSec] = useState(second);
+    const [confirmStop, setConfirmStop] = useState(false);
 
     const playSoundEffect = useCallback(() => {
         const alarm = new Audio("/timer_alarm.mp3");
@@ -30,30 +23,42 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
         };
     }, [setIsTimerVisible]);
 
-    useEffect(() => {
-        interval.current = setInterval(() => {
-            totalSec.current -= 1;
+    const handleTimerEnd = () => {
+        playSoundEffect();
+        // postNotification();
+        // 이권한 노티랑 푸시가 통합됐다고함", Notification.permission
+    };
 
-            setMin(Math.trunc(totalSec.current / SECONDS_PER_MINUTE));
-            setSec(totalSec.current % SECONDS_PER_MINUTE);
-        }, 1000);
-    }, []);
+    const { min, sec } = useTimer({ timerEnd: handleTimerEnd });
 
-    useEffect(() => {
-        if (totalSec.current === 0) {
-            clearInterval(interval.current!);
+    const makeTimerInvisible = () => {
+        setIsTimerVisible(false);
+    };
 
-            playSoundEffect();
-            postNotification();
-        }
-    }, [sec, playSoundEffect]);
+    const handleEmitStopTimer = useStopTimer(makeTimerInvisible);
 
     return (
         <div className={style.container} aria-label="남은 시간">
-            <Image src={timer_icon} alt="" />
-            <div className={style.time_container}>
-                <span>{numberToString(min)}</span>:<span>{numberToString(sec)}</span>
-            </div>
+            {!confirmStop && (
+                <>
+                    <Image src={timer_icon} alt="" />
+                    <button
+                        className={style.pre_stop_button}
+                        onClick={() => setConfirmStop(true)}
+                    />
+                    <div className={style.time_container}>
+                        <span>{numberToString(min)}</span>:<span>{numberToString(sec)}</span>
+                    </div>
+                </>
+            )}
+
+            {confirmStop && (
+                <>
+                    <button className={style.back_button} onClick={() => setConfirmStop(false)} />
+                    <p className={style.stop_confirmation}>모두의 타이머를 종료할까요?</p>
+                    <button className={style.stop_button} onClick={handleEmitStopTimer} />
+                </>
+            )}
         </div>
     );
 };

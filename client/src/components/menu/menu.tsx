@@ -1,7 +1,7 @@
 "use client";
 
-import { useAtom, useAtomValue } from "jotai";
-import { isTimerVisibleAtom, screenShareAtom } from "@/jotai/atom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { isTimerVisibleAtom, screenShareAtom, timerAtom } from "@/jotai/atom";
 import Image from "next/image";
 import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
@@ -10,6 +10,8 @@ import NotificationSwitch from "./notificationSwitch/notificationSwitch";
 import UserInfo from "../common/userInfo/userInfo";
 import LinkCopyButton from "./linkCopyButton/linkCopyButton";
 import style from "./menu.module.scss";
+import { chatSocket } from "@/socket";
+import { useEffect } from "react";
 
 interface IMenu {
     className: string;
@@ -28,6 +30,21 @@ const Menu = (props: IMenu) => {
 
         onOpen();
     };
+
+    const setTimer = useSetAtom(timerAtom);
+
+    const handleStartTimer = (duration: { minute: number; second: number }) => {
+        setTimer(duration);
+        setIsTimerVisible(true);
+    };
+
+    useEffect(() => {
+        chatSocket.on("start_timer", handleStartTimer);
+
+        return () => {
+            chatSocket.off("start_timer", handleStartTimer);
+        };
+    }, []);
 
     return (
         <div className={`${className} ${style.menu_container}`}>
