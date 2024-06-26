@@ -32,7 +32,7 @@ const useChatSocket = (params: Params) => {
     useEffect(() => {
         if (!user || !roomId) return;
 
-        chatSocket.connect();
+        // chatSocket.connect(); // 제가 auto를 ture로 해서 일단 주석 처리 했어요
 
         chatSocket.emit("join_room", { roomId, userId: user.userId, userName: user.userName });
         chatSocket.on("new_message", handleNewMessage);

@@ -40,9 +40,8 @@ export class RoomsService {
     }
 
     async addUserToRoom(roomId: string, newUserId: string) {
-        // user.decorator에 CurrentUser로 사용자 아이디(newUserId)를 가져와주세요
         const updatedRoom = await this.roomModel
-            .updateOne({ _id: roomId }, { $push: { userIds: newUserId } })
+            .updateOne({ _id: roomId }, { $addToSet: { userIds: newUserId } })
             .exec();
 
         if (!updatedRoom) {
@@ -51,6 +50,7 @@ export class RoomsService {
 
         return updatedRoom;
     }
+
     async removeUserFromRoom(roomId: string, removeUserId: string) {
         const updatedRoom = await this.roomModel
             .findOneAndUpdate({ _id: roomId }, { $pull: { userIds: removeUserId } }, { new: true })
