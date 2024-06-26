@@ -3,3 +3,9 @@ export interface IMessage {
     message: string;
     time: string;
 }
+
+export interface IChatUser {
+    socketId: string;
+    userId: string;
+    userName: string;
+}

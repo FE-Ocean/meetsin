@@ -11,6 +11,7 @@ import Skeleton from "@/components/common/skeleton/skeleton";
 import { useGetRoomData } from "@/app/api/service/room.service";
 import { useParams } from "next/navigation";
 import Peer from "peerjs";
+import useChatSocket from "@/hooks/useChatSocket";
 
 const Map = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -28,9 +29,10 @@ const Room = () => {
     const params = useParams();
     const roomId = params.roomId as string;
     const accessToken = useAtomValue(accessTokenAtom);
+    const { chatUsers, messages } = useChatSocket({ roomId });
 
     const stopScreenShare = () => {
-        if(!currentStream) {
+        if (!currentStream) {
             return;
         }
         currentStream.getTracks().forEach((track) => track.stop());
@@ -41,7 +43,7 @@ const Room = () => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
     };
 
-    const {data} = useGetRoomData(roomId, accessToken);
+    const { data } = useGetRoomData(roomId, accessToken);
 
     const user = useAtomValue(userAtom);
     const peer = new Peer(user?.userId ?? "");
@@ -54,7 +56,7 @@ const Room = () => {
             setCurrentStream(null);
         });
     }, [currentStream, setScreenShare]);
-    
+
     // const user = useAtomValue(userAtom)
     // const peer = new Peer({
     //     port: 9000,
@@ -67,10 +69,10 @@ const Room = () => {
     });
 
     useEffect(() => {
-        if(data){
+        if (data) {
             setCurrentUsers([...data.userIds]);
         }
-    }, [data,data?.userIds]);
+    }, [data, data?.userIds]);
 
     const startScreenShare = async () => {
         try {
@@ -78,23 +80,25 @@ const Room = () => {
                 return;
             }
             // 스크린 크기를 고정값으로 받고 있는데, 반응형으로 받을 수 있는 방법 고려
-            await navigator.mediaDevices.getDisplayMedia({
-                video: {
-                    aspectRatio: 1920/1280
-                },
-            }).then(mediaStream => {
-                setCurrentStream(mediaStream);
-                console.log("내 스트림: " + mediaStream);
-                console.log("현재 방 안에 있는 유저: " + currentUsers);
-                currentUsers.forEach(user => {
-                    const call = peer.call(user, mediaStream);
-                    console.log("유저한테 내가 콜: "+ call);
-                    call.on("stream", (remoteStream) => {
-                        call.answer(remoteStream);
-                        console.log("유저의 스트림: " + remoteStream);
+            await navigator.mediaDevices
+                .getDisplayMedia({
+                    video: {
+                        aspectRatio: 1920 / 1280,
+                    },
+                })
+                .then((mediaStream) => {
+                    setCurrentStream(mediaStream);
+                    console.log("내 스트림: " + mediaStream);
+                    console.log("현재 방 안에 있는 유저: " + currentUsers);
+                    currentUsers.forEach((user) => {
+                        const call = peer.call(user, mediaStream);
+                        console.log("유저한테 내가 콜: " + call);
+                        call.on("stream", (remoteStream) => {
+                            call.answer(remoteStream);
+                            console.log("유저의 스트림: " + remoteStream);
+                        });
                     });
                 });
-            });
             if (videoRef.current) {
                 videoRef.current.srcObject = currentStream;
             }
@@ -111,7 +115,9 @@ const Room = () => {
                     {/* 화면 공유하는 화면을 보이게 할 지, 통상의 맵을 보이게 할 지에 대한 atom 필요할 듯, 우선은 맵이 안 정해져서 화면 공유 화면이 보이도록 함 */}
                     <Map />
                     {<ScreenWindow videoRef={videoRef} currentStream={currentStream} />}
-                    {chatOpen && <Chat className={style.chat} toggleChat={toggleChat} />}
+                    {chatOpen && (
+                        <Chat className={style.chat} messages={messages} toggleChat={toggleChat} />
+                    )}
                 </div>
                 <Menu
                     className={style.menu}
@@ -119,6 +125,7 @@ const Room = () => {
                         isScreenShare ? stopScreenShare() : startScreenShare();
                     }}
                     toggleChat={toggleChat}
+                    chatUsers={chatUsers}
                 />
             </main>
         </>
