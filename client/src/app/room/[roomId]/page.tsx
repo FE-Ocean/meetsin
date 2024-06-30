@@ -11,7 +11,7 @@ import Skeleton from "@/components/common/skeleton/skeleton";
 import { useGetRoomData } from "@/app/api/service/room.service";
 import { useParams } from "next/navigation";
 import Peer from "peerjs";
-import useChatSocket from "@/hooks/useChatSocket";
+import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 
 const Map = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -29,7 +29,7 @@ const Room = () => {
     const params = useParams();
     const roomId = params.roomId as string;
     const accessToken = useAtomValue(accessTokenAtom);
-    const { chatUsers, messages } = useChatSocket({ roomId });
+    const { roomUsers, messages } = useChatSocket({ roomId });
 
     const stopScreenShare = () => {
         if (!currentStream) {
@@ -125,7 +125,7 @@ const Room = () => {
                         isScreenShare ? stopScreenShare() : startScreenShare();
                     }}
                     toggleChat={toggleChat}
-                    chatUsers={chatUsers}
+                    roomUsers={roomUsers}
                 />
             </main>
         </>

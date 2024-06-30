@@ -4,7 +4,7 @@ export interface IMessage {
     time: string;
 }
 
-export interface IChatUser {
+export interface IRoomUser {
     socketId: string;
     userId: string;
     userName: string;

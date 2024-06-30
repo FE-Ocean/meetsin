@@ -1,5 +1,5 @@
 import { RefObject, useState } from "react";
-import { chatSocket } from "@/socket";
+import { roomSocket } from "@/socket";
 import { useParams } from "next/navigation";
 
 const useMessage = ({
@@ -29,7 +29,7 @@ const useMessage = ({
             ...payload,
         };
 
-        chatSocket.emit("new_message", messageInfo);
+        roomSocket.emit("new_message", messageInfo);
         setMessage("");
     };
 
