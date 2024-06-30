@@ -6,7 +6,8 @@ import { AuthModule } from "./auth/auth.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
-import { PhaserModule } from './phaser/phaser.module';
+import { PhaserModule } from "./phaser/phaser.module";
+import { NotificationModule } from "./notification/notification.module";
 import * as mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -20,6 +21,7 @@ dotenv.config();
         AuthModule,
         PhaserModule,
         RoomsModule,
+        NotificationModule,
     ],
     controllers: [AppController],
     providers: [AppService],

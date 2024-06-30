@@ -1,6 +1,7 @@
 import { OmitType } from "@nestjs/mapped-types";
 import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
+import { Notification } from "src/notification/schema/notificationn.schema";
 
 const options: SchemaOptions = {
     timestamps: true,
@@ -33,8 +34,11 @@ export class UserEntity extends Document {
     @Prop()
     refresh_token: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     provider: string;
+
+    @Prop()
+    notification: Notification;
 }
 
 // 클라이언트에 제공되는 유저 정보 (토큰 미포함)
