@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
-import { chatSocket } from "@/socket";
+import { roomSocket } from "@/socket";
 import { numberToString } from "@/utils";
 import Button from "@/components/common/button/button";
 import style from "./timerSetting.module.scss";
@@ -28,7 +28,7 @@ const TimerSetting = ({ onClose }: IModal) => {
         const minute = Number(minRef.current.value) || 0;
         const second = Number(secRef.current.value) || 0;
 
-        chatSocket.emit("start_timer", { roomId, duration: { minute, second } });
+        roomSocket.emit("start_timer", { roomId, duration: { minute, second } });
 
         onClose();
     };
