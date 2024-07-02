@@ -1,5 +1,10 @@
-import { addSubscription, deleteSubscription } from "@/firebase/firebase";
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from "@/utils";
+import {
+    createSubscriptionToDB,
+    deleteSubscriptionFromDB,
+} from "@/app/api/repository/notification.repository";
+// import { addSubscription, deleteSubscription } from "@/firebase/firebase";
+
+const accessToken = "temp"; // 임시
 
 export const getServiceWorkerStatus = async () => {
     return navigator.serviceWorker.ready;
@@ -48,21 +53,21 @@ export const cancelSubscription = async () => {
 
     existingSubscription.unsubscribe();
 
-    await deleteSubscriptionFromDB();
+    await deleteSubscriptionFromDB(accessToken);
 };
 
 const storeSubscriptionToDB = async (subscription: PushSubscription) => {
+    // 포멧 정리해서 디비에 저장
     const jsonFormattedSubscription = JSON.parse(JSON.stringify(subscription));
-    const userKey = await addSubscription(jsonFormattedSubscription);
+    const formatNotificationData = {
+        endpoint: jsonFormattedSubscription.endpoint,
+        keys: {
+            p256dh: jsonFormattedSubscription.keys.p256dh,
+            auth: jsonFormattedSubscription.keys.auth,
+        },
+    }; // 추후 서비스에서 해야함
 
-    setLocalStorage("firebaseUserKey", userKey!);
-};
-
-const deleteSubscriptionFromDB = async () => {
-    const userKey = getLocalStorage("firebaseUserKey");
-    await deleteSubscription(userKey);
-
-    removeLocalStorage("firebaseUserKey");
+    await createSubscriptionToDB(formatNotificationData, accessToken);
 };
 
 export const postNotification = async () => {
