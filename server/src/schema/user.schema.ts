@@ -1,7 +1,7 @@
 import { OmitType } from "@nestjs/mapped-types";
 import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { Notification } from "src/notification/schema/notificationn.schema";
+import { Notification } from "src/notification/schema/notification.schema";
 
 const options: SchemaOptions = {
     timestamps: true,
