@@ -36,10 +36,10 @@ interface ITimer {
         allowedHeaders: ["my-custom-header"],
         credentials: true,
     },
-    namespace: "chat",
+    namespace: "room",
 })
-export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
-    private logger = new Logger("chat");
+export class RoomsGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
+    private logger = new Logger("room");
     private rooms: Map<string, User[]> = new Map();
 
     constructor(private readonly roomsService: RoomsService) {}

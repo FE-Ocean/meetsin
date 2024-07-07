@@ -10,19 +10,19 @@ import NotificationSwitch from "./notificationSwitch/notificationSwitch";
 import UserInfo from "../common/userInfo/userInfo";
 import LinkCopyButton from "./linkCopyButton/linkCopyButton";
 import style from "./menu.module.scss";
-import { IChatUser } from "@/types/chat";
-import { chatSocket } from "@/socket";
+import { IRoomUser } from "@/types/chat";
+import { roomSocket } from "@/socket";
 import { useEffect } from "react";
 
 interface IMenu {
     className: string;
     onScreenShare: () => any;
     toggleChat: () => void;
-    chatUsers: IChatUser[];
+    roomUsers: IRoomUser[];
 }
 
 const Menu = (props: IMenu) => {
-    const { className, onScreenShare, toggleChat, chatUsers } = props;
+    const { className, onScreenShare, toggleChat, roomUsers } = props;
     const isScreenShare = useAtomValue(screenShareAtom);
     const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
     const { onOpen } = useModal("timerSetting");
@@ -41,10 +41,10 @@ const Menu = (props: IMenu) => {
     };
 
     useEffect(() => {
-        chatSocket.on("start_timer", handleStartTimer);
+        roomSocket.on("start_timer", handleStartTimer);
 
         return () => {
-            chatSocket.off("start_timer", handleStartTimer);
+            roomSocket.off("start_timer", handleStartTimer);
         };
     }, []);
 
@@ -74,7 +74,7 @@ const Menu = (props: IMenu) => {
                     <li className={style.active_user_number}>
                         <Image src={active_user_icon} alt="접속자 수" />
                         <span className={style.active_circle}>●</span>
-                        <span>{chatUsers.length}</span>
+                        <span>{roomUsers.length}</span>
                     </li>
                 </ul>
                 <button className={style.chat} onClick={() => toggleChat()} />
