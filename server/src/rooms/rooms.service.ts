@@ -4,10 +4,14 @@ import { Model, Types } from "mongoose";
 import { Room } from "./rooms.schema";
 import { UserEntity } from "src/schema/user.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
+import { UsersRepository } from "src/users/users.repository";
 
 @Injectable()
 export class RoomsService {
-    constructor(@InjectModel(Room.name) private roomModel: Model<Room>) {}
+    constructor(
+        @InjectModel(Room.name) private roomModel: Model<Room>,
+        private readonly userRepository: UsersRepository,
+    ) {}
 
     createRoom(roomData: CreateRoomDto, user: UserEntity) {
         const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user.id });
@@ -39,10 +43,13 @@ export class RoomsService {
         return await room.save();
     }
 
-    async addUserToRoom(roomId: string, newUserId: string) {
-        const updatedRoom = await this.roomModel
-            .updateOne({ _id: roomId }, { $addToSet: { userIds: newUserId } })
-            .exec();
+    async addUserToRoom(roomId: string, newUserId: Types.ObjectId) {
+        const newUserData = await this.userRepository.findUserById(newUserId);
+
+        const updatedRoom = await this.roomModel.updateOne(
+            { _id: roomId },
+            { $addToSet: { userIds: newUserData } },
+        );
 
         if (!updatedRoom) {
             throw new Error("Room에 사용자가 추가되지 않았습니다.");
@@ -51,7 +58,7 @@ export class RoomsService {
         return updatedRoom;
     }
 
-    async removeUserFromRoom(roomId: string, removeUserId: string) {
+    async removeUserFromRoom(roomId: string, removeUserId: Types.ObjectId) {
         const updatedRoom = await this.roomModel
             .findOneAndUpdate({ _id: roomId }, { $pull: { userIds: removeUserId } }, { new: true })
             .exec();

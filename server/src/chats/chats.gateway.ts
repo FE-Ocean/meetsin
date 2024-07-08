@@ -9,6 +9,7 @@ import {
     MessageBody,
     WebSocketServer,
 } from "@nestjs/websockets";
+import { Types } from "mongoose";
 import { Server, Socket } from "socket.io";
 import { RoomsService } from "src/rooms/rooms.service";
 import { MessageInfoDTO } from "./dto/messageInfo.dto";
@@ -53,7 +54,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
 
     @SubscribeMessage("join_room")
     handleJoin(
-        @MessageBody() data: { roomId: string; userId: string },
+        @MessageBody() data: { roomId: string; userId: Types.ObjectId },
         @ConnectedSocket() socket: Socket,
     ) {
         const { roomId, userId } = data;
@@ -64,7 +65,7 @@ export class ChatsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
 
     @SubscribeMessage("leave_room")
     handleLeave(
-        @MessageBody() data: { roomId: string; userId: string },
+        @MessageBody() data: { roomId: string; userId: Types.ObjectId },
         @ConnectedSocket() socket: Socket,
     ) {
         const { roomId, userId } = data;
