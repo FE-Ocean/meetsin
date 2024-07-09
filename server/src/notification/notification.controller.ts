@@ -23,4 +23,9 @@ export class NotificationController {
     deleteSubscriptionFromDB(@CurrentUser() user: UserEntity) {
         return this.notificationService.deleteSubscription(user.id);
     }
+
+    @Post("/send")
+    createPushNotification(@Body("subscriptions") subscriptions: NotificationDTO[]) {
+        return this.notificationService.createPushNotification(subscriptions);
+    }
 }

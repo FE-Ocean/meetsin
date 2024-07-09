@@ -1,3 +1,4 @@
+import webpush from "web-push";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
@@ -6,7 +7,13 @@ import { NotificationDTO } from "./dto/notification.dto";
 
 @Injectable()
 export class NotificationService {
-    constructor(@InjectModel(UserEntity.name) private readonly userModel: Model<UserEntity>) {}
+    constructor(@InjectModel(UserEntity.name) private readonly userModel: Model<UserEntity>) {
+        webpush.setVapidDetails(
+            "mailto:meetsin@meetsin.com", // 변경하기
+            process.env.WEB_PUSH_PUBLIC_KEY,
+            process.env.WEB_PUSH_PRIVATE_KEY,
+        );
+    }
 
     createSubscription(userId: Types.ObjectId, subscription: NotificationDTO) {
         // 구독한 사용자의 유저 스키마에 구독 객체 저장(notification 필드에)
@@ -30,5 +37,28 @@ export class NotificationService {
         }
 
         return deletedSubscriptionObject;
+    }
+
+    async createPushNotification(subscriptions: NotificationDTO[]) {
+        const message = JSON.stringify({
+            title: "시간이 종료되었습니다.",
+            body: "타이머 설정 시간이 종료되었습니다.",
+            icon: "/timer.svg",
+        });
+
+        try {
+            const promises = subscriptions.map((subscription) =>
+                webpush.sendNotification(subscription, message).catch((error: Error) => {
+                    console.error(
+                        `${subscription.endpoint}로의 전송에 에러가 발생했습니다.`,
+                        error,
+                    );
+                }),
+            );
+
+            return await Promise.all(promises);
+        } catch (error) {
+            throw new Error("하나 이상의 알림 전송이 실패했습니다.");
+        }
     }
 }
