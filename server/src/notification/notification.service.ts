@@ -2,12 +2,12 @@ import webpush from "web-push";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { UserEntity } from "src/schema/user.schema";
+import { User } from "src/schema/user.schema";
 import { NotificationDTO } from "./dto/notification.dto";
 
 @Injectable()
 export class NotificationService {
-    constructor(@InjectModel(UserEntity.name) private readonly userModel: Model<UserEntity>) {
+    constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {
         webpush.setVapidDetails(
             "mailto:meetsin@meetsin.com", // 변경하기
             process.env.WEB_PUSH_PUBLIC_KEY,

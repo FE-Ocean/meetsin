@@ -1,16 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { UserEntity } from "src/schema/user.schema";
+import { User } from "src/schema/user.schema";
 
 @Injectable()
 export class UsersRepository {
-    constructor(@InjectModel(UserEntity.name) private readonly userModel: Model<UserEntity>) {}
+    constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
-    createUser(userData: UserEntity) {
+    createUser(userData: User) {
         return {
             ...userData,
-        } as UserEntity;
+        } as User;
     }
 
     async findUserById(id: Types.ObjectId) {
@@ -19,15 +19,15 @@ export class UsersRepository {
     }
 
     async findUserByEmailAndProvider(email: string, provider: string) {
-        const user = await this.userModel.findOne({email: email, provider: provider});
-        return user
+        const user = await this.userModel.findOne({ email: email, provider: provider });
+        return user;
     }
 
-    async saveUser(userData: UserEntity) {
+    async saveUser(userData: User) {
         await this.userModel.create(userData);
     }
 
-    async updateAccessToken(user: UserEntity, accessToken: string) {
+    async updateAccessToken(user: User, accessToken: string) {
         await this.userModel.findByIdAndUpdate(user.id, { access_token: accessToken });
     }
 }

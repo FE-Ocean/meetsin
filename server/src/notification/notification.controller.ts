@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Post, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/user.decorator";
-import { UserEntity } from "src/schema/user.schema";
+import { User } from "src/schema/user.schema";
 import { NotificationDTO } from "./dto/notification.dto";
 import { NotificationService } from "./notification.service";
 
@@ -13,14 +13,14 @@ export class NotificationController {
 
     @Post()
     createSubscriptionToDB(
-        @CurrentUser() user: UserEntity,
+        @CurrentUser() user: User,
         @Body("notification") subscription: NotificationDTO,
     ) {
         return this.notificationService.createSubscription(user.id, subscription);
     }
 
     @Delete()
-    deleteSubscriptionFromDB(@CurrentUser() user: UserEntity) {
+    deleteSubscriptionFromDB(@CurrentUser() user: User) {
         return this.notificationService.deleteSubscription(user.id);
     }
 

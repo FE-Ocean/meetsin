@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { Room } from "./rooms.schema";
-import { UserEntity } from "src/schema/user.schema";
+import { User } from "src/schema/user.schema";
 import { CreateRoomDto } from "./dto/create-room.dto";
 import { UsersRepository } from "src/users/users.repository";
 
@@ -13,7 +13,7 @@ export class RoomsService {
         private readonly userRepository: UsersRepository,
     ) {}
 
-    createRoom(roomData: CreateRoomDto, user: UserEntity) {
+    createRoom(roomData: CreateRoomDto, user: User) {
         const newRoom = new this.roomModel({ room_name: roomData.roomName, admin: user.id });
         return newRoom.save();
     }

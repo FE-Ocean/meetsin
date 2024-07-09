@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { Profile, Strategy, VerifyCallback } from "passport-google-oauth20";
-import { UserEntity } from "src/schema/user.schema";
 import { AuthService } from "./auth.service";
 import dotenv from "dotenv";
-import { Types } from "mongoose";
 
 dotenv.config();
 

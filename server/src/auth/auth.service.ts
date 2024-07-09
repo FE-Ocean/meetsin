@@ -1,5 +1,5 @@
 import { BadRequestException, ForbiddenException, Injectable } from "@nestjs/common";
-import { UserEntity } from "src/schema/user.schema";
+import { User } from "src/schema/user.schema";
 import { UsersRepository } from "src/users/users.repository";
 import dotenv from "dotenv";
 import { Response } from "express";
@@ -17,15 +17,18 @@ export class AuthService {
 
     async signIn(req: LoginRequest, res: Response) {
         try {
-            const userData = req.user as UserEntity;
+            const userData = req.user as User;
 
-            let user: UserEntity;
+            let user: User;
 
             if (!userData) {
                 throw new BadRequestException("Unauthenticated");
             }
 
-            user = await this.usersRepository.findUserByEmailAndProvider(userData.email, userData.provider);
+            user = await this.usersRepository.findUserByEmailAndProvider(
+                userData.email,
+                userData.provider,
+            );
 
             if (!user) {
                 user = await this.signUp(userData);
@@ -48,7 +51,7 @@ export class AuthService {
         }
     }
 
-    async signUp(userData: UserEntity) {
+    async signUp(userData: User) {
         const user = this.usersRepository.createUser(userData);
         await this.usersRepository.saveUser(user);
         return user;
