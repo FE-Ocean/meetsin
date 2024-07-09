@@ -1,6 +1,6 @@
 import { OmitType } from "@nestjs/mapped-types";
 import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Schema as MongooseSchema } from "mongoose";
 import { Notification } from "src/notification/schema/notification.schema";
 
 const options: SchemaOptions = {
@@ -37,7 +37,7 @@ export class UserEntity extends Document {
     @Prop({ required: true })
     provider: string;
 
-    @Prop()
+    @Prop({ type: MongooseSchema.Types.Mixed })
     notification: Notification;
 }
 
