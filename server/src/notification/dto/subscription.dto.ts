@@ -10,7 +10,7 @@ class KeysDTO {
     auth: string;
 }
 
-export class NotificationDTO {
+export class SubscriptionDTO {
     @IsNotEmpty()
     @IsString()
     endpoint: string;

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Post, UseGuards } from "@nestjs/common";
 import { JwtGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/user.decorator";
 import { User } from "src/schema/user.schema";
-import { NotificationDTO } from "./dto/notification.dto";
+import { SubscriptionDTO } from "./dto/subscription.dto";
 import { NotificationService } from "./notification.service";
 
 // get, create, update, delete
@@ -14,7 +14,7 @@ export class NotificationController {
     @Post()
     createSubscriptionToDB(
         @CurrentUser() user: User,
-        @Body("notification") subscription: NotificationDTO,
+        @Body("notification") subscription: SubscriptionDTO,
     ) {
         return this.notificationService.createSubscription(user.id, subscription);
     }
@@ -25,7 +25,7 @@ export class NotificationController {
     }
 
     @Post("/send")
-    createPushNotification(@Body("subscriptions") subscriptions: NotificationDTO[]) {
+    createPushNotification(@Body("subscriptions") subscriptions: SubscriptionDTO[]) {
         return this.notificationService.createPushNotification(subscriptions);
     }
 }

@@ -1,7 +1,7 @@
 import { OmitType } from "@nestjs/mapped-types";
 import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
 import { Document, Schema as MongooseSchema } from "mongoose";
-import { Notification } from "src/notification/schema/notification.schema";
+import { Subscription } from "src/notification/schema/subscription.schema";
 
 const options: SchemaOptions = {
     timestamps: true,
@@ -38,7 +38,7 @@ export class User extends Document {
     provider: string;
 
     @Prop({ type: MongooseSchema.Types.Mixed })
-    notification: Notification;
+    notification: Subscription;
 }
 
 // 클라이언트에 제공되는 유저 정보 (토큰 미포함)

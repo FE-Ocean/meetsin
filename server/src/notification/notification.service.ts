@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { User } from "src/schema/user.schema";
-import { NotificationDTO } from "./dto/notification.dto";
+import { SubscriptionDTO } from "./dto/subscription.dto";
 
 @Injectable()
 export class NotificationService {
@@ -15,7 +15,7 @@ export class NotificationService {
         );
     }
 
-    createSubscription(userId: Types.ObjectId, subscription: NotificationDTO) {
+    createSubscription(userId: Types.ObjectId, subscription: SubscriptionDTO) {
         // 구독한 사용자의 유저 스키마에 구독 객체 저장(notification 필드에)
         const user = this.userModel.updateOne(
             { _id: userId },
@@ -39,7 +39,7 @@ export class NotificationService {
         return deletedSubscriptionObject;
     }
 
-    async createPushNotification(subscriptions: NotificationDTO[]) {
+    async createPushNotification(subscriptions: SubscriptionDTO[]) {
         const message = JSON.stringify({
             title: "시간이 종료되었습니다.",
             body: "타이머 설정 시간이 종료되었습니다.",

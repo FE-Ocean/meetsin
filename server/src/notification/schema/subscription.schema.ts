@@ -10,7 +10,7 @@ class Keys {
 }
 
 @Schema()
-export class Notification {
+export class Subscription {
     @Prop({ required: true })
     endpoint: string;
 
@@ -18,4 +18,4 @@ export class Notification {
     keys: Keys;
 }
 
-export const NotificationSchema = SchemaFactory.createForClass(Notification);
+export const SubscriptionSchema = SchemaFactory.createForClass(Subscription);
