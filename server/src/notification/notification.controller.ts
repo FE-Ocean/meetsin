@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, UseGuards } from "@nestjs/common";
+import { Types } from "mongoose";
 import { JwtGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/user.decorator";
 import { User } from "src/schema/user.schema";
@@ -24,8 +25,8 @@ export class NotificationController {
         return this.notificationService.deleteSubscription(user.id);
     }
 
-    @Post("/send")
-    createPushNotification(@Body("subscriptions") subscriptions: SubscriptionDTO[]) {
-        return this.notificationService.createPushNotification(subscriptions);
+    @Post(":roomId")
+    createPushNotification(@Param("roomId") roomId: Types.ObjectId) {
+        return this.notificationService.createPushNotification(roomId);
     }
 }

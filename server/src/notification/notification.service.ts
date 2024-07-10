@@ -4,10 +4,14 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { User } from "src/schema/user.schema";
 import { SubscriptionDTO } from "./dto/subscription.dto";
+import { RoomsService } from "src/rooms/rooms.service";
 
 @Injectable()
 export class NotificationService {
-    constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {
+    constructor(
+        @InjectModel(User.name) private readonly userModel: Model<User>,
+        private readonly roomsService: RoomsService,
+    ) {
         webpush.setVapidDetails(
             "mailto:meetsin@meetsin.com", // 변경하기
             process.env.WEB_PUSH_PUBLIC_KEY,
@@ -39,7 +43,7 @@ export class NotificationService {
         return deletedSubscriptionObject;
     }
 
-    async createPushNotification(subscriptions: SubscriptionDTO[]) {
+    async createPushNotification(roomId: Types.ObjectId) {
         const message = JSON.stringify({
             title: "시간이 종료되었습니다.",
             body: "타이머 설정 시간이 종료되었습니다.",
@@ -47,6 +51,8 @@ export class NotificationService {
         });
 
         try {
+            const subscriptions = await this.roomsService.getRoomUserSubscriptions(roomId);
+
             const promises = subscriptions.map((subscription) =>
                 webpush.sendNotification(subscription, message).catch((error: Error) => {
                     console.error(

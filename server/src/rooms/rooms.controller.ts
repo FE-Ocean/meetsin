@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Types } from "mongoose";
 import { JwtGuard } from "src/auth/auth.guard";
 import { CurrentUser } from "src/common/decorators/user.decorator";
 import { User } from "src/schema/user.schema";
@@ -21,18 +22,18 @@ export class RoomsController {
         return this.roomsService.getRoomsByUserId(user.id);
     }
 
-    @Get(":roomId")
-    getRoomById(@Param("roomId") roomId: string) {
+    @Get("/:roomId")
+    getRoomById(@Param("roomId") roomId: Types.ObjectId) {
         return this.roomsService.getRoomById(roomId);
     }
 
-    @Patch(":roomId")
-    updateRoom(@Param("roomId") roomId: string, @Body("roomData") roomData: UpdateRoomDto) {
+    @Patch("/:roomId")
+    updateRoom(@Param("roomId") roomId: Types.ObjectId, @Body("roomData") roomData: UpdateRoomDto) {
         return this.roomsService.updateRoom(roomId, roomData.roomName);
     }
 
     @Delete(":roomId")
-    deleteRoom(@Param("roomId") roomId: string) {
+    deleteRoom(@Param("roomId") roomId: Types.ObjectId) {
         return this.roomsService.deleteRoom(roomId);
     }
 }

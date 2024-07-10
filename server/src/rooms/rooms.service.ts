@@ -27,7 +27,7 @@ export class RoomsService {
         return rooms;
     }
 
-    async getRoomById(roomId: string) {
+    async getRoomById(roomId: Types.ObjectId) {
         const room = await this.roomModel.findById(roomId).exec();
 
         if (!room) {
@@ -36,26 +36,40 @@ export class RoomsService {
         return room;
     }
 
-    async updateRoom(roomId: string, roomName: string) {
+    async updateRoom(roomId: Types.ObjectId, roomName: string) {
         const room = await this.getRoomById(roomId);
         room.room_name = roomName;
 
         return await room.save();
     }
 
+    async getRoomUserSubscriptions(roomId: Types.ObjectId) {
+        const room = await this.getRoomById(roomId);
+        const userIds = room.userIds.map((user) => user._id);
+
+        const users = await Promise.all(
+            userIds.map((userId) => this.userRepository.findUserById(userId)),
+        );
+
+        const subscriptions = users
+            .filter((user) => user.notification !== undefined)
+            .flatMap((user) => user.notification!);
+        return subscriptions;
+    }
+
     async addUserToRoom(roomId: string, newUserId: Types.ObjectId) {
         const newUserData = await this.userRepository.findUserById(newUserId);
 
-        const updatedRoom = await this.roomModel.updateOne(
+        const updatedRoomUserIds = await this.roomModel.updateOne(
             { _id: roomId },
             { $addToSet: { userIds: newUserData } },
         );
 
-        if (!updatedRoom) {
+        if (!updatedRoomUserIds) {
             throw new Error("Room에 사용자가 추가되지 않았습니다.");
         }
 
-        return updatedRoom;
+        return updatedRoomUserIds;
     }
 
     async removeUserFromRoom(roomId: string, removeUserId: Types.ObjectId) {
@@ -70,7 +84,7 @@ export class RoomsService {
         return updatedRoom;
     }
 
-    async deleteRoom(roomId: string) {
+    async deleteRoom(roomId: Types.ObjectId) {
         const room = await this.getRoomById(roomId);
 
         return await room.deleteOne();
