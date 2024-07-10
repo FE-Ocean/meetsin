@@ -20,7 +20,6 @@ export class NotificationService {
     }
 
     createSubscription(userId: Types.ObjectId, subscription: SubscriptionDTO) {
-        // 구독한 사용자의 유저 스키마에 구독 객체 저장(notification 필드에)
         const user = this.userModel.updateOne(
             { _id: userId },
             { $addToSet: { notification: subscription } },
@@ -29,7 +28,6 @@ export class NotificationService {
     }
 
     async deleteSubscription(userId: Types.ObjectId) {
-        // 구독 해제한 사용자의 유저 스키마에 notification 필드 제거
         const deletedSubscriptionObject = await this.userModel.updateOne(
             { _id: userId },
             { $unset: { notification: "" } },
@@ -37,7 +35,6 @@ export class NotificationService {
 
         if (!deletedSubscriptionObject) {
             throw new Error("구독 객체가 제거되지 않았습니다.");
-            // 이 deletedSubscriptionObject 뭐가 찍히는지 봐야겠다~
         }
 
         return deletedSubscriptionObject;

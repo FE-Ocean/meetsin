@@ -2,7 +2,6 @@ import {
     createSubscriptionToDB,
     deleteSubscriptionFromDB,
 } from "@/app/api/repository/notification.repository";
-// import { addSubscription, deleteSubscription } from "@/firebase/firebase";
 
 const accessToken = "temp"; // 임시
 
@@ -68,16 +67,4 @@ const storeSubscriptionToDB = async (subscription: PushSubscription) => {
     }; // 추후 서비스에서 해야함
 
     await createSubscriptionToDB(formatNotificationData, accessToken);
-};
-
-export const postNotification = async () => {
-    const response = await fetch("/api/notification", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-    if (!response.ok) {
-        throw Error("Failed to send push subscription to server");
-    }
 };
