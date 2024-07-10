@@ -1,7 +1,7 @@
 import { baseClient } from "@/modules/fetchClient";
-import { INotification } from "@/types/notification.type";
+import { ISubscription } from "@/types/subscription.type";
 
-export const createSubscriptionToDB = async (subscription: INotification, accessToken: string) => {
+export const createSubscriptionToDB = async (subscription: ISubscription, accessToken: string) => {
     try {
         if (!accessToken) {
             throw new Error("access token이 없거나 올바르지 않습니다.");
@@ -38,4 +38,30 @@ export const deleteSubscriptionFromDB = async (accessToken: string) => {
             Authorization: `Bearer ${accessToken}`,
         },
     });
+};
+
+export const createPushNotification = async (roomId: string, accessToken: string) => {
+    try {
+        if (!accessToken) {
+            throw new Error("access token이 없거나 올바르지 않습니다.");
+        }
+
+        const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/notification/${roomId}`;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`알림 전송 실패: ${response.statusText}`);
+        }
+
+        return response.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 };

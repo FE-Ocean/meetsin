@@ -1,10 +1,13 @@
 import { useCallback, useState } from "react";
 import Image from "next/image";
-import { postNotification } from "../menu/notificationSwitch/notification";
-import useTimer from "../../hooks/useTimer";
+import { useParams } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { accessTokenAtom } from "@/jotai/atom";
+import useTimer from "./hooks/useTimer";
+import useStopTimer from "./hooks/useStopTimer";
+import { createPushNotification } from "@/app/api/repository/notification.repository";
 import { numberToString } from "@/utils";
 import timer_icon from "/public/timer.svg";
-import useStopTimer from "@/hooks/useStopTimer";
 import style from "./timer.module.scss";
 
 interface ITimer {
@@ -12,6 +15,10 @@ interface ITimer {
 }
 
 const Timer = ({ setIsTimerVisible }: ITimer) => {
+    const accessToken = useAtomValue(accessTokenAtom);
+    const param = useParams();
+    const roomId = param.roomId as string;
+
     const [confirmStop, setConfirmStop] = useState(false);
 
     const playSoundEffect = useCallback(() => {
@@ -25,7 +32,7 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
 
     const handleTimerEnd = () => {
         playSoundEffect();
-        // postNotification();
+        createPushNotification(roomId, accessToken);
         // 이권한 노티랑 푸시가 통합됐다고함", Notification.permission
     };
 

@@ -3,7 +3,7 @@ interface Ikeys {
     auth: string;
 }
 
-export interface INotification {
+export interface ISubscription {
     endpoint: string;
     keys: Ikeys;
 }
