@@ -9,6 +9,7 @@ import useModal from "@/hooks/useModal";
 import UserInfo from "@/components/common/userInfo/userInfo";
 import RoomCard from "@/components/room/roomCard/roomCard";
 import style from "./style.module.scss";
+import Link from "next/link";
 
 const Lobby = () => {
     const { onOpen } = useModal("createRoom");
@@ -50,6 +51,7 @@ const Lobby = () => {
                             마우스를 올리면 이름을 변경하거나 삭제할 수 있습니다. <br />
                             새로운 방을 만들고 싶다면 화면의 오른쪽 상단에 있는 버튼을 클릭하세요.
                         </p>
+                        <Link href={"/room/6697c265964adc013f74ef83"}>테스트 링크</Link>
                         <ul className={style.room_cards}>
                             {userRooms.map((room: IRoom) => {
                                 return (

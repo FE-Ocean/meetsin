@@ -95,16 +95,15 @@ const Room = () => {
                 },
             }).then(mediaStream => {
                 setStreamList([mediaStream]);
-                console.log("내 스트림: " );
-                console.log(mediaStream);
-                console.log("현재 방 안에 있는 유저: " + currentUsers);
+                console.log("내 스트림: ", mediaStream);
+                console.log("현재 방 안에 있는 유저: ", currentUsers);
                 currentUsers.filter(otherUser => otherUser !== user?.userId).forEach(user => {
                     const call = peer.call(user, mediaStream);
-                    console.log("유저한테 내가 콜: "+ call);
+                    console.log("유저한테 내가 콜: ", call);
                     call.on("stream", (remoteStream) => {
                         call.answer(remoteStream);
                         setStreamList([...streamList, remoteStream]);
-                        console.log("유저의 스트림: " + remoteStream);
+                        console.log("유저의 스트림: ", remoteStream);
                     });
                 });
             });
