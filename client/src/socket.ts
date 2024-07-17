@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
 
-const URL = process.env.NODE_ENV === "production" ? undefined : "http://localhost:8000";
+const URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export const chatSocket = io(`${URL}/chat`, { autoConnect: true });
