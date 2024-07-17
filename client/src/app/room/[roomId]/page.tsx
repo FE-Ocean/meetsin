@@ -80,6 +80,9 @@ const Room = () => {
     }, [streamList]);
 
     const startScreenShare = async () => {
+        if(!user){
+            return;
+        }
         try {
             if (typeof window === "undefined" || isScreenShare) {
                 return;
@@ -95,9 +98,10 @@ const Room = () => {
                 setStreamList([mediaStream]);
                 console.log("내 스트림: ", mediaStream);
                 console.log("현재 방 안에 있는 유저: ", currentUsers);
-                currentUsers.filter(otherUser => otherUser !== user?.userId).forEach(user => {
+                console.log(currentUsers.filter(otherUser => otherUser !== user.userId));
+                currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
                     const call = peer.call(user, mediaStream);
-                    console.log("유저한테 내가 콜: ", call);
+                    console.log("유저한테 내가 콜: ", call); // 이게 undefined
                     call.on("stream", (remoteStream) => {
                         call.answer(remoteStream);
                         setStreamList([...streamList, remoteStream]);
