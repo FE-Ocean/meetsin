@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { ChatsModule } from "./chats/chats.module";
 import { AuthModule } from "./auth/auth.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { MongooseModule } from "@nestjs/mongoose";
@@ -17,7 +16,6 @@ dotenv.config();
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRoot(process.env.MONGODB_URI),
-        ChatsModule,
         AuthModule,
         PhaserModule,
         RoomsModule,
