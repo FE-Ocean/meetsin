@@ -10,7 +10,6 @@
         "lint:fix": "next lint --fix"
     },
     "dependencies": {
-        "@firebase/app": "^0.9.25",
         "@tanstack/react-query": "^5.32.0",
         "@types/node": "20.6.0",
         "@types/react": "18.2.21",

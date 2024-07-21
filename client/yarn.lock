@@ -63,47 +63,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/app@npm:^0.9.25":
-  version: 0.9.25
-  resolution: "@firebase/app@npm:0.9.25"
-  dependencies:
-    "@firebase/component": 0.6.4
-    "@firebase/logger": 0.4.0
-    "@firebase/util": 1.9.3
-    idb: 7.1.1
-    tslib: ^2.1.0
-  checksum: 662aae0ca925c196f1c96aa7077cd9fca8909555e474e1c4d9c2f39c9710c43fd2fe275c84d9ce2512260323ed1f1fde024260b2217375278646e51989baa4b8
-  languageName: node
-  linkType: hard
-
-"@firebase/component@npm:0.6.4":
-  version: 0.6.4
-  resolution: "@firebase/component@npm:0.6.4"
-  dependencies:
-    "@firebase/util": 1.9.3
-    tslib: ^2.1.0
-  checksum: 5d7006e4bc70508f16fe9297c351ca7eff29b59f7fd4cc99a6e28f93b62f422d0401d84b0ddc38a52f7125aa646c9a98d014a86afdd2c50caf178b1987f71ab6
-  languageName: node
-  linkType: hard
-
-"@firebase/logger@npm:0.4.0":
-  version: 0.4.0
-  resolution: "@firebase/logger@npm:0.4.0"
-  dependencies:
-    tslib: ^2.1.0
-  checksum: 4b5418f03a2e973f6d4fa8f3a27057b3cc439691b6067ecfa4755bb310d1ed7bdf53016bc2d13bdbdad7e369485d57e9fd1e4679e30a5b98aab9f87e1fa671ee
-  languageName: node
-  linkType: hard
-
-"@firebase/util@npm:1.9.3":
-  version: 1.9.3
-  resolution: "@firebase/util@npm:1.9.3"
-  dependencies:
-    tslib: ^2.1.0
-  checksum: b2dbd39229580df2075d102bc26a895eefdfb7ddc7bd71da6765f9ff4a61f5b67b6583e7e20676c56dc0e3f9379376fdef09a46b37b8d088b9de3eb0afbc066a
-  languageName: node
-  linkType: hard
-
 "@humanwhocodes/config-array@npm:^0.11.11":
   version: 0.11.11
   resolution: "@humanwhocodes/config-array@npm:0.11.11"
@@ -2006,13 +1965,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"idb@npm:7.1.1":
-  version: 7.1.1
-  resolution: "idb@npm:7.1.1"
-  checksum: 1973c28d53c784b177bdef9f527ec89ec239ec7cf5fcbd987dae75a16c03f5b7dfcc8c6d3285716fd0309dd57739805390bd9f98ce23b1b7d8849a3b52de8d56
-  languageName: node
-  linkType: hard
-
 "ignore@npm:^5.2.0":
   version: 5.2.4
   resolution: "ignore@npm:5.2.4"
@@ -2552,7 +2504,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "meetsin@workspace:."
   dependencies:
-    "@firebase/app": ^0.9.25
     "@tanstack/react-query": ^5.32.0
     "@types/node": 20.6.0
     "@types/react": 18.2.21
@@ -3786,7 +3737,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.4.0":
   version: 2.6.2
   resolution: "tslib@npm:2.6.2"
   checksum: 329ea56123005922f39642318e3d1f0f8265d1e7fcb92c633e0809521da75eeaca28d2cf96d7248229deb40e5c19adf408259f4b9640afd20d13aecc1430f3ad
