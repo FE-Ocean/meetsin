@@ -72,6 +72,10 @@ const Room = () => {
         if(!user) {
             return;
         }
+        if (!isScreenShare) {
+            console.error("No screen sharing stream to answer with");
+            return;
+        }
         const newPeer = new Peer(user.userId);
         setPeer(newPeer);
         newPeer.on("open", (id) => {
@@ -82,6 +86,14 @@ const Room = () => {
             call.answer();
             call.on("stream", (remoteStream) => {
                 setStreamList([...streamList, remoteStream]);
+            });
+
+            call.on("error", (err) => {
+                console.error("Call error:", err);
+            });
+
+            newPeer.on("error", (err) => {
+                console.error("Peer error:", err);
             });
         });
 
@@ -103,9 +115,11 @@ const Room = () => {
 
     const startScreenShare = async () => {
         if(!user){
+            console.log("user not found");
             return;
         }
         if(!peer) {
+            console.log("peer not found");
             return;
         }
         try {
@@ -129,11 +143,18 @@ const Room = () => {
             currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
                 const call = peer.call(user, mediaStream);
                 // call.answer(mediaStream);
+                if (!call) {
+                    console.error("Failed to establish call with user:", user);
+                    return;
+                }
                 console.log("유저한테 내가 콜: ", call); // 이게 undefined (화면공유 껐다켰다할시)
                 // 이 안의 콘솔은 안찍힘
                 call.on("stream", (remoteStream) => {
                     setStreamList([...streamList, remoteStream]);
                     console.log("유저의 스트림: ", remoteStream);
+                });
+                call.on("error", (err) => {
+                    console.error("Call error with user:", user, err);
                 });
             }); 
             
