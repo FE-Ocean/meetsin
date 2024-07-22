@@ -19,6 +19,7 @@ const Map = dynamic(() => import("../../../components/phaser/map/map"), {
 });
 
 const Room = () => {
+    const [peer, setPeer] = useState<Peer| null>(null);
     const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [streamList, setStreamList] = useState<Array<MediaStream>>([]);
@@ -47,7 +48,7 @@ const Room = () => {
     const { data } = useGetRoomData(roomId, accessToken);
 
     const user = useAtomValue(userAtom);
-    const peer = new Peer(user?.userId ?? "");
+    // const peer = new Peer(user?.userId ?? "");
 
     // 공유 중지 시 화면 공유 창 꺼지게
     useEffect(() => {
@@ -68,11 +69,16 @@ const Room = () => {
     // });
 
     useEffect(() => {
-        peer.on("open", (id) => {
+        if(!user) {
+            return;
+        }
+        const newPeer = new Peer(user.userId);
+        setPeer(newPeer);
+        newPeer.on("open", (id) => {
             console.log("My peer ID is: " + id);
         });
         
-        peer.on("call", (call) => {
+        newPeer.on("call", (call) => {
             call.answer();
             call.on("stream", (remoteStream) => {
                 setStreamList([...streamList, remoteStream]);
@@ -80,9 +86,9 @@ const Room = () => {
         });
 
         return () => {
-            peer.destroy();
+            newPeer.destroy();
         };
-    }, [peer, streamList]);
+    }, [peer, streamList, user]);
     
 
     useEffect(() => {
@@ -97,6 +103,9 @@ const Room = () => {
 
     const startScreenShare = async () => {
         if(!user){
+            return;
+        }
+        if(!peer) {
             return;
         }
         try {
@@ -119,7 +128,7 @@ const Room = () => {
                        
             currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
                 const call = peer.call(user, mediaStream);
-                call.answer(mediaStream);
+                // call.answer(mediaStream);
                 console.log("유저한테 내가 콜: ", call); // 이게 undefined (화면공유 껐다켰다할시)
                 // 이 안의 콘솔은 안찍힘
                 call.on("stream", (remoteStream) => {
