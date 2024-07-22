@@ -67,9 +67,23 @@ const Room = () => {
     //     host: "localhost"
     // });
 
-    peer.on("open", (id) => {
-        console.log("My peer ID is: " + id);
-    });
+    useEffect(() => {
+        peer.on("open", (id) => {
+            console.log("My peer ID is: " + id);
+        });
+        
+        peer.on("call", (call) => {
+            call.answer();
+            call.on("stream", (remoteStream) => {
+                setStreamList([...streamList, remoteStream]);
+            });
+        });
+
+        return () => {
+            peer.destroy();
+        };
+    }, [peer, streamList]);
+    
 
     useEffect(() => {
         if (data) {
@@ -89,28 +103,31 @@ const Room = () => {
             if (typeof window === "undefined" || isScreenShare) {
                 return;
             }
-            await navigator.mediaDevices.getDisplayMedia({
+            const mediaStream = await navigator.mediaDevices.getDisplayMedia({
                 video: {
                     width: {
                         ideal: 9999,
                     },
                     aspectRatio: 1920/1280
                 },
-            }).then(mediaStream => {
-                setStreamList([mediaStream]);
-                console.log("내 스트림: ", mediaStream);
-                console.log("현재 방 안에 있는 유저: ", currentUsers);
-                console.log(currentUsers.filter(otherUser => otherUser !== user.userId));
-                currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
-                    const call = peer.call(user, mediaStream);
-                    console.log("유저한테 내가 콜: ", call); // 이게 undefined
-                    call.on("stream", (remoteStream) => {
-                        call.answer(remoteStream);
-                        setStreamList([...streamList, remoteStream]);
-                        console.log("유저의 스트림: ", remoteStream);
-                    });
-                });
             });
+            setStreamList([mediaStream]);
+            console.log("내 스트림: ", mediaStream);
+            console.log("현재 방 안에 있는 유저: ", currentUsers);
+            console.log(currentUsers.filter(otherUser => otherUser !== user.userId));
+                    
+                       
+            currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
+                const call = peer.call(user, mediaStream);
+                call.answer(mediaStream);
+                console.log("유저한테 내가 콜: ", call); // 이게 undefined (화면공유 껐다켰다할시)
+                // 이 안의 콘솔은 안찍힘
+                call.on("stream", (remoteStream) => {
+                    setStreamList([...streamList, remoteStream]);
+                    console.log("유저의 스트림: ", remoteStream);
+                });
+            }); 
+            
         } catch (error) {
             console.error(error);
             return;
