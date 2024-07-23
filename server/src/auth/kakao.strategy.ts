@@ -1,7 +1,5 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Profile, Strategy } from "passport-kakao";
-import { Types } from "mongoose";
-import { UserEntity } from "src/schema/user.schema";
 
 export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
     constructor() {

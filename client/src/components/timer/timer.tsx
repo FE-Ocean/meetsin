@@ -1,10 +1,13 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import { postNotification } from "../menu/notificationSwitch/notification";
-import useTimer from "../../hooks/useTimer";
+import { useParams } from "next/navigation";
+import { useAtomValue } from "jotai";
+import { accessTokenAtom } from "@/jotai/atom";
+import useTimer from "./hooks/useTimer";
+import useStopTimer from "./hooks/useStopTimer";
+import { useCreatePushNotification } from "@/apis/service/notification.service";
 import { numberToString } from "@/utils";
 import timer_icon from "/public/timer.svg";
-import useStopTimer from "@/hooks/useStopTimer";
 import style from "./timer.module.scss";
 
 interface ITimer {
@@ -12,7 +15,11 @@ interface ITimer {
 }
 
 const Timer = ({ setIsTimerVisible }: ITimer) => {
+    const accessToken = useAtomValue(accessTokenAtom);
+    const param = useParams();
+    const roomId = param.roomId as string;
     const [confirmStop, setConfirmStop] = useState(false);
+    const hasCalledMutate = useRef(false);
 
     const playSoundEffect = useCallback(() => {
         const alarm = new Audio("/timer_alarm.mp3");
@@ -23,10 +30,13 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
         };
     }, [setIsTimerVisible]);
 
+    const { mutate } = useCreatePushNotification();
     const handleTimerEnd = () => {
-        playSoundEffect();
-        // postNotification();
-        // 이권한 노티랑 푸시가 통합됐다고함", Notification.permission
+        if (!hasCalledMutate.current) {
+            hasCalledMutate.current = true;
+            playSoundEffect();
+            mutate({ roomId, accessToken });
+        }
     };
 
     const { min, sec } = useTimer({ timerEnd: handleTimerEnd });

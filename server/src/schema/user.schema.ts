@@ -1,6 +1,7 @@
 import { OmitType } from "@nestjs/mapped-types";
 import { Prop, Schema, SchemaFactory, SchemaOptions } from "@nestjs/mongoose";
-import { Document, Types } from "mongoose";
+import { Document, Schema as MongooseSchema } from "mongoose";
+import { Subscription } from "src/notification/schema/subscription.schema";
 
 const options: SchemaOptions = {
     timestamps: true,
@@ -10,7 +11,7 @@ const options: SchemaOptions = {
 
 // DB에 저장되는 유저 정보 (토큰 포함)
 @Schema(options)
-export class UserEntity extends Document {
+export class User extends Document {
     @Prop({
         required: true,
     })
@@ -33,11 +34,14 @@ export class UserEntity extends Document {
     @Prop()
     refresh_token: string;
 
-    @Prop({required: true})
+    @Prop({ required: true })
     provider: string;
+
+    @Prop({ type: MongooseSchema.Types.Mixed })
+    notification: Subscription;
 }
 
 // 클라이언트에 제공되는 유저 정보 (토큰 미포함)
-export class UserDto extends OmitType(UserEntity, ["access_token", "refresh_token"]) {}
+export class UserDto extends OmitType(User, ["access_token", "refresh_token"]) {}
 
-export const UserSchema = SchemaFactory.createForClass(UserEntity);
+export const UserSchema = SchemaFactory.createForClass(User);
