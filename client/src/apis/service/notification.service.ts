@@ -12,7 +12,7 @@ const getServiceWorkerStatus = async () => {
 
 export const getExistingSubscription = async () => {
     const serviceWorker = await getServiceWorkerStatus();
-    return serviceWorker.pushManager.getSubscription(); // 이게 PushSubscription 객체 불러오는거구나~
+    return serviceWorker.pushManager.getSubscription();
 };
 
 export const startSubscription = async () => {
