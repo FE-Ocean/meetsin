@@ -6,7 +6,6 @@ import { User } from "src/schema/user.schema";
 import { SubscriptionDTO } from "./dto/subscription.dto";
 import { NotificationService } from "./notification.service";
 
-// get, create, update, delete
 @Controller("notification")
 @UseGuards(JwtGuard)
 export class NotificationController {
