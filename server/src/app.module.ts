@@ -23,9 +23,9 @@ dotenv.config();
     providers: [AppService],
 })
 export class AppModule implements NestModule {
-    private readonly isDev: boolean = process.env.MODE === "dev" ? true : false;
+    private readonly isDEV: boolean = process.env.MODE === "DEV";
     configure(consumer: MiddlewareConsumer) {
-        mongoose.set("debug", this.isDev);
+        mongoose.set("debug", this.isDEV);
         mongoose.connect(process.env.MONGODB_URI);
     }
 }
