@@ -18,12 +18,12 @@ const Map = dynamic(() => import("../../../components/phaser/map/map"), {
 });
 
 const Room = () => {
-    const [peer, setPeer] = useState<Peer| null>(null);
     const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [streamList, setStreamList] = useState<Array<MediaStream>>([]);
     const [currentUsers, setCurrentUsers] = useState<Array<string>>([]);
     const [chatOpen, setChatOpen] = useState<boolean>(true);
+    const peer = useRef<Peer | null>(null);
 
     const params = useParams();
     const roomId = params.roomId as string;
@@ -75,7 +75,7 @@ const Room = () => {
             return;
         }
         const newPeer = new Peer(user.userId);
-        setPeer(newPeer);
+        peer.current = newPeer;
         newPeer.on("open", (id) => {
             console.log("My peer ID is: " + id);
         });
@@ -98,7 +98,7 @@ const Room = () => {
         return () => {
             newPeer.destroy();
         };
-    }, [peer, streamList, user]);
+    }, [isScreenShare, peer, streamList, user]);
     
 
     useEffect(() => {
@@ -116,7 +116,7 @@ const Room = () => {
             console.log("user not found");
             return;
         }
-        if(!peer) {
+        if(!peer.current) {
             console.log("peer not found");
             return;
         }
@@ -139,7 +139,7 @@ const Room = () => {
                     
                        
             currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
-                const call = peer.call(user, mediaStream);
+                const call = peer.current?.call(user, mediaStream);
                 // call.answer(mediaStream);
                 if (!call) {
                     console.error("Failed to establish call with user:", user);
