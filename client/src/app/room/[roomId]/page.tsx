@@ -23,7 +23,7 @@ const Room = () => {
     const [streamList, setStreamList] = useState<Array<MediaStream>>([]);
     const [currentUsers, setCurrentUsers] = useState<Array<string>>([]);
     const [chatOpen, setChatOpen] = useState<boolean>(true);
-    const peer = useRef<Peer | null>(null);
+    const peer = new Peer();
 
     const params = useParams();
     const roomId = params.roomId as string;
@@ -74,13 +74,13 @@ const Room = () => {
             console.error("No screen sharing stream to answer with");
             return;
         }
-        const newPeer = new Peer(user.userId);
-        peer.current = newPeer;
-        newPeer.on("open", (id) => {
+        peer.id = user.userId;
+        
+        peer.on("open", (id) => {
             console.log("My peer ID is: " + id);
         });
         
-        newPeer.on("call", (call) => {
+        peer.on("call", (call) => {
             call.answer();
             call.on("stream", (remoteStream) => {
                 setStreamList([...streamList, remoteStream]);
@@ -90,13 +90,13 @@ const Room = () => {
                 console.error("Call error:", err);
             });
 
-            newPeer.on("error", (err) => {
+            peer.on("error", (err) => {
                 console.error("Peer error:", err);
             });
         });
 
         return () => {
-            newPeer.destroy();
+            peer.destroy();
         };
     }, [isScreenShare, peer, streamList, user]);
     
@@ -109,14 +109,15 @@ const Room = () => {
     
     useEffect(() => {
         console.log(streamList);
-    }, [streamList]);
+        console.log(peer);
+    }, [streamList, peer]);
 
     const startScreenShare = async () => {
         if(!user){
             console.log("user not found");
             return;
         }
-        if(!peer.current) {
+        if(!peer) {
             console.log("peer not found");
             return;
         }
@@ -139,7 +140,7 @@ const Room = () => {
                     
                        
             currentUsers.filter(otherUser => otherUser !== user.userId).forEach(user => {
-                const call = peer.current?.call(user, mediaStream);
+                const call = peer.call(user, mediaStream);
                 // call.answer(mediaStream);
                 if (!call) {
                     console.error("Failed to establish call with user:", user);
