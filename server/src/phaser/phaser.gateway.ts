@@ -12,7 +12,13 @@ import {
 import { Server, Socket } from "socket.io";
 import { MoveInfoDto, StopPlayerInfoDto } from "src/dto/phaser.dto";
 
-@WebSocketGateway({ namespace: "phaser" })
+@WebSocketGateway({
+    cors: {
+        origin: process.env.CLIENT_URL,
+        credentials: true,
+    },
+    namespace: "phaser",
+})
 export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
     private logger = new Logger("phaser");
     private gameRooms = {};

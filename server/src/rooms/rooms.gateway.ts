@@ -29,7 +29,13 @@ interface ITimer {
     duration: TimerDto;
 }
 
-@WebSocketGateway({ namespace: "room" })
+@WebSocketGateway({
+    cors: {
+        origin: process.env.CLIENT_URL,
+        credentials: true,
+    },
+    namespace: "room",
+})
 export class RoomsGateway implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
     private logger = new Logger("room");
     private rooms: Map<string, User[]> = new Map();
