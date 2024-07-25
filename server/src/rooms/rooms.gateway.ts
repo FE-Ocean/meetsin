@@ -31,9 +31,7 @@ interface ITimer {
 
 @WebSocketGateway({
     cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
-        allowedHeaders: ["my-custom-header"],
+        origin: process.env.CLIENT_URL,
         credentials: true,
     },
     namespace: "room",
