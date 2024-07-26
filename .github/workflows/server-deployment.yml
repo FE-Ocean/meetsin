@@ -26,6 +26,7 @@ jobs:
             - name: Install dependencies
               if: steps.setup-node.outputs.cache-hit != 'true'
               run: yarn install
+              working-directory: server
 
             - name: Create .env file
               run: |
