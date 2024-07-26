@@ -21,7 +21,7 @@ interface UserSocket extends Socket {
 
 interface User {
     socketId: string;
-    userId: string;
+    userId: Types.ObjectId;
     userName: string;
 }
 
