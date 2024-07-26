@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { useSetAtom } from "jotai";
-import { timerAtom, isTimerVisibleAtom } from "@/jotai/atom";
+import { useParams } from "next/navigation";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
+import { roomSocket } from "@/socket";
 import { numberToString } from "@/utils";
 import Button from "@/components/common/button/button";
 import style from "./timerSetting.module.scss";
@@ -11,8 +11,7 @@ interface IModal {
 }
 
 const TimerSetting = ({ onClose }: IModal) => {
-    const setTimer = useSetAtom(timerAtom);
-    const setIsTimerVisible = useSetAtom(isTimerVisibleAtom);
+    const { roomId } = useParams();
 
     const minRef = useRef<HTMLInputElement>({} as HTMLInputElement);
     const secRef = useRef<HTMLInputElement>({} as HTMLInputElement);
@@ -24,15 +23,14 @@ const TimerSetting = ({ onClose }: IModal) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         if (minRef.current.value === "00" && secRef.current.value === "00") return;
 
-        setTimer({
-            minute: Number(minRef.current.value) || 0,
-            second: Number(secRef.current.value) || 0,
-        });
+        const minute = Number(minRef.current.value) || 0;
+        const second = Number(secRef.current.value) || 0;
+
+        roomSocket.emit("start_timer", { roomId, duration: { minute, second } });
+
         onClose();
-        setIsTimerVisible(true);
     };
 
     const handleInput = (

@@ -1,9 +1,11 @@
+import { IUser, IUserModel } from "./user.type";
+
 export interface IRoom {
     id: string;
     roomName: string;
     admin: string;
     createdAt: string;
-    userIds: string[];
+    userIds: IUser[];
 }
 
 export interface IRoomModel {
@@ -11,7 +13,7 @@ export interface IRoomModel {
     room_name: string;
     admin: string;
     created_at: string;
-    userIds: string[];
+    userIds: IUserModel[];
 }
 
 export interface IPatchRoom {

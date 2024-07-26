@@ -43,6 +43,17 @@
     }
 }
 
+@mixin hover_button($size, $icon) {
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    background: no-repeat center $icon;
+    background-color: $gray-light;
+    &:hover {
+        background-color: $hover-color;
+    }
+}
+
 @mixin modal_container($width: 350px, $height: 240px) {
     width: $width;
     height: $height;

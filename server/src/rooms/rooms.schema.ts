@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { User } from "src/schema/user.schema";
 
 const options = {
     collection: "Rooms",
@@ -15,7 +16,7 @@ export class Room {
     admin: string;
 
     @Prop({ required: true })
-    userIds: string[];
+    userIds: User[];
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

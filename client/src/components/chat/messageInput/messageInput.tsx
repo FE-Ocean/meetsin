@@ -2,9 +2,9 @@
 
 import { useRef, useState } from "react";
 import style from "./messageInput.module.scss";
-import useMessage from "@/hooks/useMessage";
-import useAdjustHeight from "@/hooks/useAdjustHeight";
-import useResetHeight from "@/hooks/useResetHeight";
+import useMessage from "@/components/chat/messageInput/hooks/useMessage";
+import useAdjustHeight from "@/components/chat/messageInput/hooks/useAdjustHeight";
+import useResetHeight from "@/components/chat/messageInput/hooks/useResetHeight";
 import { useAtomValue } from "jotai";
 import { userAtom } from "@/jotai/atom";
 

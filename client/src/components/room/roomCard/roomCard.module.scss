@@ -1,15 +1,5 @@
 @import "../../../styles/variables";
-
-@mixin button($icon) {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: no-repeat center $icon;
-    background-color: $gray-light;
-    &:hover {
-        background-color: $hover-color;
-    }
-}
+@import "../../../styles/mixin";
 
 .container {
     position: relative;
@@ -28,10 +18,10 @@
             gap: 5px;
 
             .rename_button {
-                @include button(url(/icon/pencil.svg));
+                @include hover_button(32px, url(/icon/pencil.svg));
             }
             .delete_button {
-                @include button(url(/icon/trash.svg));
+                @include hover_button(32px, url(/icon/trash.svg));
             }
         }
     }

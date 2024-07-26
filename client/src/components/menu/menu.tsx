@@ -1,7 +1,7 @@
 "use client";
 
-import { useAtom, useAtomValue } from "jotai";
-import { isTimerVisibleAtom, screenShareAtom } from "@/jotai/atom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { isTimerVisibleAtom, screenShareAtom, timerAtom } from "@/jotai/atom";
 import Image from "next/image";
 import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
@@ -10,15 +10,19 @@ import NotificationSwitch from "./notificationSwitch/notificationSwitch";
 import UserInfo from "../common/userInfo/userInfo";
 import LinkCopyButton from "./linkCopyButton/linkCopyButton";
 import style from "./menu.module.scss";
+import { IRoomUser } from "@/types/chat";
+import { roomSocket } from "@/socket";
+import { useEffect } from "react";
 
 interface IMenu {
     className: string;
     onScreenShare: () => any;
     toggleChat: () => void;
+    roomUsers: IRoomUser[];
 }
 
 const Menu = (props: IMenu) => {
-    const { className, onScreenShare, toggleChat } = props;
+    const { className, onScreenShare, toggleChat, roomUsers } = props;
     const isScreenShare = useAtomValue(screenShareAtom);
     const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
     const { onOpen } = useModal("timerSetting");
@@ -28,6 +32,21 @@ const Menu = (props: IMenu) => {
 
         onOpen();
     };
+
+    const setTimer = useSetAtom(timerAtom);
+
+    const handleStartTimer = (duration: { minute: number; second: number }) => {
+        setTimer(duration);
+        setIsTimerVisible(true);
+    };
+
+    useEffect(() => {
+        roomSocket.on("start_timer", handleStartTimer);
+
+        return () => {
+            roomSocket.off("start_timer", handleStartTimer);
+        };
+    }, []);
 
     return (
         <div className={`${className} ${style.menu_container}`}>
@@ -55,7 +74,7 @@ const Menu = (props: IMenu) => {
                     <li className={style.active_user_number}>
                         <Image src={active_user_icon} alt="접속자 수" />
                         <span className={style.active_circle}>●</span>
-                        <span>2</span>
+                        <span>{roomUsers.length}</span>
                     </li>
                 </ul>
                 <button className={style.chat} onClick={() => toggleChat()} />
