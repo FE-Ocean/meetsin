@@ -12,45 +12,45 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-        - name: Setup Node.js
-          uses: actions/setup-node@v4
-          id: setup-node
-          with:
-            node-version: '20'
-            cache: 'yarn'
-        
-        - name: Install dependencies
-	        if: steps.setup-node.outputs.cache-hit != 'true'
-          run: yarn install
-        
-        - name: Create .env file
-          run: |
-            echo "MODE=PROD" > .env
-            jq -r 'to_entries | map(select(.key | startswith("PROD_"))) | map("\(.key | ltrimstr("PROD_"))=\(.value|tostring)") | .[]' <<< "$SECRETS_CONTEXT" >> .env
-          env:
-            SECRETS_CONTEXT: ${{ toJson(secrets) }}
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              id: setup-node
+              with:
+                  node-version: "20"
+                  cache: "yarn"
 
-        - name: Build project
-          run: yarn build
+            - name: Install dependencies
+              if: steps.setup-node.outputs.cache-hit != 'true'
+              run: yarn install
 
-        - name: SSH Commands
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            username: ${{ secrets.SSH_USERNAME }}
-            port: ${{ secrets.SSH_PORT }}
-            script_stop: true
-            script: |
-              scp -r /home/runner/work/meetsin/meetsin/server/dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/dist
-              scp /home/runner/work/meetsin/meetsin/server/package.json ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/package.json
-              scp /home/runner/work/meetsin/meetsin/server/yarn.lock ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/yarn.lock
-              scp /home/runner/work/meetsin/meetsin/server/.env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/.env
-              echo "Files transferred successfully."
-              cd server_meetsin
-              pm2 kill
-              yarn install
-              yarn start:prod
+            - name: Create .env file
+              run: |
+                  echo "MODE=PROD" > .env
+                  jq -r 'to_entries | map(select(.key | startswith("PROD_"))) | map("\(.key | ltrimstr("PROD_"))=\(.value|tostring)") | .[]' <<< "$SECRETS_CONTEXT" >> .env
+              env:
+                  SECRETS_CONTEXT: ${{ toJson(secrets) }}
+
+            - name: Build project
+              run: yarn build
+
+            - name: SSH Commands
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  script_stop: true
+                  script: |
+                      scp -r /home/runner/work/meetsin/meetsin/server/dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/dist
+                      scp /home/runner/work/meetsin/meetsin/server/package.json ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/package.json
+                      scp /home/runner/work/meetsin/meetsin/server/yarn.lock ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/yarn.lock
+                      scp /home/runner/work/meetsin/meetsin/server/.env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/.env
+                      echo "Files transferred successfully."
+                      cd server_meetsin
+                      pm2 kill
+                      yarn install
+                      yarn start:prod
