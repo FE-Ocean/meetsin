@@ -17,14 +17,12 @@ jobs:
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
-              id: setup-node
               with:
                   node-version: "20"
                   cache: "yarn"
                   cache-dependency-path: server/yarn.lock
 
             - name: Install dependencies
-              if: steps.setup-node.outputs.cache-hit != 'true'
               run: yarn install
               working-directory: server
 
