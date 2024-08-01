@@ -3,6 +3,6 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class AppService {
     getHello(): string {
-        return "Hello meetsin!! known_hosts 제거";
+        return "Hello meetsin!! ssh-keyscan 추가";
     }
 }
