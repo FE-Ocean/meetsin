@@ -47,7 +47,7 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
                   script: |
-                      ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+                      # ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
                       scp -r /home/runner/work/meetsin/meetsin/server/dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/dist
                       scp /home/runner/work/meetsin/meetsin/server/package.json ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/package.json
                       scp /home/runner/work/meetsin/meetsin/server/yarn.lock ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/yarn.lock
