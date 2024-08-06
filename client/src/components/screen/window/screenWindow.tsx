@@ -3,18 +3,22 @@ import { useAtomValue } from "jotai";
 import { screenShareAtom } from "@/jotai/atom";
 import Screen from "@/components/screen/screen";
 import style from "./screenWindow.module.scss";
+import { IPeer } from "@/types/peer.type";
 
 interface IProps {
-    streamList: Array<MediaStream>
+    peerList: Array<IPeer>
 }
 
-const ScreenWindow = ({ streamList }: IProps) => {
+const ScreenWindow = ({ peerList }: IProps) => {
     const isScreenShare = useAtomValue(screenShareAtom);
-    const gridCols = streamList.length > 4 ? "over" : "under";
+    const gridCols = peerList.length > 4 ? "over" : "under";
+
     return (
         <div className={`${style.screen_window} ${style[gridCols]}`}>
-            {isScreenShare && streamList.map((stream, index) => {
-                return <Screen currentStream={stream} key={index} />;
+            {isScreenShare && peerList.filter(peer => peer.stream).map((peer, index) => {
+                if(peer.stream) {
+                    return <Screen currentStream={peer.stream} key={index} userName={peer.user.userName} />;
+                }
             })
             }</div>
     );
