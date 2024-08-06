@@ -38,9 +38,6 @@ jobs:
               run: yarn build
               working-directory: server
 
-            - name: no host key checking
-              run: ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "whoami"
-
             - name: SSH Commands
               uses: appleboy/ssh-action@master
               with:
@@ -51,6 +48,7 @@ jobs:
                   script_stop: true
                   script: |
                       ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+                      ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "whoami"
                       scp -r /home/runner/work/meetsin/meetsin/server/dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/dist
                       scp /home/runner/work/meetsin/meetsin/server/package.json ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/package.json
                       scp /home/runner/work/meetsin/meetsin/server/yarn.lock ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/yarn.lock
