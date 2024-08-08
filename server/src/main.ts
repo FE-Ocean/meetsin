@@ -3,6 +3,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
 import dotenv from "dotenv";
 import passport from "passport";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ async function bootstrap() {
     });
 
     app.use(passport.initialize());
+
+    app.use(cookieParser());
 
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
 
