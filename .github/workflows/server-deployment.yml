@@ -46,6 +46,7 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
                   script: |
+                      scp /home/runner/work/meetsin/meetsin/server/.env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/github/meetsin/server/.env
                       cd github/meetsin/server
                       cd src
                       cat main.ts
