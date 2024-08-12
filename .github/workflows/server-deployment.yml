@@ -46,12 +46,10 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script_stop: true
                   script: |
-                      cd server_meetsin
+                      cd github/meetsin/server
                       yarn pm2:kill
-                      cd ..
-                      rm -rf server_meetsin
-                      mkdir github
-                      cd github
+                      cd ../..
+                      rm -rf meetsin
                       git clone https://github.com/FE-Ocean/meetsin.git
                       cd meetsin/server
                       yarn install
