@@ -6,40 +6,13 @@ on:
             - testAction
         paths:
             - "server/**"
-
 jobs:
     server-deploy:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20"
-                  cache: "yarn"
-                  cache-dependency-path: server/yarn.lock
-
-            - name: Install dependencies
-              run: yarn install
-              working-directory: server
-
-            - name: Create .env file
-              run: |
-                  echo "MODE=PROD" > .env
-                  jq -r 'to_entries | map(select(.key | startswith("PROD_"))) | map("\(.key | ltrimstr("PROD_"))=\(.value|tostring)") | .[]' <<< "$SECRETS_CONTEXT" >> .env
-              env:
-                  SECRETS_CONTEXT: ${{ toJson(secrets) }}
-              working-directory: server
-
-            - name: Build project
-              run: yarn build
-              working-directory: server
-
             - name: SSH Commands
-              uses: appleboy/ssh-action@v1.0.3
+              uses: appleboy/ssh-action@master
               with:
                   host: ${{ secrets.SSH_HOST }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -48,12 +21,13 @@ jobs:
                   script_stop: true
                   script: |
                       cd server_meetsin
-                      ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "whoami"
-                      scp -r /home/runner/work/meetsin/meetsin/server/dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/dist
-                      scp /home/runner/work/meetsin/meetsin/server/package.json ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/package.json
-                      scp /home/runner/work/meetsin/meetsin/server/yarn.lock ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/yarn.lock
-                      scp /home/runner/work/meetsin/meetsin/server/.env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/server_meetsin/.env
-                      echo "Files transferred successfully."
                       pm2 kill
+                      cd ..
+                      rm -rf server_meetsin
+                      mkdir github
+                      cd github
+                      git clone https://github.com/FE-Ocean/meetsin.git
+                      cd meetsin/server
                       yarn install
+                      yarn build
                       yarn start:prod
