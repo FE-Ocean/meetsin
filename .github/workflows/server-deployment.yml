@@ -11,6 +11,32 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "yarn"
+                  cache-dependency-path: server/yarn.lock
+
+            - name: Install dependencies
+              run: yarn install
+              working-directory: server
+
+            - name: Create .env file
+              run: |
+                  echo "MODE=PROD" > .env
+                  jq -r 'to_entries | map(select(.key | startswith("PROD_"))) | map("\(.key | ltrimstr("PROD_"))=\(.value|tostring)") | .[]' <<< "$SECRETS_CONTEXT" >> .env
+              env:
+                  SECRETS_CONTEXT: ${{ toJson(secrets) }}
+              working-directory: server
+
+            - name: Build project
+              run: yarn build
+              working-directory: server
+
             - name: SSH Commands
               uses: appleboy/ssh-action@master
               with:
