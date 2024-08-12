@@ -47,11 +47,5 @@ jobs:
                   script_stop: true
                   script: |
                       cd github/meetsin/server
-                      yarn pm2:kill
-                      cd ../..
-                      rm -rf meetsin
-                      git clone https://github.com/FE-Ocean/meetsin.git
-                      cd meetsin/server
-                      yarn install
-                      yarn build
-                      yarn start:prod
+                      cd src
+                      cat main.ts
