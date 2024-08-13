@@ -1,4 +1,4 @@
-import { addAuthHeader, baseClient } from "@/modules/fetchClient";
+import { addAuthHeader, baseClient, createAuthHeader } from "@/modules/fetchClient";
 import { IPatchRoom } from "@/types/room";
 
 // export const getRoomInfo = async (roomId: string, accessToken: string) => {
@@ -18,15 +18,23 @@ export const getRoomInfo = async (roomId: string, accessToken: string) => {
     return await baseClient.get(`/rooms/${roomId}`, authConfig);
 };
 
-export const getUserRooms = async (accessToken: string) => {
-    if (!accessToken) {
-        throw new Error("access token이 없거나 올바르지 않습니다.");
-    }
+// export const getUserRooms = async (accessToken: string) => {
+//     if (!accessToken) {
+//         throw new Error("access token이 없거나 올바르지 않습니다.");
+//     }
+
+//     return await baseClient.get("/rooms/user", {
+//         headers: {
+//             Authorization: `Bearer ${accessToken}`,
+//         },
+//     });
+// };
+
+export const getUserRooms = async (accessToken?: string) => {
+    const headers = createAuthHeader(accessToken);
 
     return await baseClient.get("/rooms/user", {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
+        headers,
     });
 };
 

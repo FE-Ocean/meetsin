@@ -1,12 +1,9 @@
-import { baseClient } from "../../../modules/fetchClient";
+import { baseClient, createAuthHeader } from "../../../modules/fetchClient";
 
-export const getUserInfo = async (accessToken: string) => {
-    if(!accessToken){
-        return;
-    }
+export const getUserInfo = async (accessToken?: string) => {
+    const headers = createAuthHeader(accessToken);
+
     return await baseClient.get("/auth/user", {
-        headers: {
-            "Authorization": `Bearer ${accessToken}`
-        }
+        headers,
     });
 };

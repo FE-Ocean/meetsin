@@ -95,3 +95,13 @@ export const addAuthHeader = (accessToken: string, config: RequestInit = {}) => 
         },
     };
 };
+
+export const createAuthHeader = (accessToken?: string) => {
+    const headers: { [key: string]: string } = {};
+
+    if (accessToken) {
+        headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return headers;
+};

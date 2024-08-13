@@ -5,7 +5,7 @@ export interface IRoom {
     roomName: string;
     admin: string;
     createdAt: string;
-    userIds: IUser[];
+    userIds: IUserModel[];
 }
 
 export interface IRoomModel {

@@ -21,40 +21,43 @@ const Home = () => {
         registerServiceWorker();
     }, []);
 
-    const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
+    // const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
 
-    const [user, setUser] = useAtom(userAtom);
+    // const [user, setUser] = useAtom(userAtom);
 
-    useEffect(() => {
-        if (!user) {
-            const token = document.cookie
-                .split("; ")
-                .find((cookie) => cookie.includes("access_token="))
-                ?.replace("access_token=", "");
-            if (token) {
-                setAccessToken(token);
-            } else {
-                setAccessToken("");
-            }
-        }
-    }, [user, accessToken, setAccessToken]);
+    // useEffect(() => {
+    //     if (!user) {
+    //         const token = document.cookie
+    //             .split("; ")
+    //             .find((cookie) => cookie.includes("access_token="))
+    //             ?.replace("access_token=", "");
+    //         if (token) {
+    //             setAccessToken(token);
+    //         } else {
+    //             setAccessToken("");
+    //         }
+    //     }
+    // }, [user, accessToken, setAccessToken]);
 
-    const isEnable = !!accessToken;
+    // const isEnable = !!accessToken;
 
-    const { data } = useGetUserInfo(accessToken, isEnable);
-    useEffect(() => {
-        if (data) {
-            setUser(data);
-        }
-    }, [data, setUser]);
+    // const { data } = useGetUserInfo();
+
+    // useEffect(() => {
+    //     if (data) {
+    //         setUser(data);
+    //     }
+    // }, [data, setUser]);
+
     const { onOpen } = useModal("login");
-    const router = useRouter();
 
-    useEffect(() => {
-        if (user && accessToken) {
-            router.push("/lobby");
-        }
-    }, [user, accessToken, router]);
+    // const router = useRouter();
+
+    // useEffect(() => {
+    //     if (user && accessToken) {
+    //         router.push("/lobby");
+    //     }
+    // }, [user, accessToken, router]);
 
     return (
         <div className={style.home_wrapper}>
