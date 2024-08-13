@@ -6,6 +6,7 @@ on:
             - testAction
         paths:
             - "server/**"
+
 jobs:
     server-deploy:
         runs-on: ubuntu-latest
@@ -37,16 +38,5 @@ jobs:
               run: yarn build
               working-directory: server
 
-            - name: SSH Commands
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.SSH_HOST }}
-                  key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  username: ${{ secrets.SSH_USERNAME }}
-                  port: ${{ secrets.SSH_PORT }}
-                  script_stop: true
-                  script: |
-                      scp /home/runner/work/meetsin/meetsin/server/.env ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/github/meetsin/server/.env
-                      cd github/meetsin/server
-                      cd src
-                      cat main.ts
+            - name: List files
+              run: ls -al /home/runner/work/meetsin/meetsin/server/
