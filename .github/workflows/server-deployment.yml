@@ -62,6 +62,6 @@ jobs:
                   script_stop: true
                   script: |
                       cd server_meetsin
-                      pm2 kill
+                      yarn pm2:kill
                       yarn install
                       yarn start:prod
