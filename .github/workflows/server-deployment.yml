@@ -50,7 +50,7 @@ jobs:
                       /home/runner/work/meetsin/meetsin/server/package.json,
                       /home/runner/work/meetsin/meetsin/server/yarn.lock,
                       /home/runner/work/meetsin/meetsin/server/.env
-                  target: "/server_meetsin"
+                  target: ${{ secrets.SSH_TARGET }}
 
             - name: SSH Commands
               uses: appleboy/ssh-action@v1.0.3
