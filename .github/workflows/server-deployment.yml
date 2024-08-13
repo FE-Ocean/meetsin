@@ -47,7 +47,7 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   source: "/home/runner/work/meetsin/meetsin/server/dist"
                   target: ${{ secrets.SSH_TARGET }}
-                  strip_components: 3
+                  strip_components: 5
 
             - name: SSH Commands
               uses: appleboy/ssh-action@v1.0.3
