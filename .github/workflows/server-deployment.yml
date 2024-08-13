@@ -38,26 +38,6 @@ jobs:
               run: yarn build
               working-directory: server
 
-            - name: Copy file via ssh
-              uses: appleboy/scp-action@v0.1.7
-              with:
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USERNAME }}
-                  port: ${{ secrets.SSH_PORT }}
-                  key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  source: /home/runner/work/meetsin/meetsin/server/yarn.lock, /home/runner/work/meetsin/meetsin/server/dist
-                  target: ${{ secrets.SSH_TARGET }}
-
-            - name: SSH Commands
-              uses: appleboy/ssh-action@v1.0.3
-              with:
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USERNAME }}
-                  port: ${{ secrets.SSH_PORT }}
-                  key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  script_stop: true
-                  script: |
-                      cd server_meetsin
-                      yarn pm2:kill
-                      yarn install
-                      yarn start:prod
+            - name: List files in the repository
+              run: |
+                  ls ${{ github.workspace }}
