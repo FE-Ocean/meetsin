@@ -45,7 +45,7 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   port: ${{ secrets.SSH_PORT }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  source: "/home/runner/work/meetsin/meetsin/server/package.json, /home/runner/work/meetsin/meetsin/server/yarn.lock"
+                  source: "/home/runner/work/meetsin/meetsin/server/yarn.lock"
                   target: ${{ secrets.SSH_TARGET }}
 
             - name: SSH Commands
