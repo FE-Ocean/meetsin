@@ -12,7 +12,7 @@ async function bootstrap() {
     // CORS 설정
     app.enableCors({
         origin: process.env.CLIENT_URL,
-        methods: ["GET", "POST"],
+        methods: ["GET", "POST", "PATCH", "DELETE"],
         credentials: true,
         exposedHeaders: ["Authorization"],
     });

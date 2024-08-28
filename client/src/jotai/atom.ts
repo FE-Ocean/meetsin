@@ -13,7 +13,7 @@ export const modalAtom = atom<IModalAtom>({
     },
     login: {
         open: false,
-    }
+    },
 });
 
 export const timerAtom = atom({
@@ -28,3 +28,5 @@ export const screenShareAtom = atom(false);
 export const accessTokenAtom = atom<string>("");
 
 export const userAtom = atom<IUser | null>(null);
+
+export const roomIdAtom = atom("");

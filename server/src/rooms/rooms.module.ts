@@ -4,6 +4,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { JwtGuard } from "src/auth/auth.guard";
 import { UsersModule } from "src/users/users.module";
 import { RoomsController } from "./rooms.controller";
+import { RoomsGateway } from "./rooms.gateway";
 import { Room, RoomSchema } from "./rooms.schema";
 import { RoomsService } from "./rooms.service";
 
@@ -14,6 +15,7 @@ import { RoomsService } from "./rooms.service";
         UsersModule,
     ],
     controllers: [RoomsController],
-    providers: [RoomsService, JwtGuard],
+    providers: [RoomsService, JwtGuard, RoomsGateway],
+    exports: [RoomsService],
 })
 export class RoomsModule {}

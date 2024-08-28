@@ -2,23 +2,18 @@
 
 import style from "./chat.module.scss";
 import MessageInput from "./messageInput/messageInput";
-import useChatSocket from "@/hooks/useChatSocket";
-import { useParams } from "next/navigation";
 import MessageList from "./messageList/messageList";
 import ScrollToBottom from "./scrollToBottom/scrollToBottom";
+import { IMessage } from "@/types/chat";
 
 interface IChatProps {
     className: string;
     toggleChat: (shouldClose?: boolean) => void;
+    messages: IMessage[];
 }
 
 const Chat = (props: IChatProps) => {
-    const { className, toggleChat } = props;
-
-    const params = useParams();
-    const roomId = params.roomId as string;
-
-    const { messages } = useChatSocket({ roomId });
+    const { className, toggleChat, messages } = props;
 
     return (
         <div className={`${className} ${style.chat_container}`}>

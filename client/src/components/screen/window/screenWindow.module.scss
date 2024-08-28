@@ -4,10 +4,9 @@
     background-color: $gray;
     flex-grow: 1;
     margin-right: 26px;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     padding: 88px 95px;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
     gap: 8px;
     justify-items: center;
     align-items: stretch;

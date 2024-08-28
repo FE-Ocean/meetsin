@@ -31,6 +31,10 @@
         "@nestjs/platform-express": "^10.0.0",
         "@nestjs/platform-socket.io": "^10.2.7",
         "@nestjs/websockets": "^10.2.7",
+<<<<<<< HEAD
+=======
+        "class-transformer": "^0.5.1",
+>>>>>>> 0baa84166a804fce5b96c2097acd24042395f37a
         "class-validator": "^0.14.1",
         "dotenv": "^16.3.2",
         "express": "^4.18.2",
@@ -43,7 +47,8 @@
         "passport-local": "^1.0.0",
         "reflect-metadata": "^0.1.13",
         "rxjs": "^7.8.1",
-        "socket.io": "^4.7.2"
+        "socket.io": "^4.7.2",
+        "web-push": "^3.6.7"
     },
     "devDependencies": {
         "@nestjs/cli": "^10.0.0",
