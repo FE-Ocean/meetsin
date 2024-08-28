@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
 
-const URL = process.env.NODE_ENV === "production" ? undefined : "http://localhost:8000";
+const URL = process.env.NEXT_PUBLIC_SERVER_URL;
 
-export const roomSocket = io(`${URL}/room`, { autoConnect: true });
+export const roomSocket = io(`${URL}/room`, { autoConnect: true, withCredentials: true, transports: ["websocket", "polling"]  });
