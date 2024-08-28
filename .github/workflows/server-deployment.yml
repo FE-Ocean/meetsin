@@ -70,6 +70,6 @@ jobs:
                   script_stop: true
                   script: |
                       cd backend-meetsin
-                      yarn pm2:kill
                       yarn install
+                      yarn pm2:kill
                       yarn start:prod
