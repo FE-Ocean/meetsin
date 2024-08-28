@@ -1,9 +1,9 @@
-name: Server Deployment (develop branch)
+name: Server Deployment (main branch)
 
 on:
     push:
         branches:
-            - develop
+            - main
         paths:
             - "server/**"
 
@@ -12,18 +12,75 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: SSH Commands
-              uses: appleboy/ssh-action@master
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "yarn"
+                  cache-dependency-path: server/yarn.lock
+
+            - name: Install dependencies
+              run: yarn install
+              working-directory: server
+
+            - name: Create .env file
+              run: |
+                  echo "MODE=PROD" > .env
+                  jq -r 'to_entries | map(select(.key | startswith("PROD_"))) | map("\(.key | ltrimstr("PROD_"))=\(.value|tostring)") | .[]' <<< "$SECRETS_CONTEXT" >> .env
+              env:
+                  SECRETS_CONTEXT: ${{ toJson(secrets) }}
+              working-directory: server
+
+            - name: Build project
+              run: yarn build
+              working-directory: server
+
+            - name: Copy yarn.lock file via ssh
+              uses: appleboy/scp-action@v0.1.7
               with:
                   host: ${{ secrets.SSH_HOST }}
-                  key: ${{ secrets.SSH_PRIVATE_KEY }}
                   username: ${{ secrets.SSH_USERNAME }}
                   port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  source: "./server/yarn.lock"
+                  target: ${{ secrets.SSH_TARGET }}
+                  strip_components: 2
+
+            - name: Copy package.json file via ssh
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  source: "./server/package.json"
+                  target: ${{ secrets.SSH_TARGET }}
+                  strip_components: 2
+
+            - name: Copy dist folder via ssh
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  source: "./server/dist"
+                  target: ${{ secrets.SSH_TARGET }}
+                  strip_components: 2
+
+            - name: SSH Commands
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script_stop: true
                   script: |
-                      cd github/meetsin/server
-                      git stash
-                      git pull origin develop
-                      pm2 kill
+                      cd backend-meetsin
                       yarn install
-                      yarn deploy:dev
+                      yarn pm2:kill
+                      yarn start:prod
