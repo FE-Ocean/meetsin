@@ -45,9 +45,9 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   port: ${{ secrets.SSH_PORT }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  source: "/home/runner/work/meetsin/meetsin/server/dist"
+                  source: "/home/runner/work/meetsin/meetsin/server/dist/"
                   target: ${{ secrets.SSH_TARGET }}
-                  strip_components: 5
+                  # strip_components: 5
 
             - name: Trim the characters of the SSH_TARGET secret
               run: |
