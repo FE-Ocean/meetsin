@@ -1,16 +1,21 @@
-import { baseClient } from "@/modules/fetchClient";
+import { addAuthHeader, baseClient } from "@/modules/fetchClient";
 import { IPatchRoom } from "@/types/room";
 
-export const getRoomInfo = async (roomId: string, accessToken: string) => {
-    if (!accessToken) {
-        throw new Error("access token이 없거나 올바르지 않습니다."); //이거 어디서
-    }
+// export const getRoomInfo = async (roomId: string, accessToken: string) => {
+//     if (!accessToken) {
+//         throw new Error("access token이 없거나 올바르지 않습니다."); //이거 어디서
+//     }
 
-    return await baseClient.get(`/rooms/${roomId}`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
+//     return await baseClient.get(`/rooms/${roomId}`, {
+//         headers: {
+//             Authorization: `Bearer ${accessToken}`,
+//         },
+//     });
+// };
+
+export const getRoomInfo = async (roomId: string, accessToken: string) => {
+    const authConfig = addAuthHeader(accessToken);
+    return await baseClient.get(`/rooms/${roomId}`, authConfig);
 };
 
 export const getUserRooms = async (accessToken: string) => {
@@ -52,31 +57,43 @@ export const createRoom = async (roomNameInput: string, accessToken: string) => 
     }
 };
 
+// export const patchRoom = async ({ roomName, roomId, accessToken }: IPatchRoom) => {
+//     try {
+//         if (!accessToken) {
+//             throw new Error("access token이 없거나 올바르지 않습니다.");
+//         }
+
+//         const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${roomId}`;
+//         const response = await fetch(url, {
+//             method: "PATCH",
+//             headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: `Bearer ${accessToken}`,
+//             },
+//             body: JSON.stringify({ roomData: { roomName } }),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`PATCH room 실패: ${response.statusText}`);
+//         }
+
+//         return response.json();
+//     } catch (error) {
+//         console.error(error);
+//         throw error;
+//     }
+// };
+
 export const patchRoom = async ({ roomName, roomId, accessToken }: IPatchRoom) => {
-    try {
-        if (!accessToken) {
-            throw new Error("access token이 없거나 올바르지 않습니다.");
-        }
+    const authConfig = addAuthHeader(accessToken);
 
-        const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${roomId}`;
-        const response = await fetch(url, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({ roomData: { roomName } }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`PATCH room 실패: ${response.statusText}`);
-        }
-
-        return response.json();
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    return await baseClient.patch(
+        `/rooms/${roomId}`,
+        {
+            roomData: { roomName },
+        },
+        authConfig,
+    );
 };
 
 export const deleteRoom = async (roomId: string, accessToken: string) => {

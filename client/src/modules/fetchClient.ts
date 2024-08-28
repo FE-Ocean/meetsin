@@ -38,11 +38,18 @@ export class FetchClient {
         return this.request<T>(path, { ...config, method: "PATCH", body: requestBody });
     }
 
-    private async request<T>(path: string, config: RequestInit): Promise<T> {
+    protected async request<T>(path: string, config: RequestInit): Promise<T> {
         const url = this.baseURL + path;
+
+        const headers = {
+            ...this.config.headers,
+            ...config.headers,
+        };
+
         const requestConfig: RequestInit = {
             ...this.config,
             ...config,
+            headers,
         };
 
         try {
@@ -74,3 +81,17 @@ export const baseClient = FetchClient.create({
         credentials: "include",
     },
 });
+
+export const addAuthHeader = (accessToken: string, config: RequestInit = {}) => {
+    if (!accessToken) {
+        throw new Error("access token이 없거나 올바르지 않습니다.");
+    }
+
+    return {
+        ...config,
+        headers: {
+            ...config.headers,
+            Authorization: `Bearer ${accessToken}`,
+        },
+    };
+};

@@ -14,15 +14,15 @@ const Lobby = () => {
     const { onOpen } = useModal("createRoom");
 
     const accessToken = useAtomValue(accessTokenAtom);
-    const [userRooms, setUserRoom] = useState<IRoom[]>([]);
+    // const [userRooms, setUserRoom] = useState<IRoom[]>([]);
 
-    const { data } = useGetUserRooms(accessToken);
+    const { data: userRooms } = useGetUserRooms(accessToken);
 
-    useEffect(() => {
-        if (data) {
-            setUserRoom(data);
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (data) {
+    //         setUserRoom(data);
+    //     }
+    // }, [data]);
 
     return (
         <>
@@ -33,7 +33,7 @@ const Lobby = () => {
                 </button>
             </header>
             <main className={style.main}>
-                {userRooms.length === 0 && (
+                {!userRooms?.length && (
                     <div className={style.no_room_container}>
                         <p className={style.title}>
                             오른쪽 상단의 버튼을 클릭해 방을 개설해 보세요!
@@ -41,7 +41,7 @@ const Lobby = () => {
                     </div>
                 )}
 
-                {userRooms.length > 0 && (
+                {userRooms && userRooms.length > 0 && (
                     <div className={style.room_container}>
                         <h2 className={style.title}>내가 만든 방들</h2>
                         <p className={style.description}>
@@ -51,7 +51,7 @@ const Lobby = () => {
                             새로운 방을 만들고 싶다면 화면의 오른쪽 상단에 있는 버튼을 클릭하세요.
                         </p>
                         <ul className={style.room_cards}>
-                            {userRooms.map((room: IRoom) => {
+                            {userRooms?.map((room: IRoom) => {
                                 return (
                                     <li key={room.id}>
                                         <RoomCard room={room} />
