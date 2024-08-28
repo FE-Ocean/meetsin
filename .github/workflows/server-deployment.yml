@@ -38,16 +38,27 @@ jobs:
               run: yarn build
               working-directory: server
 
-            # - name: Copy file via ssh
-            #   uses: appleboy/scp-action@v0.1.7
-            #   with:
-            #       host: ${{ secrets.SSH_HOST }}
-            #       username: ${{ secrets.SSH_USERNAME }}
-            #       port: ${{ secrets.SSH_PORT }}
-            #       key: ${{ secrets.SSH_PRIVATE_KEY }}
-            #       source: "./server/yarn.lock"
-            #       target: ${{ secrets.SSH_TARGET }}
-            #       strip_components: 2
+            - name: Copy file via ssh
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  source: "./server/yarn.lock"
+                  target: ${{ secrets.SSH_TARGET }}
+                  strip_components: 2
+
+            - name: Copy file via ssh
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  port: ${{ secrets.SSH_PORT }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  source: "./server/package.json"
+                  target: ${{ secrets.SSH_TARGET }}
+                  strip_components: 2
 
             - name: SSH Commands
               uses: appleboy/ssh-action@v1.0.3
