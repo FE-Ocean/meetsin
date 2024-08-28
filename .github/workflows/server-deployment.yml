@@ -47,7 +47,7 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   source: "/home/runner/work/meetsin/meetsin/server/yarn.lock"
                   target: ${{ secrets.SSH_TARGET }}
-                  strip_components: 5
+                  strip_components: 4
 
             - name: Trim the characters of the SSH_TARGET secret
               run: |
@@ -64,7 +64,7 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script_stop: true
                   script: |
-                      cd ${{ secrets.TRIMMED_TARGET }}
+                      cd backend-meetsin
                       yarn pm2:kill
                       yarn install
                       yarn start:prod
