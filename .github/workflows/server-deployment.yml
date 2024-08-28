@@ -49,6 +49,12 @@ jobs:
                   target: ${{ secrets.SSH_TARGET }}
                   strip_components: 5
 
+            - name: Trim the characters of the SSH_TARGET secret
+              run: |
+                  TRIMMED_TARGET="${{ secrets.SSH_TARGET }}"
+                  TRIMMED_TARGET="${TRIMMED_TARGET:13}"
+                  echo "TRIMMED_TARGET=$TRIMMED_TARGET" >> $GITHUB_ENV
+
             - name: SSH Commands
               uses: appleboy/ssh-action@v1.0.3
               with:
@@ -58,7 +64,7 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   script_stop: true
                   script: |
-                      cd server_meetsin
+                      cd ${{ secrets.TRIMMED_TARGET }}
                       yarn pm2:kill
                       yarn install
                       yarn start:prod
