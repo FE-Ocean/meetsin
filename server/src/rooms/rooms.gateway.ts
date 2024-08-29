@@ -10,6 +10,7 @@ import {
     WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { Types } from "mongoose";
 import { RoomsService } from "src/rooms/rooms.service";
 import { MessageInfoDTO } from "./dto/messageInfo.dto";
 import { TimerDto } from "./dto/timer.dto";
@@ -20,7 +21,7 @@ interface UserSocket extends Socket {
 
 interface User {
     socketId: string;
-    userId: string;
+    userId: Types.ObjectId;
     userName: string;
 }
 
@@ -58,7 +59,7 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
 
     @SubscribeMessage("join_room")
     handleJoin(
-        @MessageBody() data: { roomId: string; userId: string; userName: string },
+        @MessageBody() data: { roomId: string; userId: Types.ObjectId; userName: string },
         @ConnectedSocket() socket: Socket,
     ) {
         const { roomId, userId, userName } = data;
@@ -77,7 +78,7 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
 
     @SubscribeMessage("leave_room")
     handleLeave(
-        @MessageBody() data: { roomId: string; userId: string },
+        @MessageBody() data: { roomId: string; userId: Types.ObjectId },
         @ConnectedSocket() socket: Socket,
     ) {
         const { roomId, userId } = data;
