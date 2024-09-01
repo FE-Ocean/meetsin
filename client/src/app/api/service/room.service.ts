@@ -61,19 +61,19 @@ export const usePatchRoomData = () => {
     });
 };
 
-export const useGetUserRooms = (accessToken?: string) => {
-    const formatRoomsData = async () => {
-        const res = (await getUserRooms(accessToken)) as IRoomModel[];
-        return res.map((room) => ({
-            id: room._id,
-            roomName: room.room_name,
-            admin: room.admin,
-            createdAt: room.created_at,
-            userIds: room.userIds,
-        }));
-    };
+export const formatRoomsData = async (accessToken?: string) => {
+    const res = (await getUserRooms(accessToken)) as IRoomModel[];
+    return res.map((room) => ({
+        id: room._id,
+        roomName: room.room_name,
+        admin: room.admin,
+        createdAt: room.created_at,
+        userIds: room.userIds,
+    }));
+};
 
-    return useQuery({ queryKey: QUERY_KEY.rooms, queryFn: formatRoomsData });
+export const useGetUserRooms = (accessToken?: string) => {
+    return useQuery({ queryKey: QUERY_KEY.rooms, queryFn: () => formatRoomsData(accessToken) });
 };
 
 export const useDeleteRoom = (roomId: string) => {

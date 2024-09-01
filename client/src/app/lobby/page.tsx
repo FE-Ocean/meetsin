@@ -5,26 +5,16 @@ import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query
 import { getUserRooms } from "../api/repository/room.repository";
 import { IRoomModel } from "@/types/room";
 import { getToken } from "@/utils/getToken";
+import { formatRoomsData } from "../api/service/room.service";
 
 const Lobby = async () => {
     const queryClient = new QueryClient();
 
     const accessToken = getToken();
 
-    const formatRoomsData = async () => {
-        const res = (await getUserRooms(accessToken)) as IRoomModel[];
-        return res.map((room) => ({
-            id: room._id,
-            roomName: room.room_name,
-            admin: room.admin,
-            createdAt: room.created_at,
-            userIds: room.userIds,
-        }));
-    };
-
     await queryClient.prefetchQuery({
         queryKey: QUERY_KEY.rooms,
-        queryFn: formatRoomsData,
+        queryFn: () => formatRoomsData(accessToken),
     });
 
     return (
