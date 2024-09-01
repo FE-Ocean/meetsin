@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAtomValue } from "jotai";
-import { accessTokenAtom } from "@/jotai/atom";
+
 import {
     startSubscription,
     cancelSubscription,
@@ -12,7 +11,6 @@ import style from "./notificationSwitch.module.scss";
 
 const NotificationSwitch = () => {
     const [hasSubscription, setHasSubscription] = useState<boolean>();
-    const accessToken = useAtomValue(accessTokenAtom);
 
     useEffect(() => {
         const getActiveSubscription = async () => {
@@ -23,14 +21,14 @@ const NotificationSwitch = () => {
     }, []);
 
     const { mutate: createSubscription } = useCreateSubscriptionToDB();
-    const { mutate: deleteSubscription } = useDeleteSubscriptionFromDB(accessToken);
+    const { mutate: deleteSubscription } = useDeleteSubscriptionFromDB();
 
     const toggleNotificationSwitch = async (isOn: boolean) => {
         try {
             if (isOn) {
                 const subscription = (await startSubscription()) as PushSubscription;
                 if (subscription) {
-                    createSubscription({ subscription, accessToken });
+                    createSubscription({ subscription });
                 }
             } else {
                 const cancelSuccess = await cancelSubscription();

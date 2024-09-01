@@ -1,14 +1,11 @@
 "use client";
 
-import { useAtomValue } from "jotai";
 import style from "./lobbyMain.module.scss";
-import { accessTokenAtom } from "@/jotai/atom";
 import { useGetUserRooms } from "@/app/api/service/room.service";
 import RoomCard from "@/components/room/roomCard/roomCard";
 
 const LobbyMain = () => {
-    const accessToken = useAtomValue(accessTokenAtom);
-    const { data: userRooms } = useGetUserRooms(accessToken);
+    const { data: userRooms } = useGetUserRooms();
 
     return (
         <main className={style.main}>

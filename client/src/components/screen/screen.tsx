@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import style from "./screen.module.scss";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/jotai/atom";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 interface IProps {
-    videoRef: React.RefObject<HTMLVideoElement>,
-    currentStream: MediaStream
+    videoRef: React.RefObject<HTMLVideoElement>;
+    currentStream: MediaStream;
 }
 
 const Screen = ({ videoRef, currentStream }: IProps) => {
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
     useEffect(() => {
         if (videoRef && videoRef.current && currentStream) {
             videoRef.current.srcObject = currentStream;

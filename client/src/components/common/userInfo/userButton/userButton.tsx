@@ -1,7 +1,7 @@
 import ProfileImage from "@/components/common/profileImage/profileImage";
 import style from "./userButton.module.scss";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/jotai/atom";
+
+import { useGetUserInfo } from "@/app/api/service/user.service";
 
 interface IUserButton {
     onClick?: () => void;
@@ -10,13 +10,15 @@ interface IUserButton {
 const UserInfoButton = (props: IUserButton) => {
     const { onClick } = props;
 
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
 
     return (
-        user && <button className={style.user_info_button} onClick={onClick}>
-            <ProfileImage src={user.profileImg} />
-            <span className={style.user_name}>{user.userName}</span>
-        </button>
+        user && (
+            <button className={style.user_info_button} onClick={onClick}>
+                <ProfileImage src={user.profileImg} />
+                <span className={style.user_name}>{user.userName}</span>
+            </button>
+        )
     );
 };
 

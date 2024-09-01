@@ -1,15 +1,14 @@
 import { useAtomValue } from "jotai";
-import { accessTokenAtom, roomIdAtom } from "@/jotai/atom";
+import { roomIdAtom } from "@/jotai/atom";
 import { useDeleteRoom } from "@/app/api/service/room.service";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 import Button from "@/components/common/button/button";
 import style from "./confirmDelete.module.scss";
 
 const ConfirmDelete = ({ onClose }: { onClose: () => void }) => {
-    const accessToken = useAtomValue(accessTokenAtom);
     const roomId = useAtomValue(roomIdAtom);
 
-    const { mutate } = useDeleteRoom(roomId, accessToken);
+    const { mutate } = useDeleteRoom(roomId);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
