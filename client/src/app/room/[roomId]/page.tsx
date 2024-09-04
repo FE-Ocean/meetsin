@@ -1,8 +1,8 @@
 "use client";
 import style from "./style.module.scss";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import Menu from "@/components/menu/menu";
-import { accessTokenAtom, screenShareAtom, userAtom } from "@/jotai/atom";
+import { screenShareAtom } from "@/jotai/atom";
 import { useEffect, useRef, useState } from "react";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
@@ -12,6 +12,7 @@ import { useGetRoomData } from "@/app/api/service/room.service";
 import { useParams } from "next/navigation";
 import Peer from "peerjs";
 import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 
 const Map = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -23,12 +24,11 @@ const Room = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     // TODO: 스트림 배열로 변경
     const [currentStream, setCurrentStream] = useState<MediaStream | null>(null);
-    const [currentUsers, setCurrentUsers] = useState<Array<string>>([]);
+    const [currentUsers, setCurrentUsers] = useState<Array<any>>([]);
     const [chatOpen, setChatOpen] = useState<boolean>(true);
 
     const params = useParams();
     const roomId = params.roomId as string;
-    const accessToken = useAtomValue(accessTokenAtom);
     const { roomUsers, messages } = useChatSocket({ roomId });
 
     const stopScreenShare = () => {
@@ -43,9 +43,9 @@ const Room = () => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
     };
 
-    const { data } = useGetRoomData(roomId, accessToken);
+    const { data } = useGetRoomData(roomId);
 
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
     const peer = new Peer(user?.userId ?? "");
 
     // 공유 중지 시 화면 공유 창 꺼지게
@@ -57,7 +57,6 @@ const Room = () => {
         });
     }, [currentStream, setScreenShare]);
 
-    // const user = useAtomValue(userAtom)
     // const peer = new Peer({
     //     port: 9000,
     //     path: "/peer-server",

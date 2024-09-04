@@ -9,6 +9,7 @@ import {
     MessageBody,
     WebSocketServer,
 } from "@nestjs/websockets";
+import { Types } from "mongoose";
 import { Server, Socket } from "socket.io";
 import { Types } from "mongoose";
 import { RoomsService } from "src/rooms/rooms.service";

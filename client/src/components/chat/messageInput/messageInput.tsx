@@ -5,15 +5,15 @@ import style from "./messageInput.module.scss";
 import useMessage from "@/components/chat/messageInput/hooks/useMessage";
 import useAdjustHeight from "@/components/chat/messageInput/hooks/useAdjustHeight";
 import useResetHeight from "@/components/chat/messageInput/hooks/useResetHeight";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/jotai/atom";
+
+import { useGetUserInfo } from "@/app/api/service/user.service";
 
 const MessageInput = () => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const [isComposing, setIsComposing] = useState<boolean>(false);
 
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
 
     const { message, onChange, sendMessage } = useMessage({
         inputRef: textareaRef,

@@ -1,7 +1,6 @@
-import { userAtom } from "@/jotai/atom";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 import { roomSocket } from "@/socket";
 import { IRoomUser, IMessage } from "@/types/chat";
-import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 
 interface Params {
@@ -10,7 +9,7 @@ interface Params {
 
 const useChatSocket = (params: Params) => {
     const { roomId } = params;
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
 
     const [roomUsers, setRoomUsers] = useState<IRoomUser[]>([]);
     const [messages, setMessages] = useState<IMessage[]>([]);
