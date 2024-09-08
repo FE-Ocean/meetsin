@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { useGetUserInfo } from "@/app/api/service/user.service";
 import { roomSocket } from "@/socket";
 import { IRoomUser, IMessage } from "@/types/chat";
-import { useEffect, useState } from "react";
 
 interface Params {
     roomId: string;
@@ -30,6 +30,10 @@ const useChatSocket = (params: Params) => {
 
     useEffect(() => {
         if (!user || !roomId) return;
+
+        if (!roomSocket.connected) {
+            roomSocket.connect();
+        }
 
         roomSocket.emit("join_room", { roomId, userId: user.userId, userName: user.userName });
         roomSocket.on("new_message", handleNewMessage);
