@@ -41,7 +41,7 @@ const Lobby = () => {
                         </p>
                     </div>
                 )}
-                <Link href={"/room/6697cc10964adc013f74f12d"}>테스트 링크</Link>
+                <Link href={"/room/66d3f936401eaaf10f2b615e"}>테스트 링크</Link>
 
                 {userRooms.length > 0 && (
                     <div className={style.room_container}>
