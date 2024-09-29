@@ -2,7 +2,9 @@
 @import "../../../styles/mixin";
 
 .room_user_info_container {
-    @include common_ui;
+    border: 1px solid $border-color;
+    box-shadow: $normal-shadow;
+    backdrop-filter: blur(4px);
     position: absolute;
     bottom: 60px;
     right: 0;
@@ -42,7 +44,7 @@
 
 .separator {
     height: 1px;
-    background-color: white;
+    background-color: $white;
     margin: 4px 6px;
 }
 
