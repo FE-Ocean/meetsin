@@ -13,7 +13,7 @@ import { useParams } from "next/navigation";
 import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 import { useScreenShare } from "./hooks/useScreenShare";
 
-const Map = dynamic(() => import("../../../components/phaser/map/map"), {
+const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
     loading: () => <Skeleton />,
 });
@@ -26,25 +26,33 @@ const Room = () => {
     const params = useParams();
     const roomId = params.roomId as string;
     const accessToken = useAtomValue(accessTokenAtom);
-    const { roomUsers, messages } = useChatSocket({ roomId });
-    
 
-    const {currentPeers, startScreenShare, stopScreenShare} = useScreenShare();
+    const { data } = useGetRoomData(roomId, accessToken);
+    const { roomUsers, messages } = useChatSocket({ roomId });
+    const { currentPeers, startScreenShare, stopScreenShare, setPeerId, streamList } = useScreenShare(roomId);
 
     const toggleChat = (shouldClose?: boolean) => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
     };
 
-    const {data} = useGetRoomData(roomId, accessToken);
-
+    const handleScreenShare = () => {
+        isMyScreenShare ? stopScreenShare() : startScreenShare();
+    };
     
     useEffect(() => {
         if (data) {
-            currentPeers.current = data.userIds.map(user => ({ user, stream: undefined }));
+            data.userIds.forEach(user => {
+                currentPeers.current.set(setPeerId(user.userId), {
+                    user,
+                    peerId: setPeerId(user.userId),
+                    stream: undefined,
+                    connection: undefined
+                });
+            });
         }
-    }, [currentPeers, data]);
+    }, [currentPeers, data, setPeerId]);
 
-    // unmount 시 화면 공유 중지
+    // unmount 시 화면 공유 중지 및 모든 연결 해제
     useEffect(() => {
         return () => {
             stopScreenShare();
@@ -56,14 +64,12 @@ const Room = () => {
         <>
             <main className={style.main}>
                 <div className={style.container}>
-                    {isMyScreenShare ? <ScreenWindow peerList={currentPeers} /> : <Map />}
+                    {isMyScreenShare ? <ScreenWindow peerList={streamList} /> : <PhaserMap />}
                     {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} />}
                 </div>
                 <Menu
                     className={style.menu}
-                    onScreenShare={() => {
-                        isMyScreenShare ? stopScreenShare() : startScreenShare();
-                    }}
+                    onScreenShare={handleScreenShare}
                     toggleChat={toggleChat}
                     roomUsers={roomUsers}
                 />
