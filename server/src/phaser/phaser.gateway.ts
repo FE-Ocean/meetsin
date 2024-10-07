@@ -53,7 +53,7 @@ export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGate
         delete this.gameRooms[roomId]?.players[socket.id];
     }
 
-    @SubscribeMessage("join_room")
+    @SubscribeMessage("join_phaser_room")
     handleJoin(@MessageBody() roomId: string, @ConnectedSocket() socket: Socket) {
         this.logger.log(`방 참가 신청 ${roomId} ${socket.id}`);
         socket.join(roomId);

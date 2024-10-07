@@ -12,7 +12,8 @@ import LinkCopyButton from "./linkCopyButton/linkCopyButton";
 import style from "./menu.module.scss";
 import { IRoomUser } from "@/types/chat";
 import { roomSocket } from "@/socket";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import RoomUserInfo from "./roomUserInfo/roomUserInfo";
 
 interface IMenu {
     className: string;
@@ -23,6 +24,7 @@ interface IMenu {
 
 const Menu = (props: IMenu) => {
     const { className, onScreenShare, toggleChat, roomUsers } = props;
+    const [roomUserInfoOpen, setRoomUserInfoOpen] = useState(false);
     const isScreenShare = useAtomValue(screenShareAtom);
     const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
     const { onOpen } = useModal("timerSetting");
@@ -40,11 +42,28 @@ const Menu = (props: IMenu) => {
         setIsTimerVisible(true);
     };
 
+    const onRoomUserInfoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        setRoomUserInfoOpen((prev) => !prev);
+    };
+
     useEffect(() => {
         roomSocket.on("start_timer", handleStartTimer);
 
         return () => {
             roomSocket.off("start_timer", handleStartTimer);
+        };
+    }, []);
+
+    useEffect(() => {
+        const closeRoomUserInfo = () => {
+            setRoomUserInfoOpen(false);
+        };
+
+        window.addEventListener("click", closeRoomUserInfo);
+
+        return () => {
+            window.removeEventListener("click", closeRoomUserInfo);
         };
     }, []);
 
@@ -71,14 +90,18 @@ const Menu = (props: IMenu) => {
                             aria-label="화면 공유하기"
                         ></button>
                     </li>
-                    <li className={style.active_user_number}>
-                        <Image src={active_user_icon} alt="접속자 수" />
-                        <span className={style.active_circle}>●</span>
-                        <span>{roomUsers.length}</span>
+                    <li>
+                        <button className={style.active_user_number} onClick={onRoomUserInfoClick}>
+                            <Image src={active_user_icon} alt="접속자 수" />
+                            <span className={style.active_circle}>●</span>
+                            <span>{roomUsers.length}</span>
+                        </button>
                     </li>
                 </ul>
                 <button className={style.chat} onClick={() => toggleChat()} />
             </div>
+
+            {roomUserInfoOpen && <RoomUserInfo roomUsers={roomUsers} />}
         </div>
     );
 };

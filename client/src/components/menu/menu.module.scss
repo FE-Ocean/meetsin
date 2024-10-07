@@ -14,6 +14,7 @@
 .menu_container {
     display: flex;
     padding: 0 10px;
+    position: relative;
 }
 
 .link_copy_button {
@@ -32,10 +33,11 @@
     align-items: center;
     width: 193px;
     height: 50px;
-    padding: 5px 22px 5px 14px;
+    padding: 5px 12px;
     border-radius: 30px;
 }
 .timer {
+    display: flex;
     position: relative;
     width: 40px;
     height: 40px;
@@ -50,6 +52,7 @@
     }
 }
 .screen_share {
+    display: flex;
     position: relative;
     width: 40px;
     height: 40px;
@@ -71,14 +74,23 @@
 }
 .active_user_number {
     display: flex;
+    gap: 2px;
     align-items: center;
-    margin-left: 8px;
+    justify-content: center;
     font-size: 12px;
     font-weight: 700;
+    border-radius: 30px;
+    width: 64px;
+    height: 38px;
+    box-sizing: border-box;
 
     .active_circle {
         color: $active-color;
         margin-right: 2px;
+    }
+
+    &:hover {
+        background-color: $hover-color;
     }
 }
 
