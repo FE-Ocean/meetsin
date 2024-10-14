@@ -18,8 +18,8 @@ const ScreenWindow = ({ peerList }: IProps) => {
                 if(peer.stream) {
                     return <Screen currentStream={peer.stream} key={index} userName={peer.user.userName} />;
                 }
-            })
-            }</div>
+            })}
+        </div>
     );
 };
 

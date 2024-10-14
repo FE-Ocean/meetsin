@@ -62,6 +62,7 @@
     &.active {
         &::after {
             background-image: url(/device-desktop.svg);
+            filter: invert(75%) sepia(14%) saturate(1679%) hue-rotate(64deg) brightness(92%) contrast(87%);
         }
     }
 

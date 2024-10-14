@@ -12,6 +12,7 @@ import { useGetRoomData } from "@/app/api/service/room.service";
 import { useParams } from "next/navigation";
 import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 import { useScreenShare } from "./hooks/useScreenShare";
+import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
 
 const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -22,6 +23,7 @@ const Room = () => {
     const isMyScreenShare = useAtomValue(screenShareAtom);
 
     const [chatOpen, setChatOpen] = useState<boolean>(true);
+    const [isMeetingView, setMeetingView] = useState<boolean>(false);
     
     const params = useParams();
     const roomId = params.roomId as string;
@@ -29,7 +31,7 @@ const Room = () => {
 
     const { data } = useGetRoomData(roomId, accessToken);
     const { roomUsers, messages } = useChatSocket({ roomId });
-    const { currentPeers, startScreenShare, stopScreenShare, setPeerId, streamList } = useScreenShare(roomId);
+    const { startScreenShare, stopScreenShare, setPeerId, streamList, isScreenSharing, setCurrentPeers } = useScreenShare(roomId);
 
     const toggleChat = (shouldClose?: boolean) => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
@@ -38,19 +40,40 @@ const Room = () => {
     const handleScreenShare = () => {
         isMyScreenShare ? stopScreenShare() : startScreenShare();
     };
+
+    const handleView = () => {
+        setMeetingView(!isMeetingView);
+    };
     
+    // useEffect(() => {
+    //     if (data) {
+    //         // const tempPeers = new Map();
+    //         data.userIds.forEach(user => {
+    //             currentPeers.current.set(setPeerId(user.userId), {
+    //                 user,
+    //                 peerId: setPeerId(user.userId),
+    //                 stream: undefined,
+    //                 connection: undefined
+    //             });
+    //         });
+    //         // setCurrentPeers(tempPeers);
+    //     }
+    // }, [currentPeers, data, setPeerId]);
+
     useEffect(() => {
         if (data) {
+            const tempPeers = new Map();
             data.userIds.forEach(user => {
-                currentPeers.current.set(setPeerId(user.userId), {
+                tempPeers.set(setPeerId(user.userId), {
                     user,
                     peerId: setPeerId(user.userId),
                     stream: undefined,
                     connection: undefined
                 });
             });
+            setCurrentPeers(tempPeers);
         }
-    }, [currentPeers, data, setPeerId]);
+    }, [data, setCurrentPeers, setPeerId]);
 
     // unmount 시 화면 공유 중지 및 모든 연결 해제
     useEffect(() => {
@@ -60,11 +83,24 @@ const Room = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if(isMyScreenShare) {
+            setMeetingView(true);
+        }
+        else {
+            setMeetingView(false);
+        }
+        if(!isScreenSharing) {
+            setMeetingView(false);
+        }
+    }, [isMyScreenShare, isScreenSharing]);
+
     return (
         <>
             <main className={style.main}>
                 <div className={style.container}>
-                    {isMyScreenShare ? <ScreenWindow peerList={streamList} /> : <PhaserMap />}
+                    <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={handleView} />
+                    {isMeetingView ? <ScreenWindow peerList={streamList} /> : <PhaserMap />}
                     {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} />}
                 </div>
                 <Menu

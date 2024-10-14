@@ -5,137 +5,127 @@ import Peer from "peerjs";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 
 export const useScreenShare = (roomId: string) => {
-    const currentPeers = useRef<Map<string, IPeer>>(new Map());
-    const [peer, setPeer] = useState<Peer | null>(null);
-    const [, updatePeerState] = useState(0);
+    const [currentPeers, setCurrentPeers] = useState<Map<string, IPeer>>(new Map());
+    const peerRef = useRef<Peer | null>(null);
     
     const user = useAtomValue(userAtom);
     const setMyScreenShare = useSetAtom(screenShareAtom);
 
-    // useRef로 쓰인 currentPeers의 리렌더링을 위함
-    const forceUpdatePeers = useCallback((key: string, value: IPeer)=> {
-        const tempPeerMap = new Map(currentPeers.current);
+    const updatePeers = useCallback((key: string, value: IPeer) => {
+        const tempPeerMap = new Map(currentPeers);
         tempPeerMap.set(key, value);
-        currentPeers.current = tempPeerMap;
-        updatePeerState(prev => prev+1);
-    }, []);
+        setCurrentPeers(tempPeerMap);
+    }, [currentPeers]);
 
     // 피어 아이디 중복 방지를 위함
     const setPeerId = useCallback((userId: string) => {
         return `meetsin${roomId}${userId}`;
     }, [roomId]);
 
+    // 피어는 한 번만 생성하고, 컴포넌트가 언마운트되면 제거
     useEffect(() => {
-        if (!user) return;
+        if (!user || peerRef.current) return; // 피어가 이미 있으면 실행하지 않음
+
         const myPeerId = setPeerId(user.userId);
         const newPeer = new Peer(myPeerId);
         console.log("Peer created with ID:", newPeer.id);
-        setPeer(newPeer);
+        peerRef.current = newPeer;
 
-        // 피어 생성 시
-        newPeer.on("open", (id) => {
-            console.log("My peer ID is: " + id);
-        });
-
-        // 다른 피어와의 연결
-        newPeer.on("connection", (connection) => {
-            connection.on("data", (data) => {
-                const peerData = currentPeers.current.get(connection.peer);
-                if(!peerData) {
-                    return;
-                } 
-                peerData.connection = connection;
-
-                // connection.send로 오는 메시지에 따라 처리
-                switch(data.type) {
-                case "stop-screen-share": // 피어가 화면 공유를 멈춘 경우
-                    peerData.stream = undefined;
-                case "request-screen-share": // 피어에게서 내 스트림을 요청받은 경우
-                    const myPeer = currentPeers.current.get(setPeerId(user.userId));
-                    if (myPeer && myPeer.stream) {
-                        newPeer.call(connection.peer, myPeer.stream);
-                        console.log("Responding with current stream to:", connection.peer);
-                    }
-                default: 
-                    forceUpdatePeers(connection.peer, peerData);
-                    break;
-                }
-            });
-
-            return () => {
-                newPeer.destroy();
-            };
-        });
-
-        // 피어 연결 끊길 시
-        newPeer.on("disconnected", (data) => {
-            console.log("disconnected", data);
+        // 피어 연결 해제 시 처리
+        newPeer.on("disconnected", () => {
             console.log("Peer disconnected");
         });
 
-        // 피어 닫힐 시
-        newPeer.on("close", () => {
-            console.log("Peer connection closed");
-            return () => {
-                newPeer.removeAllListeners();
-            };
-        });
-
-        // 에러 처리
+        // 피어 생성 후 에러 처리
         newPeer.on("error", (err) => {
-            console.error("Peer connection error: ");
-            console.log("Error type:", err.type); // 에러 유형 출력
-            console.log("Error message:", err.message); // 에러 메시지 출력
+            console.error("Peer connection error:", err);
             if (err.type === "unavailable-id") {
-                // id 중복 방지 -> 이미 같은 아이디의 피어가 존재할 시 피어 죽이고 같은 아이디로 재생성
-                // setPeerId에 의해 유저끼리 아이디가 같을 수가 없으므로
-                newPeer.destroy(); // 이전 피어 강제 종료
-                const tempPeer = new Peer(myPeerId); // 같은 ID로 피어 재생성
-                setPeer(tempPeer);
+                newPeer.destroy(); // 기존 피어 제거
+                const tempPeer = new Peer(setPeerId(user.userId + "-" + new Date().getTime())); // 새로운 피어 생성
+                peerRef.current = tempPeer;
+                console.log("Retrying with new Peer ID");
             }
         });
 
-        // 다른 피어로부터 콜을 받았을 때
-        newPeer.on("call", (mediaConnection) => {
-            console.log("Incoming call from:", mediaConnection.peer);
+        // 컴포넌트가 언마운트될 때 피어 제거
+        return () => {
+            newPeer.destroy();
+            console.log("Peer destroyed on component unmount");
+        };
+    }, [setPeerId, user]); // 의존성 배열에서 peer 제거
+
+    useEffect(() => {
+        if (!peerRef.current || !user) return;
+        const peer = peerRef.current;
+        const myPeerId = setPeerId(user.userId);
+
+        peer.on("open", (id) => {
+            console.log("My peer ID is: " + id);
+        });
+
+        peer.on("connection", (connection) => {
+            connection.on("data", (data) => {
+                const peerData = currentPeers.get(connection.peer);
+                if (!peerData) return;
+                
+                peerData.connection = connection;
+                console.log(data.type);
+                switch (data.type) {
+                case "stop-screen-share":
+                    peerData.stream = undefined;
+                    break;
+                case "request-screen-share":
+                    const myPeer = currentPeers.get(myPeerId);
+                    if (myPeer && myPeer.stream) {
+                        peer.call(connection.peer, myPeer.stream);
+                    }
+                    break;
+                default:
+                    updatePeers(connection.peer, peerData);
+                    break;
+                }
+            });
+        });
+
+        peer.on("call", (mediaConnection) => {
             mediaConnection.answer();
-            // 다른 피어의 스트림을 받았을 때
             mediaConnection.on("stream", (remoteStream) => {
-                const peerData = currentPeers.current.get(mediaConnection.peer);
-                if(peerData) {
-                    console.log("Received remote stream from:", mediaConnection.peer);
+                const peerData = currentPeers.get(mediaConnection.peer);
+                if (peerData) {
                     peerData.stream = remoteStream;
-                    forceUpdatePeers(mediaConnection.peer, peerData);
+                    updatePeers(mediaConnection.peer, peerData);
                 }
             });
         });
 
         return () => {
-            newPeer.destroy();
+            peer.removeAllListeners(); // 이벤트 핸들러를 제거하여 메모리 누수 방지
         };
-    }, [currentPeers, forceUpdatePeers, roomId, setPeerId, user]);
-
-    // 화면 공유 중인 스트림 리스트
-    const streamList = useMemo(() => {
-        return Array.from(currentPeers.current.values()).filter(peer => peer.stream);
-    }, []);
+    }, [currentPeers, setPeerId, updatePeers, user]);
 
     // 나 포함 한 명이라도 화면 공유 중인지 상태
     const isScreenSharing = useMemo(() => {
-        Array.from(currentPeers.current.values()).some(peer => {
+        return Array.from(currentPeers.values()).some(peer => {
             return peer.stream;
         });
     }, [currentPeers]);
+
+    // 화면 공유 중인 스트림 리스트
+    const streamList = useMemo(() => {
+        console.log(Array.from(currentPeers.values()).filter(peer => peer.stream));
+        return Array.from(currentPeers.values()).filter(peer => peer.stream);
+    }, [currentPeers]);
     
+    // TODO: 화면 공유 중지 시 streamlist 업데이트 안됨
+    // TODO: 또한 페이지 나갈 시 화면공유 안꺼짐 -> onBeforeUnmount
+    // TODO: stop-screen-share 받고 있는지 확인 필요
     // 화면 공유 시작 메서드
     const startScreenShare = async () => {
         try {
             if(!user) {
                 throw new Error("user not found");
             }
-            if(!peer) {
-                throw new Error("peer not found");
-            }
+            console.log(currentPeers);
             // 화면 공유 스트림 받아오기
             const mediaStream = await navigator.mediaDevices.getDisplayMedia({
                 video: {
@@ -150,15 +140,18 @@ export const useScreenShare = (roomId: string) => {
                 };
             });
             // 방에 있는 사람들에게 연결
-            currentPeers.current.forEach(p => {
-                const peerData = currentPeers.current.get(p.peerId);
+            currentPeers.forEach(p => {
+                if(!peerRef.current) {
+                    throw new Error("peer not found");
+                }
+                const peerData = currentPeers.get(p.peerId);
                 if(p.peerId === setPeerId(user.userId) && peerData) {
                     peerData.stream = mediaStream;
-                    forceUpdatePeers(p.peerId, peerData);
+                    updatePeers(p.peerId, peerData);
                     setMyScreenShare(true);
                 }
                 else {
-                    const call = peer.call(p.peerId, mediaStream);
+                    const call = peerRef.current.call(p.peerId, mediaStream);
                     if (!call) {
                         console.error("Failed to establish call with user:", p);
                         return;
@@ -169,7 +162,7 @@ export const useScreenShare = (roomId: string) => {
                         console.log("Received remote stream during call:", remoteStream);
                         if(peerData) {
                             peerData.stream = remoteStream;
-                            forceUpdatePeers(p.peerId, peerData);
+                            updatePeers(p.peerId, peerData);
                         }
                     });
 
@@ -178,20 +171,21 @@ export const useScreenShare = (roomId: string) => {
                         console.log("Call closed with user:", p);
                         if(peerData) {
                             peerData.stream = undefined;
-                            forceUpdatePeers(p.peerId, peerData);
+                            updatePeers(p.peerId, peerData);
                         }
                     });
                     call.on("error", (error) => {
                         console.error("Call error with user:", p, error);
                     });
 
-                    const connection = peer.connect(p.peerId);
+                    const connection = peerRef.current.connect(p.peerId);
 
                     // 다른 피어와의 연결 생성 시
                     connection.on("open", () => {
                         console.log("Data connection open with:", p.peerId);
                         if(peerData) {
-                            peerData.connection = connection;forceUpdatePeers(p.peerId, peerData);
+                            peerData.connection = connection;
+                            updatePeers(p.peerId, peerData);
                         }
                         // 내 화면 공유 시작했음을 전송
                         // TODO: 내 화면 공유 중인 상태는 isMyScreenShare로 구분하고 있으므로 쓸모없다면 삭제
@@ -206,7 +200,7 @@ export const useScreenShare = (roomId: string) => {
                         if (data.type === "screen-share-stopped") {
                             if(peerData) {
                                 peerData.stream = undefined;
-                                forceUpdatePeers(p.peerId, peerData);
+                                updatePeers(p.peerId, peerData);
                             }
                         }
                     });
@@ -220,11 +214,12 @@ export const useScreenShare = (roomId: string) => {
 
     // 화면 공유 중지 메서드
     const stopScreenShare = () => {
-        if(!user || !peer){
+        if(!user || !peerRef.current){
             return;
         }
-        currentPeers.current.forEach((peerData, peerId) => {
+        currentPeers.forEach((peerData, peerId) => {
             // 내가 화면 공유를 중지했음을 다른 피어에게 전송
+            console.log(peerData);
             if(peerData.connection) {
                 peerData.connection.send({ type: "stop-screen-share" });
             }
@@ -233,14 +228,14 @@ export const useScreenShare = (roomId: string) => {
                 peerData.stream.getTracks().forEach((track) => track.stop());
                 peerData.stream = undefined;
             }
-            forceUpdatePeers(peerId, peerData);
+            updatePeers(peerId, peerData);
         });
         setMyScreenShare(false);
     };
 
     return {
-        peer,
         currentPeers,
+        setCurrentPeers,
         isScreenSharing,
         startScreenShare,
         stopScreenShare,

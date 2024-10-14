@@ -8,6 +8,7 @@
 }
 
 .container {
+    position: relative;
     display: flex;
     gap: 26px;
     height: calc(100% - 73px);
@@ -18,6 +19,9 @@
     flex-shrink: 0;
 }
 
-.menu {
-    // margin-left: auto;
+.switch {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9000;
 }
