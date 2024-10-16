@@ -1,15 +1,15 @@
-import { screenShareAtom, userAtom } from "@/jotai/atom";
-import { IPeer } from "@/types/peer.type";
-import { useAtomValue, useSetAtom } from "jotai";
+import { screenShareStateAtom, userAtom } from "@/jotai/atom";
+import { IPeer, IScreenShareState } from "@/types/peer.type";
+import { useAtomValue, useAtom } from "jotai";
 import Peer from "peerjs";
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
 export const useScreenShare = (roomId: string) => {
     const [currentPeers, setCurrentPeers] = useState<Map<string, IPeer>>(new Map());
     const peerRef = useRef<Peer | null>(null);
     
     const user = useAtomValue(userAtom);
-    const setMyScreenShare = useSetAtom(screenShareAtom);
+    const [screenShareState, setScreenShareState] = useAtom(screenShareStateAtom);
 
     const updatePeers = useCallback((key: string, value: IPeer) => {
         const tempPeerMap = new Map(currentPeers);
@@ -103,22 +103,27 @@ export const useScreenShare = (roomId: string) => {
 
         return () => {
             peer.removeAllListeners(); // 이벤트 핸들러를 제거하여 메모리 누수 방지
-            peer.destroy();
         };
     }, [currentPeers, setPeerId, updatePeers, user]);
 
     // 나 포함 한 명이라도 화면 공유 중인지 상태
-    const isScreenSharing = useMemo(() => {
+    const isSomeoneSharing = useMemo(() => {
         return Array.from(currentPeers.values()).some(peer => {
             return peer.stream;
         });
     }, [currentPeers]);
+    useEffect(() => {
+        console.log(screenShareState);
 
-    // 화면 공유 중인 스트림 리스트
-    const streamList = useMemo(() => {
-        console.log(Array.from(currentPeers.values()).filter(peer => peer.stream));
-        return Array.from(currentPeers.values()).filter(peer => peer.stream);
-    }, [currentPeers]);
+        if(screenShareState !== IScreenShareState.SELF_SHARING) {
+            if(isSomeoneSharing) {
+                setScreenShareState(IScreenShareState.SOMEONE_SHARING);
+            }
+            else {
+                setScreenShareState(IScreenShareState.NOT_SHARING);
+            }
+        }
+    }, [currentPeers, isSomeoneSharing, screenShareState, setScreenShareState]);
     
     // TODO: 화면 공유 중지 시 streamlist 업데이트 안됨
     // TODO: 또한 페이지 나갈 시 화면공유 안꺼짐 -> onBeforeUnmount
@@ -143,6 +148,8 @@ export const useScreenShare = (roomId: string) => {
                     stopScreenShare();
                 };
             });
+            
+            setScreenShareState(IScreenShareState.SELF_SHARING);
             // 방에 있는 사람들에게 연결
             currentPeers.forEach(p => {
                 if(!peerRef.current) {
@@ -152,7 +159,6 @@ export const useScreenShare = (roomId: string) => {
                 if(p.peerId === setPeerId(user.userId) && peerData) {
                     peerData.stream = mediaStream;
                     updatePeers(p.peerId, peerData);
-                    setMyScreenShare(true);
                 }
                 else {
                     const call = peerRef.current.call(p.peerId, mediaStream);
@@ -167,6 +173,7 @@ export const useScreenShare = (roomId: string) => {
                         if(peerData) {
                             peerData.stream = remoteStream;
                             updatePeers(p.peerId, peerData);
+
                         }
                     });
 
@@ -233,14 +240,18 @@ export const useScreenShare = (roomId: string) => {
                 peerData.stream = undefined;
             }
             updatePeers(peerId, peerData);
+            if(isSomeoneSharing) {
+                setScreenShareState(IScreenShareState.SOMEONE_SHARING);
+            }
+            else {
+                setScreenShareState(IScreenShareState.NOT_SHARING);
+            }
         });
-        setMyScreenShare(false);
     };
 
     return {
         currentPeers,
         setCurrentPeers,
-        isScreenSharing,
         startScreenShare,
         stopScreenShare,
         setPeerId,

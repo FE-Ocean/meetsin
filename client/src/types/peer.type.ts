@@ -7,3 +7,10 @@ export interface IPeer {
         connection: DataConnection | undefined
         peerId: string
 }
+
+export const IScreenShareState = {
+    SOMEONE_SHARING: "SOMEONE_SHARING",
+    SELF_SHARING: "SELF_SHARING",
+    NOT_SHARING: "NOT_SHARING",
+} as const;
+export type IScreenShareState = typeof IScreenShareState [keyof typeof IScreenShareState]

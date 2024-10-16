@@ -1,3 +1,4 @@
+import { IScreenShareState } from "@/types/peer.type";
 import { IUser } from "@/types/user.type";
 import { atom } from "jotai";
 
@@ -23,7 +24,8 @@ export const timerAtom = atom({
 
 export const isTimerVisibleAtom = atom(false);
 
-export const screenShareAtom = atom(false);
+
+export const screenShareStateAtom = atom<IScreenShareState>(IScreenShareState.NOT_SHARING);
 
 export const accessTokenAtom = atom<string>("");
 

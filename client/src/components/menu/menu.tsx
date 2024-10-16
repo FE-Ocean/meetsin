@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { isTimerVisibleAtom, screenShareAtom, timerAtom } from "@/jotai/atom";
+import { isTimerVisibleAtom, screenShareStateAtom, timerAtom } from "@/jotai/atom";
 import Image from "next/image";
 import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
@@ -13,6 +13,7 @@ import style from "./menu.module.scss";
 import { IRoomUser } from "@/types/chat";
 import { roomSocket } from "@/socket";
 import { useEffect } from "react";
+import { IScreenShareState } from "@/types/peer.type";
 
 interface IMenu {
     className: string;
@@ -23,7 +24,7 @@ interface IMenu {
 
 const Menu = (props: IMenu) => {
     const { className, onScreenShare, toggleChat, roomUsers } = props;
-    const isScreenShare = useAtomValue(screenShareAtom);
+    const screenShareState = useAtomValue(screenShareStateAtom);
     const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
     const { onOpen } = useModal("timerSetting");
 
@@ -66,7 +67,7 @@ const Menu = (props: IMenu) => {
                     </li>
                     <li>
                         <button
-                            className={`${style.screen_share} ${isScreenShare && style.active}`}
+                            className={`${style.screen_share} ${screenShareState === IScreenShareState.SELF_SHARING && style.active}`}
                             onClick={onScreenShare}
                             aria-label="화면 공유하기"
                         ></button>

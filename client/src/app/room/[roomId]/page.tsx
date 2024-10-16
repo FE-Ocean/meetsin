@@ -2,8 +2,8 @@
 import style from "./style.module.scss";
 import { useAtomValue } from "jotai";
 import Menu from "@/components/menu/menu";
-import { accessTokenAtom, screenShareAtom } from "@/jotai/atom";
-import { useEffect, useState } from "react";
+import { accessTokenAtom, screenShareStateAtom } from "@/jotai/atom";
+import { useEffect, useMemo, useState } from "react";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
 import dynamic from "next/dynamic";
@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 import { useScreenShare } from "./hooks/useScreenShare";
 import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
+import { IScreenShareState } from "@/types/peer.type";
 
 const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -20,7 +21,7 @@ const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
 });
 
 const Room = () => {
-    const isMyScreenShare = useAtomValue(screenShareAtom);
+    const screenShareState = useAtomValue(screenShareStateAtom);
 
     const [chatOpen, setChatOpen] = useState<boolean>(true);
     const [isMeetingView, setMeetingView] = useState<boolean>(false);
@@ -31,34 +32,29 @@ const Room = () => {
 
     const { data } = useGetRoomData(roomId, accessToken);
     const { roomUsers, messages } = useChatSocket({ roomId });
-    const { currentPeers, startScreenShare, stopScreenShare, setPeerId, isScreenSharing, setCurrentPeers } = useScreenShare(roomId);
+    const { currentPeers, startScreenShare, stopScreenShare, setPeerId, setCurrentPeers } = useScreenShare(roomId);
 
     const toggleChat = (shouldClose?: boolean) => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
     };
 
-    const handleScreenShare = () => {
-        isMyScreenShare ? stopScreenShare() : startScreenShare();
-    };
-
-    const handleView = () => {
+    const toggleView = () => {
         setMeetingView(!isMeetingView);
     };
-    
-    // useEffect(() => {
-    //     if (data) {
-    //         // const tempPeers = new Map();
-    //         data.userIds.forEach(user => {
-    //             currentPeers.current.set(setPeerId(user.userId), {
-    //                 user,
-    //                 peerId: setPeerId(user.userId),
-    //                 stream: undefined,
-    //                 connection: undefined
-    //             });
-    //         });
-    //         // setCurrentPeers(tempPeers);
-    //     }
-    // }, [currentPeers, data, setPeerId]);
+
+    const handleScreenShare = () => {
+        screenShareState === IScreenShareState.SELF_SHARING ? stopScreenShare() : startScreenShare();
+    };
+
+    const isScreenSharing = useMemo(() => {
+        return screenShareState !== IScreenShareState.NOT_SHARING;
+    }, [screenShareState]);
+
+    useEffect(() => {
+        if(screenShareState === IScreenShareState.SELF_SHARING) {
+            setMeetingView(true);
+        }
+    }, [screenShareState]);
 
     useEffect(() => {
         if (data) {
@@ -83,23 +79,11 @@ const Room = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    useEffect(() => {
-        if(isMyScreenShare) {
-            setMeetingView(true);
-        }
-        else {
-            setMeetingView(false);
-        }
-        if(!isScreenSharing) {
-            setMeetingView(false);
-        }
-    }, [isMyScreenShare, isScreenSharing]);
-
     return (
         <>
             <main className={style.main}>
                 <div className={style.container}>
-                    <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={handleView} />
+                    <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={toggleView} />
                     {isMeetingView ? <ScreenWindow peerList={currentPeers} /> : <PhaserMap />}
                     {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} />}
                 </div>
