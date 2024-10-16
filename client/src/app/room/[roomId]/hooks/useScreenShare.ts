@@ -27,7 +27,9 @@ export const useScreenShare = (roomId: string) => {
         if (!user || peerRef.current) return; // 피어가 이미 있으면 실행하지 않음
 
         const myPeerId = setPeerId(user.userId);
-        const newPeer = new Peer(myPeerId);
+        const newPeer = new Peer(myPeerId, {
+            debug: 3
+        });
         console.log("Peer created with ID:", newPeer.id);
         peerRef.current = newPeer;
 
@@ -71,15 +73,16 @@ export const useScreenShare = (roomId: string) => {
                 peerData.connection = connection;
                 console.log(data.type);
                 switch (data.type) {
+                case "start-screen-share": 
+                // isscreenshare update?
+                    break;
                 case "stop-screen-share":
                     peerData.stream = undefined;
-                    break;
                 case "request-screen-share":
                     const myPeer = currentPeers.get(myPeerId);
                     if (myPeer && myPeer.stream) {
                         peer.call(connection.peer, myPeer.stream);
                     }
-                    break;
                 default:
                     updatePeers(connection.peer, peerData);
                     break;
@@ -100,6 +103,7 @@ export const useScreenShare = (roomId: string) => {
 
         return () => {
             peer.removeAllListeners(); // 이벤트 핸들러를 제거하여 메모리 누수 방지
+            peer.destroy();
         };
     }, [currentPeers, setPeerId, updatePeers, user]);
 
@@ -197,7 +201,7 @@ export const useScreenShare = (roomId: string) => {
                     // 다른 피어에서 데이터 전송 받을 시
                     connection.on("data", (data) => {
                         // 다른 피어가 화면 공유를 종료 시
-                        if (data.type === "screen-share-stopped") {
+                        if (data.type === "stop-screen-share") {
                             if(peerData) {
                                 peerData.stream = undefined;
                                 updatePeers(p.peerId, peerData);
@@ -240,6 +244,5 @@ export const useScreenShare = (roomId: string) => {
         startScreenShare,
         stopScreenShare,
         setPeerId,
-        streamList
     };
 };

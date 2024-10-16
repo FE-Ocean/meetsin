@@ -31,7 +31,7 @@ const Room = () => {
 
     const { data } = useGetRoomData(roomId, accessToken);
     const { roomUsers, messages } = useChatSocket({ roomId });
-    const { startScreenShare, stopScreenShare, setPeerId, streamList, isScreenSharing, setCurrentPeers } = useScreenShare(roomId);
+    const { currentPeers, startScreenShare, stopScreenShare, setPeerId, isScreenSharing, setCurrentPeers } = useScreenShare(roomId);
 
     const toggleChat = (shouldClose?: boolean) => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
@@ -100,7 +100,7 @@ const Room = () => {
             <main className={style.main}>
                 <div className={style.container}>
                     <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={handleView} />
-                    {isMeetingView ? <ScreenWindow peerList={streamList} /> : <PhaserMap />}
+                    {isMeetingView ? <ScreenWindow peerList={currentPeers} /> : <PhaserMap />}
                     {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} />}
                 </div>
                 <Menu
