@@ -5,7 +5,7 @@ export interface IRoom {
     roomName: string;
     admin: string;
     createdAt: string;
-    userIds: IUser[];
+    userIds: IUserModel[];
 }
 
 export interface IRoomModel {
@@ -19,5 +19,12 @@ export interface IRoomModel {
 export interface IPatchRoom {
     roomName: string;
     roomId: string;
-    accessToken: string;
+}
+
+export interface ICreateRoomResponse {
+    room_name: string;
+    admin: string;
+    userIds: string[];
+    _id: string;
+    created_at: string;
 }

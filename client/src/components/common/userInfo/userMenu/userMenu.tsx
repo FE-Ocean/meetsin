@@ -1,8 +1,6 @@
 import Image from "next/image";
 import UserMenuItem from "../userMenuItem/userMenuItem";
 import style from "./userMenu.module.scss";
-import { useSetAtom } from "jotai";
-import { accessTokenAtom, userAtom } from "@/jotai/atom";
 import { useRouter } from "next/navigation";
 
 interface IUserMenu {
@@ -10,22 +8,19 @@ interface IUserMenu {
 }
 
 const UserMenu = (props: IUserMenu) => {
-
-    const setUser = useSetAtom(userAtom);
-    const setAccessToken = useSetAtom(accessTokenAtom);
     const router = useRouter();
     const logout = () => {
-        document.cookie = document.cookie.split("; ").map(cookie => {
-            if(cookie.includes("access_token=")){
-                return cookie+"=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-            }
-            else {
-                return cookie;
-            }
-        }).join("; ");
-        setUser(null);
-        setAccessToken("");
-        
+        document.cookie = document.cookie
+            .split("; ")
+            .map((cookie) => {
+                if (cookie.includes("access_token=")) {
+                    return cookie + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+                } else {
+                    return cookie;
+                }
+            })
+            .join("; ");
+
         router.push("/");
     };
 
@@ -37,16 +32,21 @@ const UserMenu = (props: IUserMenu) => {
         {
             icon: <Image width={24} height={24} src="/door-exit.svg" alt="로그아웃 아이콘" />,
             label: "로그아웃",
-            onClick: logout
+            onClick: logout,
         },
     ];
-    
+
     const { className } = props;
 
     return (
         <div className={`${style.wrapper} ${className}`}>
             {USER_MENU.map((menu, index) => (
-                <UserMenuItem key={index} icon={menu.icon} label={menu.label} onClick={menu.onClick} />
+                <UserMenuItem
+                    key={index}
+                    icon={menu.icon}
+                    label={menu.label}
+                    onClick={menu.onClick}
+                />
             ))}
         </div>
     );

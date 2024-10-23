@@ -1,8 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useAtomValue } from "jotai";
-import { accessTokenAtom } from "@/jotai/atom";
 import useTimer from "./hooks/useTimer";
 import useStopTimer from "./hooks/useStopTimer";
 import { useCreatePushNotification } from "@/apis/service/notification.service";
@@ -15,7 +13,6 @@ interface ITimer {
 }
 
 const Timer = ({ setIsTimerVisible }: ITimer) => {
-    const accessToken = useAtomValue(accessTokenAtom);
     const param = useParams();
     const roomId = param.roomId as string;
     const [confirmStop, setConfirmStop] = useState(false);
@@ -35,7 +32,7 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
         if (!hasCalledMutate.current) {
             hasCalledMutate.current = true;
             playSoundEffect();
-            mutate({ roomId, accessToken });
+            mutate({ roomId });
         }
     };
 

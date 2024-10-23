@@ -2,8 +2,8 @@
 import style from "./style.module.scss";
 import { useAtomValue } from "jotai";
 import Menu from "@/components/menu/menu";
-import { accessTokenAtom, screenShareStateAtom } from "@/jotai/atom";
 import { useEffect, useMemo, useState } from "react";
+import { screenShareAtom } from "@/jotai/atom";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
 import dynamic from "next/dynamic";
@@ -14,6 +14,7 @@ import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 import { useScreenShare } from "./hooks/useScreenShare";
 import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
 import { IScreenShareState } from "@/types/peer.type";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 
 const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -28,9 +29,6 @@ const Room = () => {
     
     const params = useParams();
     const roomId = params.roomId as string;
-    const accessToken = useAtomValue(accessTokenAtom);
-
-    const { data } = useGetRoomData(roomId, accessToken);
     const { roomUsers, messages } = useChatSocket({ roomId });
     const { currentPeers, startScreenShare, stopScreenShare, setPeerId, setCurrentPeers } = useScreenShare(roomId);
 
@@ -45,6 +43,9 @@ const Room = () => {
     const handleScreenShare = () => {
         screenShareState === IScreenShareState.SELF_SHARING ? stopScreenShare() : startScreenShare();
     };
+
+    const { data } = useGetRoomData(roomId);
+    const { data: user } = useGetUserInfo();
 
     const isScreenSharing = useMemo(() => {
         return screenShareState !== IScreenShareState.NOT_SHARING;

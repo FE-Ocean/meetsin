@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import style from "./screen.module.scss";
+
 interface IProps {
     currentStream: MediaStream
     userName: string

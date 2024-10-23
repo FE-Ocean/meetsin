@@ -1,7 +1,5 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useAtomValue } from "jotai";
-import { accessTokenAtom } from "@/jotai/atom";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 import { useCreateRoom } from "@/app/api/service/room.service";
 import useModal from "@/hooks/useModal";
@@ -12,7 +10,6 @@ const CreateRoom = () => {
     const { onClose } = useModal("createRoom");
 
     const roomNameRef = useRef<HTMLInputElement>({} as HTMLInputElement);
-    const accessToken = useAtomValue(accessTokenAtom);
     const router = useRouter();
 
     const { mutate } = useCreateRoom();
@@ -21,7 +18,7 @@ const CreateRoom = () => {
         e.preventDefault();
 
         mutate(
-            { roomNameInput: roomNameRef.current.value, accessToken },
+            { roomNameInput: roomNameRef.current.value },
             {
                 onSuccess: (data) => {
                     onClose();

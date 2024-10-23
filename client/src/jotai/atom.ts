@@ -27,8 +27,4 @@ export const isTimerVisibleAtom = atom(false);
 
 export const screenShareStateAtom = atom<IScreenShareState>(IScreenShareState.NOT_SHARING);
 
-export const accessTokenAtom = atom<string>("");
-
-export const userAtom = atom<IUser | null>(null);
-
 export const roomIdAtom = atom("");

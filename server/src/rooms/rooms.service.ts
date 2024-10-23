@@ -74,7 +74,11 @@ export class RoomsService {
 
     async removeUserFromRoom(roomId: string, removeUserId: Types.ObjectId) {
         const updatedRoom = await this.roomModel
-            .findOneAndUpdate({ _id: roomId }, { $pull: { userIds: removeUserId } }, { new: true })
+            .findOneAndUpdate(
+                { _id: roomId },
+                { $pull: { userIds: { _id: new Types.ObjectId(removeUserId) } } },
+                { new: true },
+            )
             .exec();
 
         if (!updatedRoom) {

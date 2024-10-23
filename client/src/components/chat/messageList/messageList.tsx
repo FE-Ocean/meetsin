@@ -2,8 +2,7 @@ import { IMessage } from "@/types/chat";
 import MyMessage from "../myMessage/myMessage";
 import ReceivedMessage from "../receivedMessage/receivedMessage";
 import style from "./messageList.module.scss";
-import { userAtom } from "@/jotai/atom";
-import { useAtomValue } from "jotai";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 
 interface Props {
     messages: IMessage[];
@@ -12,7 +11,7 @@ interface Props {
 const MessageList = (props: Props) => {
     const { messages } = props;
 
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
     const isMyMessage = (nickname: string) => nickname === user?.userName;
 
     return (
