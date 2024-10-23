@@ -2,9 +2,10 @@
 
 .screen_container {
     position: relative;
+    // width: 100%;
     width: fit-content;
     min-height: 0;
-    max-height: fit-content;
+    max-height: auto;
 
     .screen {
         border: 1px solid $border-color;
@@ -23,5 +24,10 @@
         padding: 3px 14px;
         border-radius: 5px;
         font-size: 9px;
+    }
+
+    &:nth-child(5):last-child {
+        grid-column: 1 / span 2;
+        max-width: 50%;
     }
 }
