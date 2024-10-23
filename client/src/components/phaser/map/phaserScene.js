@@ -33,7 +33,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     setupSocket() {
-        this.socket.emit("join_room", this.roomId);
+        this.socket.emit("join_phaser_room", this.roomId);
         this.socket.on("roomInfo", (roomInfo) => this.handleRoomInfo(roomInfo));
         this.socket.on("newPlayer", ({ playerInfo }) => this.addOtherPlayers(playerInfo));
         this.socket.on("move", (info) => this.moveOtherPlayer(info));

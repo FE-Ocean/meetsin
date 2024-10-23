@@ -1,0 +1,56 @@
+@import "../../../styles/variables";
+@import "../../../styles/mixin";
+
+.room_user_info_container {
+    border: 1px solid $border-color;
+    box-shadow: $normal-shadow;
+    backdrop-filter: blur(4px);
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    padding: 7px 1px;
+    width: 159px;
+    // height: 300px;
+    box-sizing: border-box;
+    border-radius: 15px;
+}
+
+.room_user_info_item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+    padding: 4px 8px;
+    border-radius: 6px;
+
+    &:hover {
+        background-color: $hover-color;
+    }
+
+    & > span {
+        font-size: 12px;
+        font-weight: 400;
+        cursor: pointer;
+    }
+}
+
+.avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-color: $white;
+}
+
+.separator {
+    height: 1px;
+    background-color: $white;
+    margin: 4px 6px;
+}
+
+.room_name {
+    display: block;
+    margin: 0 11px;
+    font-weight: 700;
+    font-size: 13px;
+}

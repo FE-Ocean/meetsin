@@ -6,13 +6,12 @@ import Phaser from "phaser";
 import { MeetsInPhaserScene } from "./phaserScene.js";
 import { useParams } from "next/navigation";
 import { phaserConfig } from "./phaserConfig";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/jotai/atom";
 import { io } from "socket.io-client";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 
 const Map = () => {
     const { roomId } = useParams();
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
 
     useEffect(() => {
         if (!user) return;

@@ -1,8 +1,7 @@
-import { userAtom } from "@/jotai/atom";
+import { useEffect, useState } from "react";
+import { useGetUserInfo } from "@/app/api/service/user.service";
 import { roomSocket } from "@/socket";
 import { IRoomUser, IMessage } from "@/types/chat";
-import { useAtomValue } from "jotai";
-import { useEffect, useState } from "react";
 
 interface Params {
     roomId: string;
@@ -10,7 +9,7 @@ interface Params {
 
 const useChatSocket = (params: Params) => {
     const { roomId } = params;
-    const user = useAtomValue(userAtom);
+    const { data: user } = useGetUserInfo();
 
     const [roomUsers, setRoomUsers] = useState<IRoomUser[]>([]);
     const [messages, setMessages] = useState<IMessage[]>([]);
@@ -31,6 +30,10 @@ const useChatSocket = (params: Params) => {
 
     useEffect(() => {
         if (!user || !roomId) return;
+
+        if (!roomSocket.connected) {
+            roomSocket.connect();
+        }
 
         roomSocket.emit("join_room", { roomId, userId: user.userId, userName: user.userName });
         roomSocket.on("new_message", handleNewMessage);
