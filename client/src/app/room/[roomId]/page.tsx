@@ -54,6 +54,9 @@ const Room = () => {
         if(screenShareState === IScreenShareState.SELF_SHARING) {
             setMeetingView(true);
         }
+        else if(screenShareState === IScreenShareState.NOT_SHARING) {
+            setMeetingView(false);
+        }
     }, [screenShareState]);
 
     useEffect(() => {
