@@ -1,6 +1,7 @@
-import { screenShareStateAtom, userAtom } from "@/jotai/atom";
+import { useGetUserInfo } from "@/app/api/service/user.service";
+import { screenShareStateAtom } from "@/jotai/atom";
 import { IPeer, IScreenShareState } from "@/types/peer.type";
-import { useAtomValue, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import Peer from "peerjs";
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
@@ -8,7 +9,7 @@ export const useScreenShare = (roomId: string) => {
     const [currentPeers, setCurrentPeers] = useState<Map<string, IPeer>>(new Map());
     const peerRef = useRef<Peer | null>(null);
     
-    const user = useAtomValue(userAtom);
+    const {data: user} = useGetUserInfo();
     const [screenShareState, setScreenShareState] = useAtom(screenShareStateAtom);
 
     const updatePeers = useCallback((key: string, value: IPeer) => {
@@ -124,10 +125,7 @@ export const useScreenShare = (roomId: string) => {
             }
         }
     }, [currentPeers, isSomeoneSharing, screenShareState, setScreenShareState]);
-    
-    // TODO: 화면 공유 중지 시 streamlist 업데이트 안됨
-    // TODO: 또한 페이지 나갈 시 화면공유 안꺼짐 -> onBeforeUnmount
-    // TODO: stop-screen-share 받고 있는지 확인 필요
+
     // 화면 공유 시작 메서드
     const startScreenShare = async () => {
         try {

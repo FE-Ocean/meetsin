@@ -3,7 +3,7 @@ import style from "./style.module.scss";
 import { useAtomValue } from "jotai";
 import Menu from "@/components/menu/menu";
 import { useEffect, useMemo, useState } from "react";
-import { screenShareAtom } from "@/jotai/atom";
+import { screenShareStateAtom } from "@/jotai/atom";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
 import dynamic from "next/dynamic";
@@ -45,7 +45,6 @@ const Room = () => {
     };
 
     const { data } = useGetRoomData(roomId);
-    const { data: user } = useGetUserInfo();
 
     const isScreenSharing = useMemo(() => {
         return screenShareState !== IScreenShareState.NOT_SHARING;
