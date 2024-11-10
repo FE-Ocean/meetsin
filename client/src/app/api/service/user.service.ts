@@ -11,7 +11,7 @@ export const useGetUserInfo = () => {
             const userData = res as IUserModel;
             return {
                 userName: userData.user_name,
-                userId: userData.id,
+                userId: userData._id,
                 profileImg: userData.profile_img,
                 email: userData.email,
             } as IUser;

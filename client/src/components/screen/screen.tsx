@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import style from "./screen.module.scss";
-import { useGetUserInfo } from "@/app/api/service/user.service";
+
 interface IProps {
-    videoRef: React.RefObject<HTMLVideoElement>;
-    currentStream: MediaStream;
+    currentStream: MediaStream
+    userName: string
 }
 
-const Screen = ({ videoRef, currentStream }: IProps) => {
-    const { data: user } = useGetUserInfo();
+const Screen = ({ currentStream, userName }: IProps) => {
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     useEffect(() => {
         if (videoRef && videoRef.current && currentStream) {
             videoRef.current.srcObject = currentStream;
@@ -16,8 +16,8 @@ const Screen = ({ videoRef, currentStream }: IProps) => {
 
     return (
         <div className={style.screen_container}>
-            <video className={style.screen} autoPlay={true} ref={videoRef}></video>
-            <span className={style.user_name}>{user?.userName}</span>
+            <video className={style.screen} autoPlay={true} ref={videoRef} />
+            <span className={style.user_name}>{userName}</span>
         </div>
     );
 };
