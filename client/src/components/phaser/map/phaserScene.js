@@ -10,11 +10,32 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("background", "/space.jpg");
+        // this.load.image("background", "/space.jpg");
+        this.load.image("base", "/map/base.png");
+        this.load.image("indoor", "/map/indoor.png");
+        this.load.image("urban", "/map/urban.png");
+        this.load.tilemapTiledJSON("map", "/map/map.json");
         this.load.spritesheet("player", "/player.png", { frameWidth: 32, frameHeight: 36 });
     }
 
     create() {
+        const map = this.make.tilemap({ key: "map" });
+        const tileBase = map.addTilesetImage("base", "base");
+        const tileIndoor = map.addTilesetImage("indoor", "indoor");
+        const tileUrban = map.addTilesetImage("urban", "urban");
+
+        map.createLayer("ground", [tileBase, tileUrban], 0, 0);
+        const layerBlockOutdoor = map.createLayer("block-outdoor", [tileBase, tileUrban], 0, 0);
+        const layerBlockWall = map.createLayer("block-wall", [tileBase, tileUrban], 0, 0);
+        const layerBlockFurniture = map.createLayer(
+            "block-furniture",
+            [tileBase, tileIndoor],
+            0,
+            0,
+        );
+        map.createLayer("furniture", [tileBase, tileIndoor, tileUrban], 0, 0);
+        map.createLayer("top-decorations", [tileBase, tileUrban], 0, 0);
+
         this.otherPlayers = this.physics.add.group();
         this.setupBackground();
         this.setupSocket();
