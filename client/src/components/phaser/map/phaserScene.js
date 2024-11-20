@@ -148,18 +148,20 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     updatePlayerPosition(player) {
+        player.setVelocity(0);
+
         if (this.keyboardInput.left.isDown) {
-            player.x -= PLAYER_SPEED;
+            player.setVelocityX(-PLAYER_SPEED * 16);
             player.flipX = false;
         } else if (this.keyboardInput.right.isDown) {
-            player.x += PLAYER_SPEED;
+            player.setVelocityX(PLAYER_SPEED * 16);
             player.flipX = true;
         }
 
         if (this.keyboardInput.up.isDown) {
-            player.y -= PLAYER_SPEED;
+            player.setVelocityY(-PLAYER_SPEED * 16);
         } else if (this.keyboardInput.down.isDown) {
-            player.y += PLAYER_SPEED;
+            player.setVelocityY(PLAYER_SPEED * 16);
         }
     }
 
