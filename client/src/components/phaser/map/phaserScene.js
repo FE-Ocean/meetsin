@@ -15,7 +15,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.load.image("indoor", "/map/indoor.png");
         this.load.image("urban", "/map/urban.png");
         this.load.tilemapTiledJSON("map", "/map/map.json");
-        this.load.spritesheet("player", "/player.png", { frameWidth: 32, frameHeight: 36 });
+        this.load.spritesheet("player", "/player.png", { frameWidth: 16, frameHeight: 16 }); // 임시로 16x16로 설정
     }
 
     create() {
@@ -25,19 +25,18 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         const tileUrban = map.addTilesetImage("urban", "urban");
 
         map.createLayer("ground", [tileBase, tileUrban], 0, 0);
-        const layerBlockOutdoor = map.createLayer("block-outdoor", [tileBase, tileUrban], 0, 0);
-        const layerBlockWall = map.createLayer("block-wall", [tileBase, tileUrban], 0, 0);
-        const layerBlockFurniture = map.createLayer(
-            "block-furniture",
-            [tileBase, tileIndoor],
-            0,
-            0,
-        );
+        this.layerBlockOutdoor = map.createLayer("block-outdoor", [tileBase, tileUrban], 0, 0);
+        this.layerBlockWall = map.createLayer("block-wall", [tileBase, tileUrban], 0, 0);
+        this.layerBlockFurniture = map.createLayer("block-furniture", [tileBase, tileIndoor], 0, 0);
         map.createLayer("furniture", [tileBase, tileIndoor, tileUrban], 0, 0);
         map.createLayer("top-decorations", [tileBase, tileUrban], 0, 0);
 
+        this.layerBlockOutdoor.setCollisionByExclusion([-1]);
+        this.layerBlockWall.setCollisionByExclusion([-1]);
+        this.layerBlockFurniture.setCollisionByExclusion([-1]);
+
         this.otherPlayers = this.physics.add.group();
-        this.setupBackground();
+        // this.setupBackground();
         this.setupSocket();
         this.setupAnimations();
         this.keyboardInput = this.input.keyboard.createCursorKeys();
@@ -49,9 +48,9 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.updateNameTags();
     }
 
-    setupBackground() {
-        this.background = this.add.image(0, 0, "background").setOrigin(0, 0);
-    }
+    // setupBackground() {
+    //     this.background = this.add.image(0, 0, "background").setOrigin(0, 0);
+    // }
 
     setupSocket() {
         this.socket.emit("join_phaser_room", this.roomId);
@@ -220,6 +219,11 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     addPlayer(playerInfo) {
         const player = this.physics.add.sprite(playerInfo.x, playerInfo.y, "player");
         player.setCollideWorldBounds(true);
+
+        this.physics.add.collider(player, this.layerBlockOutdoor);
+        this.physics.add.collider(player, this.layerBlockWall);
+        this.physics.add.collider(player, this.layerBlockFurniture);
+
         player.nameTag = this.createNameTag(
             playerInfo.x,
             playerInfo.y - 50,
