@@ -1,7 +1,8 @@
 @import "../../../styles/variables";
+@import "../../../styles/mixin";
 
 .screen_window {
-    background-color: $gray;
+    background-color: addOpacityToColor($gray, 40);
     flex-grow: 1;
     margin-right: 26px;
     display: grid;

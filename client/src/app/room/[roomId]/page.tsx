@@ -87,7 +87,10 @@ const Room = () => {
             <main className={style.main}>
                 <div className={style.container}>
                     <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={toggleView} />
-                    {isMeetingView ? <ScreenWindow peerList={currentPeers} /> : <PhaserMap />}
+                    <div className={style.map_container}>
+                        <PhaserMap />
+                        {isMeetingView && <ScreenWindow peerList={currentPeers} className={style.screen} />}
+                    </div>
                     {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} />}
                 </div>
                 <Menu
