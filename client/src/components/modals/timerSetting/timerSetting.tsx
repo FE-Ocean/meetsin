@@ -80,8 +80,8 @@ const TimerSetting = ({ onClose }: IModal) => {
                     </div>
                 </div>
                 <div className={style.buttons}>
-                    <Button type="button" onClick={onClose} look="ghost" width={90} text="닫기" />
-                    <Button type="submit" look="solid" width={90} text="시작" />
+                    <Button type="button" onClick={onClose} look="ghost" width={90} text="닫기" bold />
+                    <Button type="submit" look="solid" width={90} text="시작" bold />
                 </div>
             </form>
         </BaseModal>
