@@ -12,6 +12,15 @@
     gap: 32px;
     background-color: $base-color;
     padding: 32px;
+
+    @media screen and (max-width: 1000px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 64px;
+        padding: 16px;
+    }
 }
 
 .home_wrapper {
@@ -51,7 +60,6 @@
     align-items: center;
     gap: 24px;
     width: 100%;
-    height: 100vh; 
     text-align: center;
 }
 
@@ -145,6 +153,13 @@
     right: 16px;
     transform: translateY(-50%);
     z-index: 20;
+
+    @media screen and (max-width: 1000px) {
+        flex-direction: row;
+        top: 16px;
+        right: 50%;
+        transform: translateX(50%);
+    }
 }
 
 .carousel_navigator_item {
