@@ -7,6 +7,11 @@
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    background-color: $base-color;
+    padding: 32px;
 }
 
 .home_wrapper {
@@ -16,6 +21,7 @@
     align-items: center;
     width: 100%;
     overflow-y: auto;
+    color: $black-light;
 
     .user_info {
         position: absolute;
@@ -38,126 +44,119 @@
     }
 }
 
-.landing_wrapper {
+.landing_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    height: 100vh; 
+    text-align: center;
+}
+
+.landing_title {
+    font-weight: bold;
+    font-size: 48px;
+    background-image: linear-gradient(90deg, $point-color 25%, $active-color 75%, $point-color);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: move 3s linear infinite;
+
+    @keyframes move {
+        0% {
+            background-position: 0% 50%;
+        }
+        100% {
+            background-position: -200% 50%;
+        }
+    }
+}
+
+.landing_description {
+    color: $gray-dark;
+    margin-bottom: 48px;
+}
+
+.carousel_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.carousel_card_container {
     position: relative;
     width: 100%;
-    height: auto;
-    will-change: transform;
-
-    .landing_section {
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 24px;
-        width: 100%;
-        height: 100vh; 
-        
-        &:nth-child(even) {
-            .landing_content {
-                flex-direction: row;
-                background-image: linear-gradient(90deg, $point-color, white);
-            }
-            .landing_description {
-                text-align: left;
-                transform: translateX(50px);
-            }
-        }
-
-        &:nth-child(odd) {
-            .landing_content {
-                flex-direction: row-reverse;
-                background-image: linear-gradient(-90deg, $point-color, white);
-            }
-            .landing_description {
-                text-align: right;
-                transform: translateX(-50px);
-            }
-        }
-    }
-
-    .landing_title {
-        font-weight: bold;
-        font-size: 48px;
-        text-align: center;
-        background-image: linear-gradient(90deg, #62B6FE 25%, #6FCF97 75%, #62B6FE);
-        background-size: 200% 100%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: move 3s linear infinite;
-
-        @keyframes move {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: -200% 50%;
-            }
-        }
-    }
-
-    .landing_content {
-        width: 100%;
-        height: 240px;
-        display: flex;
-        flex-direction: row;
-        gap: 24px;
-        justify-content: space-between;
-        align-items: center;
-
-        .landing_image {
-            width: 240px;
-            aspect-ratio: 1 / 1;
-            background-color: white;
-            transform: scale(0.8);
-        }
-        
-        .landing_description {
-            padding: 16px 0;
-            font-weight: bold;
-            font-size: 24px;
-            width: 50%;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 1s ease-out forwards;
-            transition: all 0.6s ease;
-        }
-
-    }
-
-    .active {
-        .landing_image {
-            opacity: 1;
-            transform: scale(1);
-            transition-delay: 0.3s;
-        }
-        
-        .landing_description {
-            opacity: 1;
-            transform: translateX(0);
-            transition-delay: 0.5s;
-        }
-    }
+    max-width: 640px;
 }
 
-section {
-    .landing_image {
-        transition: all 0.4s ease-out;
-    }
-    
-    &:not(.active) {
-        .landing_image{
-            opacity: 0;
-            pointer-events: none;
-        }
-    }
+.carousel_card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid $gray-light;
+    position: relative;
+    box-shadow: 0 16px 32px 16px $gray;
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
+// TODO: 이미지 들어가면 이미지의 클래스 이름으로 사용
+.carousel_image {
+    background-color: $point-color;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel_text {
+    padding: 16px;
+    background-color: $base-color;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.carousel_text_title {
+    font-size: 20px;
+    font-weight: bold;
+    color: $point-color;
+}
+
+.carousel_text_description {
+    font-size: 14px;
+    color: $gray-dark;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.carousel_navigator {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
+.carousel_navigator_item {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: $white;
+    opacity: 40%;
+
+    &:hover, &.active {
+        opacity: 100%;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
     }
 }
