@@ -1,4 +1,4 @@
-const PLAYER_SPEED = 5;
+const PLAYER_SPEED = 10;
 
 export class MeetsInPhaserScene extends Phaser.Scene {
     constructor(roomId, user, socket) {
@@ -30,6 +30,9 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.layerBlockFurniture = map.createLayer("block-furniture", [tileBase, tileIndoor], 0, 0);
         map.createLayer("furniture", [tileBase, tileIndoor, tileUrban], 0, 0);
         map.createLayer("top-decorations", [tileBase, tileUrban], 0, 0);
+
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         this.layerBlockOutdoor.setCollisionByExclusion([-1]);
         this.layerBlockWall.setCollisionByExclusion([-1]);
@@ -219,10 +222,15 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     addPlayer(playerInfo) {
         const player = this.physics.add.sprite(playerInfo.x, playerInfo.y, "player");
         player.setCollideWorldBounds(true);
+        player.setOrigin(0, 0);
+        player.setSize(16, 16);
 
         this.physics.add.collider(player, this.layerBlockOutdoor);
         this.physics.add.collider(player, this.layerBlockWall);
         this.physics.add.collider(player, this.layerBlockFurniture);
+
+        this.cameras.main.startFollow(player);
+        this.cameras.main.setZoom(2);
 
         player.nameTag = this.createNameTag(
             playerInfo.x,
@@ -248,7 +256,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     createNameTag(x, y, text) {
-        return this.add.text(x, y, text, { font: "16px Arial" }).setOrigin(0.5);
+        return this.add.text(x, y, text, { font: "9px" }).setOrigin(0.5);
     }
 
     removePlayer(playerId) {

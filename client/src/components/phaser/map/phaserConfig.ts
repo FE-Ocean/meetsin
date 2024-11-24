@@ -1,6 +1,7 @@
 export const phaserConfig = {
     type: Phaser.AUTO,
     backgroundColor: "black",
+    pixelArt: true,
     physics: {
         default: "arcade",
         arcade: {
