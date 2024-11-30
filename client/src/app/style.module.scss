@@ -66,6 +66,7 @@
 .landing_title {
     font-weight: bold;
     font-size: 48px;
+    word-break: keep-all
     background-image: linear-gradient(90deg, $point-color 25%, $active-color 75%, $point-color);
     background-size: 200% 100%;
     -webkit-background-clip: text;
