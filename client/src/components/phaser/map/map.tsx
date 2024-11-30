@@ -18,6 +18,12 @@ const Map = () => {
 
     const gameRef = useRef<Phaser.Game | null>(null);
 
+    const handleMouseDown = () => {
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+        }
+    };
+
     useEffect(() => {
         if (!user) return;
 
@@ -59,7 +65,7 @@ const Map = () => {
         }
     }, [isChatFocused]);
 
-    return <div id="gamediv" className={style.map} />;
+    return <div id="gamediv" className={style.map} onMouseDown={handleMouseDown} />;
 };
 
 export default Map;
