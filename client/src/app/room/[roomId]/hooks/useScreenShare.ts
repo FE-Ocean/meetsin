@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 export const useScreenShare = (roomId: string) => {
     const [currentPeers, setCurrentPeers] = useState<Map<string, IPeer>>(new Map());
     const peerRef = useRef<Peer | null>(null);
+    const displayStreamRef = useRef<MediaStream | null>(null);
     
     const {data: user} = useGetUserInfo();
     const [screenShareState, setScreenShareState] = useAtom(screenShareStateAtom);
@@ -140,6 +141,10 @@ export const useScreenShare = (roomId: string) => {
                     aspectRatio: 1920 / 1280
                 }
             });
+
+            // ref에 스트림 저장
+            displayStreamRef.current = mediaStream;
+            
             // 스트림이 종료되면 화면 공유 중지
             mediaStream.getTracks().forEach(track => {
                 track.onended = () => {
@@ -226,25 +231,48 @@ export const useScreenShare = (roomId: string) => {
         if(!user || !peerRef.current){
             return;
         }
-        currentPeers.forEach((peerData, peerId) => {
-            // 내가 화면 공유를 중지했음을 다른 피어에게 전송
-            console.log(peerData);
-            if(peerData.connection) {
-                peerData.connection.send({ type: "stop-screen-share" });
+    
+        try {
+            // displayStreamRef에서 스트림을 가져와 직접 종료
+            if (displayStreamRef.current) {
+                displayStreamRef.current.getTracks().forEach((track) => {
+                    track.enabled = false;
+                    track.stop();
+                });
+                displayStreamRef.current = null;
             }
-            // 나의 스트림을 비활성화
-            if(peerId === setPeerId(user.userId) && peerData.stream) {
-                peerData.stream.getTracks().forEach((track) => track.stop());
-                peerData.stream = undefined;
-            }
-            updatePeers(peerId, peerData);
-            if(isSomeoneSharing) {
-                setScreenShareState(IScreenShareState.SOMEONE_SHARING);
-            }
-            else {
-                setScreenShareState(IScreenShareState.NOT_SHARING);
-            }
-        });
+
+            const myPeerId = setPeerId(user.userId);
+            
+            currentPeers.forEach((peerData, peerId) => {
+                if(peerData.connection) {
+                    try {
+                        peerData.connection.send({ type: "stop-screen-share" });
+                    } catch (err) {
+                        console.error("Error sending stop-screen-share message:", err);
+                    }
+                }
+                
+                if(peerId === myPeerId && peerData.stream) {
+                    try {
+                        peerData.stream.getTracks().forEach((track) => {
+                            track.enabled = false;
+                            track.stop();
+                        });
+                        peerData.stream = undefined;
+                    } catch (err) {
+                        console.error("Error stopping stream tracks:", err);
+                    }
+                }
+                
+                updatePeers(peerId, {...peerData, stream: undefined});
+            });
+
+            setScreenShareState(IScreenShareState.NOT_SHARING);
+            
+        } catch (error) {
+            console.error("Error in stopScreenShare:", error);
+        }
     };
 
     return {
