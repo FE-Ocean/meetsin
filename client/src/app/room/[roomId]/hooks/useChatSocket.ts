@@ -22,11 +22,19 @@ const useChatSocket = (params: Params) => {
         setRoomUsers(users);
     };
 
-    const handleBeforeUnload = () => {
-        roomSocket.emit("leave_room", { roomId, userId: user?.userId });
-        roomSocket.off("new_message");
-        roomSocket.disconnect();
-    };
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            roomSocket.emit("leave_room", { roomId, userId: user?.userId });
+            roomSocket.off("new_message");
+            roomSocket.disconnect();
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [roomId, user]);
 
     useEffect(() => {
         if (!user || !roomId) return;
@@ -39,14 +47,11 @@ const useChatSocket = (params: Params) => {
         roomSocket.on("new_message", handleNewMessage);
         roomSocket.on("room_users", handleRoomUsers);
 
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
         return () => {
             roomSocket.emit("leave_room", { roomId, userId: user.userId });
             roomSocket.off("new_message");
             roomSocket.off("room_users");
             roomSocket.disconnect();
-            window.removeEventListener("beforeunload", handleBeforeUnload);
         };
     }, [roomId, user]);
 
