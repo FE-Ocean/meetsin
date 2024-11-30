@@ -235,6 +235,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
 
         this.cameras.main.startFollow(player);
         this.cameras.main.setZoom(2);
+        this.cameras.main.setRoundPixels(true);
 
         player.nameTag = this.createNameTag(
             playerInfo.x,
