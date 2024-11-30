@@ -1,17 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
-import style from "./map.module.scss";
+import { useEffect, useRef } from "react";
+import { useParams } from "next/navigation";
 import Phaser from "phaser";
 import { MeetsInPhaserScene } from "./phaserScene.js";
-import { useParams } from "next/navigation";
 import { phaserConfig } from "./phaserConfig";
 import { io } from "socket.io-client";
 import { useGetUserInfo } from "@/app/api/service/user.service";
+import { useAtomValue } from "jotai";
+import { isChatFocusedAtom } from "@/jotai/atom";
+import style from "./map.module.scss";
 
 const Map = () => {
     const { roomId } = useParams();
     const { data: user } = useGetUserInfo();
+    const isChatFocused = useAtomValue(isChatFocusedAtom);
+
+    const gameRef = useRef<Phaser.Game | null>(null);
 
     useEffect(() => {
         if (!user) return;
@@ -25,20 +30,34 @@ const Map = () => {
         });
 
         phaserSocket.on("connect", () => {
-            new Phaser.Game({
+            gameRef.current = new Phaser.Game({
                 ...phaserConfig,
                 scene: new MeetsInPhaserScene(roomId, user, phaserSocket),
             });
         });
 
         phaserSocket.on("error", (error) => {
-            console.error("Socket Connect Error : ", error);
+            console.error("소켓 연결 에러 : ", error);
         });
 
         return () => {
+            if (gameRef.current) {
+                gameRef.current.destroy(true);
+            }
             phaserSocket.disconnect();
         };
     }, [user]);
+
+    useEffect(() => {
+        if (gameRef.current) {
+            const scene = gameRef.current.scene.getScene(
+                "MeetsInPhaserScene",
+            ) as MeetsInPhaserScene;
+            if (scene) {
+                scene.setIsChatFocused(isChatFocused);
+            }
+        }
+    }, [isChatFocused]);
 
     return <div id="gamediv" className={style.map} />;
 };

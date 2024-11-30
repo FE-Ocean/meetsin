@@ -2,15 +2,19 @@ const PLAYER_SPEED = 10;
 
 export class MeetsInPhaserScene extends Phaser.Scene {
     constructor(roomId, user, socket) {
-        super();
+        super("MeetsInPhaserScene");
         this.user = user;
         this.roomId = roomId;
         this.socket = socket;
         this.otherPlayers = null;
+        this.isChatFocused = false;
+    }
+
+    setIsChatFocused(value) {
+        this.isChatFocused = value;
     }
 
     preload() {
-        // this.load.image("background", "/space.jpg");
         this.load.image("base", "/map/base.png");
         this.load.image("indoor", "/map/indoor.png");
         this.load.image("urban", "/map/urban.png");
@@ -39,10 +43,10 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.layerBlockFurniture.setCollisionByExclusion([-1]);
 
         this.otherPlayers = this.physics.add.group();
-        // this.setupBackground();
         this.setupSocket();
         this.setupAnimations();
         this.keyboardInput = this.input.keyboard.createCursorKeys();
+        this.input.keyboard.disableGlobalCapture();
     }
 
     update() {
@@ -50,10 +54,6 @@ export class MeetsInPhaserScene extends Phaser.Scene {
 
         this.updateNameTags();
     }
-
-    // setupBackground() {
-    //     this.background = this.add.image(0, 0, "background").setOrigin(0, 0);
-    // }
 
     setupSocket() {
         this.socket.emit("join_phaser_room", this.roomId);
@@ -87,6 +87,10 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     handlePlayerMovement(player) {
+        if (this.isChatFocused) {
+            return;
+        }
+
         this.updatePlayerPosition(player);
         if (this.isAnyCursorKeyDown()) {
             if (!player.moving) player.play("player_anims");
