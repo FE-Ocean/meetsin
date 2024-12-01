@@ -261,7 +261,21 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     createNameTag(x, y, text) {
-        return this.add.text(x, y, text, { font: "9px" }).setOrigin(0.5);
+        const nameTag = this.add
+            .text(x, y, text, {
+                fontFamily: "Noto Sans KR",
+                fontSize: "7px",
+                fontWeight: "bold",
+                color: "#ffffff",
+                padding: { x: 2, y: 2 },
+                resolution: 2,
+            })
+            .setOrigin(0.5);
+
+        nameTag.setBackgroundColor("#000000");
+        nameTag.alpha = 0.6;
+
+        return nameTag;
     }
 
     removePlayer(playerId) {
