@@ -1,4 +1,5 @@
 @import "../../../styles/variables";
+@import "../../../styles/mixin";
 
 .container {
     display: flex;
@@ -19,7 +20,6 @@
 
 .message_main {
     padding: 5px 10px;
-    background: $point-color;
     border-radius: 15px;
     font-size: 13px;
     font-weight: 400;
@@ -28,6 +28,8 @@
     overflow-wrap: break-word;
     letter-spacing: -0.65px;
     white-space: pre-wrap;
+    color: $white;
+    @include point-gradient();
 }
 
 .time {

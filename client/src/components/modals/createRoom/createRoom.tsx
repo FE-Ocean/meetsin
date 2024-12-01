@@ -41,8 +41,8 @@ const CreateRoom = () => {
                     placeholder="방 이름을 입력하세요 (최대 20자)"
                 />
                 <div className={style.buttons}>
-                    <Button type="button" onClick={onClose} look="ghost" width={100} text="닫기" />
-                    <Button type="submit" look="solid" width={100} text="만들기" />
+                    <Button type="button" onClick={onClose} look="ghost" width={100} text="닫기" bold />
+                    <Button type="submit" look="solid" width={100} text="만들기" bold />
                 </div>
             </form>
         </BaseModal>
