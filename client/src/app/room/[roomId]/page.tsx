@@ -14,7 +14,7 @@ import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 import { useScreenShare } from "./hooks/useScreenShare";
 import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
 import { IScreenShareState } from "@/types/peer.type";
-import { useGetUserInfo } from "@/app/api/service/user.service";
+import RoomGradientBackground from "@/components/background/room/roomGradientBackground";
 
 const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
@@ -85,6 +85,7 @@ const Room = () => {
     return (
         <>
             <main className={style.main}>
+                <RoomGradientBackground className={style.gradient} />
                 <div className={style.container}>
                     <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={toggleView} />
                     <div className={style.map_container}>

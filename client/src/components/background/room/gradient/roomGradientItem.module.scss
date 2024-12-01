@@ -1,0 +1,88 @@
+@import "../../../../styles/mixin";
+@import "../../../../styles/variables";
+
+.gradient_item {
+    position: absolute;
+    mix-blend-mode: soft-light;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    opacity: 80%;
+
+    &:nth-child(odd) {
+      background: radial-gradient(circle at center, addOpacityToColor($point-color, 50) 0, transparent 50%) no-repeat;
+    }
+
+    &:nth-child(even) {
+      background: radial-gradient(circle at center, addOpacityToColor($active-color, 50) 0, transparent 50%) no-repeat;
+    }
+
+    &:nth-child(1), &:nth-child(4) {
+      transform-origin: center center;
+    }
+
+    &:nth-child(1) {
+      animation: moveHorizontal 40s ease infinite;
+    }
+
+    &:nth-child(2) {
+      transform-origin: calc(50% - 400px);
+      animation: moveInCircle 20s ease reverse infinite;
+    }
+
+    &:nth-child(3) {
+      transform-origin: calc(50% + 400px);
+      animation: moveInCircle 20s ease infinite;
+    }
+
+    &:nth-child(4) {
+      animation: moveVertical 30s ease infinite;
+    }
+
+    &:nth-child(5) {
+        width: 160%;
+        height: 160%;
+        top: -30%;
+        left: -30%;
+    
+        transform-origin: calc(50% - 800px) calc(50% + 200px);
+        animation: moveInCircle 20s ease infinite;
+    }
+}
+
+@keyframes moveInCircle {
+    0% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(180deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
