@@ -29,7 +29,7 @@ const RenameRoom = ({ onClose }: IModal) => {
         <BaseModal onClose={onClose}>
             <form onSubmit={handleSubmit} className={style.modal_container}>
                 <button type="button" onClick={onClose} className={style.close_icon} />
-                <h2 className={style.title}>Rename Room</h2>
+                <h2 className={style.title}>방 이름 변경하기</h2>
                 <input
                     type="text"
                     maxLength={20}

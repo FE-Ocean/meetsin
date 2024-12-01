@@ -91,7 +91,7 @@ const Room = () => {
                         <PhaserMap />
                         {isMeetingView && <ScreenWindow peerList={currentPeers} className={style.screen} />}
                     </div>
-                    {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} />}
+                    {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} roomTitle={data?.roomName ?? ""} />}
                 </div>
                 <Menu
                     className={style.menu}
