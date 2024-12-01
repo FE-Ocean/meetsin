@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Phaser from "phaser";
-import { MeetsInPhaserScene } from "./phaserScene.js";
+import { MeetsInPhaserScene } from "./phaserScene";
 import { phaserConfig } from "./phaserConfig";
 import { io } from "socket.io-client";
 import { useGetUserInfo } from "@/app/api/service/user.service";
