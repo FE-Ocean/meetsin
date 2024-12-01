@@ -85,7 +85,7 @@ const Room = () => {
     return (
         <>
             <main className={style.main}>
-                <RoomGradientBackground className={style.gradient} />
+                <RoomGradientBackground className={style.gradient_background} />
                 <div className={style.container}>
                     <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={toggleView} />
                     <div className={style.map_container}>

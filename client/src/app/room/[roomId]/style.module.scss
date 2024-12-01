@@ -6,6 +6,7 @@
     row-gap: 23px;
     width: 100%;
     min-width: 1000px;
+    overflow-x: auto;
 }
 
 .container {
@@ -14,6 +15,7 @@
     gap: 26px;
     width: 100%;
     height: calc(100% - 73px);
+    flex: 1 0 auto;
 }
 
 .chat {
@@ -31,10 +33,20 @@
 .map_container {
     flex: 1;
     position: relative;
+    min-width: 0;
 }
 
 .screen {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.gradient_background {
+    position: fixed;
+    overflow: hidden;
     top: 0;
     left: 0;
     width: 100%;
