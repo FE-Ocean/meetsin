@@ -1,4 +1,4 @@
-const PLAYER_SPEED = 5;
+const PLAYER_SPEED = 3;
 
 export class MeetsInPhaserScene extends Phaser.Scene {
     constructor(roomId, user, socket) {
@@ -7,11 +7,17 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.roomId = roomId;
         this.socket = socket;
         this.otherPlayers = null;
+        this.myCharacterId = null;
     }
 
     preload() {
         this.load.image("background", "/space.jpg");
-        this.load.spritesheet("player", "/player.png", { frameWidth: 32, frameHeight: 36 });
+        for (let i = 1; i <= 6; i++) {
+            this.load.spritesheet(`player${i}`, `/player${i}.png`, {
+                frameWidth: 34,
+                frameHeight: 35,
+            });
+        }
     }
 
     create() {
@@ -37,7 +43,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.socket.on("roomInfo", (roomInfo) => this.handleRoomInfo(roomInfo));
         this.socket.on("newPlayer", ({ playerInfo }) => this.addOtherPlayers(playerInfo));
         this.socket.on("move", (info) => this.moveOtherPlayer(info));
-        this.socket.on("stop", (info) => this.stopOtherPlayer(info)); // 움직임 멈춤 이벤트 추가
+        this.socket.on("stop", (info) => this.stopOtherPlayer(info));
         this.socket.on("userDisconnected", (info) => this.removePlayer(info.user.userId));
     }
 
@@ -49,33 +55,91 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     setupAnimations() {
-        this.anims.create({
-            key: "player_anims",
-            frames: this.anims.generateFrameNumbers("player", { start: 0, end: 10 }),
-            frameRate: 10,
-            repeat: -1,
-        });
+        for (let i = 1; i <= 6; i++) {
+            const spriteKey = `player${i}`;
 
-        this.anims.create({
-            key: "player_idle",
-            frames: [{ key: "player", frame: 0 }],
-            frameRate: 1,
-        });
+            this.anims.create({
+                key: `walk-right-${i}`,
+                frames: this.anims.generateFrameNumbers(spriteKey, { frames: [3, 7, 11] }),
+                frameRate: 10,
+                repeat: -1,
+            });
+
+            this.anims.create({
+                key: `walk-down-${i}`,
+                frames: this.anims.generateFrameNumbers(spriteKey, { frames: [1, 5, 9] }),
+                frameRate: 10,
+                repeat: -1,
+            });
+
+            this.anims.create({
+                key: `walk-left-${i}`,
+                frames: this.anims.generateFrameNumbers(spriteKey, { frames: [0, 4, 8] }),
+                frameRate: 10,
+                repeat: -1,
+            });
+
+            this.anims.create({
+                key: `walk-up-${i}`,
+                frames: this.anims.generateFrameNumbers(spriteKey, { frames: [2, 6, 10] }),
+                frameRate: 10,
+                repeat: -1,
+            });
+
+            this.anims.create({
+                key: `player_idle_${i}`,
+                frames: [{ key: spriteKey, frame: 1 }],
+                frameRate: 1,
+            });
+        }
     }
 
     handlePlayerMovement(player) {
-        this.updatePlayerPosition(player);
         if (this.isAnyCursorKeyDown()) {
-            if (!player.moving) player.play("player_anims");
             player.moving = true;
             this.emitPlayerMovement(player, this.getCurrentDirection());
-        } else {
-            if (player.moving) player.play("player_idle");
+        }
+        if (this.isAllCursorKeyUp() && player.moving) {
+            this.emitStopMovement();
             player.moving = false;
         }
 
-        if (this.isAllCursorKeyUp()) {
-            this.emitStopMovement();
+        if (this.keyboardInput.left.isDown) {
+            if (
+                !player.anims.isPlaying ||
+                player.anims.currentAnim.key !== `walk-left-${this.myCharacterId}`
+            ) {
+                player.play(`walk-left-${this.myCharacterId}`);
+            }
+            player.x -= PLAYER_SPEED;
+        } else if (this.keyboardInput.right.isDown) {
+            if (
+                !player.anims.isPlaying ||
+                player.anims.currentAnim.key !== `walk-right-${this.myCharacterId}`
+            ) {
+                player.play(`walk-right-${this.myCharacterId}`);
+            }
+            player.x += PLAYER_SPEED;
+        } else if (this.keyboardInput.up.isDown) {
+            if (
+                !player.anims.isPlaying ||
+                player.anims.currentAnim.key !== `walk-up-${this.myCharacterId}`
+            ) {
+                player.play(`walk-up-${this.myCharacterId}`);
+            }
+            player.y -= PLAYER_SPEED;
+        } else if (this.keyboardInput.down.isDown) {
+            if (
+                !player.anims.isPlaying ||
+                player.anims.currentAnim.key !== `walk-down-${this.myCharacterId}`
+            ) {
+                player.play(`walk-down-${this.myCharacterId}`);
+            }
+            player.y += PLAYER_SPEED;
+        } else {
+            if (player.anims.isPlaying) {
+                player.play(`player_idle_${this.myCharacterId}`);
+            }
         }
     }
 
@@ -95,7 +159,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         if (this.keyboardInput.down.isDown) {
             return "down";
         }
-        return null; // 혹은 마지막 방향을 유지할 수 있도록 처리
+        return null;
     }
 
     isAnyCursorKeyDown() {
@@ -176,27 +240,31 @@ export class MeetsInPhaserScene extends Phaser.Scene {
     }
 
     animateOtherPlayerMovement(otherPlayer, info) {
-        if (!otherPlayer.moving) otherPlayer.play("player_anims");
-        otherPlayer.moving = true;
+        const direction = info.direction;
+        const animationKey = `walk-${direction}-${otherPlayer.characterId}`;
 
-        // 방향 정보를 기반으로 flipX 설정
-        if (info.direction === "left") {
-            otherPlayer.flipX = false;
-        } else if (info.direction === "right") {
-            otherPlayer.flipX = true;
+        if (!otherPlayer.anims.isPlaying || otherPlayer.anims.currentAnim.key !== animationKey) {
+            otherPlayer.play(animationKey);
         }
 
+        otherPlayer.moving = true;
         otherPlayer.setPosition(info.x, info.y);
     }
 
     animateOtherPlayerStop(otherPlayer) {
-        if (otherPlayer.moving) otherPlayer.play("player_idle");
+        if (otherPlayer.moving) {
+            otherPlayer.play(`player_idle_${otherPlayer.characterId}`);
+        }
         otherPlayer.moving = false;
     }
 
     addPlayer(playerInfo) {
-        const player = this.physics.add.sprite(playerInfo.x, playerInfo.y, "player");
+        this.myCharacterId = playerInfo.characterId;
+        const spriteKey = `player${playerInfo.characterId}`;
+
+        const player = this.physics.add.sprite(playerInfo.x, playerInfo.y, spriteKey);
         player.setCollideWorldBounds(true);
+        player.setFrame(1);
         player.nameTag = this.createNameTag(
             playerInfo.x,
             playerInfo.y - 50,
@@ -208,10 +276,12 @@ export class MeetsInPhaserScene extends Phaser.Scene {
 
     addOtherPlayers(playerInfo) {
         if (!this.otherPlayers) return;
-
-        const otherPlayer = this.physics.add.sprite(playerInfo.x, playerInfo.y, "player");
+        const spriteKey = `player${playerInfo.characterId}`;
+        const otherPlayer = this.physics.add.sprite(playerInfo.x, playerInfo.y, spriteKey);
         otherPlayer.setCollideWorldBounds(true);
+        otherPlayer.setFrame(1);
         otherPlayer.playerId = playerInfo.playerId;
+        otherPlayer.characterId = playerInfo.characterId;
         otherPlayer.nameTag = this.createNameTag(
             playerInfo.x,
             playerInfo.y - 50,
