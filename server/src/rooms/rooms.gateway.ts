@@ -64,16 +64,20 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
     ) {
         const { roomId, userId, userName } = data;
 
-        socket.join(roomId);
-        this.roomsService.addUserToRoom(roomId, userId);
-
-        const user: User = { socketId: socket.id, userId, userName };
         if (!this.rooms.has(roomId)) {
             this.rooms.set(roomId, []);
         }
-        this.rooms.get(roomId).push(user);
 
-        this.server.to(roomId).emit("room_users", this.rooms.get(roomId));
+        const roomUsers = this.rooms.get(roomId);
+        const existingUser = roomUsers.find((user) => user.userId.toString() === userId.toString());
+
+        if (!existingUser) {
+            const user: User = { socketId: socket.id, userId, userName };
+            roomUsers.push(user);
+            socket.join(roomId);
+
+            this.server.to(roomId).emit("room_users", this.rooms.get(roomId));
+        }
     }
 
     @SubscribeMessage("leave_room")
@@ -84,15 +88,17 @@ export class RoomsGateway implements OnGatewayConnection, OnGatewayInit, OnGatew
         const { roomId, userId } = data;
 
         socket.leave(roomId);
-        this.roomsService.removeUserFromRoom(roomId, userId);
 
         if (this.rooms.has(roomId)) {
-            const users = this.rooms.get(roomId).filter((user) => user.socketId !== socket.id);
-            if (users.length > 0) {
-                this.rooms.set(roomId, users);
-            } else {
+            const roomUsers = this.rooms.get(roomId);
+            const filteredUsers = roomUsers.filter((user) => user.userId !== userId);
+
+            if (filteredUsers.length === 0) {
                 this.rooms.delete(roomId);
+            } else {
+                this.rooms.set(roomId, filteredUsers);
             }
+
             this.server.to(roomId).emit("room_users", this.rooms.get(roomId));
         }
     }
