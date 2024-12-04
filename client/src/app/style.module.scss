@@ -1,10 +1,36 @@
+@import "../styles/variables";
+
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    background-color: $base-color;
+    padding: 32px;
+
+    @media screen and (max-width: 1000px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 64px;
+        padding: 16px;
+    }
+}
+
 .home_wrapper {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    overflow-y: auto;
+    color: $black-light;
 
     .user_info {
         position: absolute;
@@ -25,5 +51,128 @@
             font-size: 18px;
         }
     }
+}
 
+.landing_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    text-align: center;
+}
+
+.landing_title {
+    font-weight: bold;
+    font-size: 48px;
+    word-break: keep-all
+    background-image: linear-gradient(90deg, $point-color 25%, $active-color 75%, $point-color);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: move 3s linear infinite;
+
+    @keyframes move {
+        0% {
+            background-position: 0% 50%;
+        }
+        100% {
+            background-position: -200% 50%;
+        }
+    }
+}
+
+.landing_description {
+    color: $gray-dark;
+    margin-bottom: 48px;
+}
+
+.carousel_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.carousel_card_container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+}
+
+.carousel_card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid $gray-light;
+    position: relative;
+    box-shadow: 0 16px 32px 16px $gray;
+}
+
+// TODO: 이미지 들어가면 이미지의 클래스 이름으로 사용
+.carousel_image {
+    background-color: $point-color;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel_text {
+    padding: 16px;
+    background-color: $base-color;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+
+.carousel_text_title {
+    font-size: 20px;
+    font-weight: bold;
+    color: $point-color;
+}
+
+.carousel_text_description {
+    font-size: 14px;
+    color: $gray-dark;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.carousel_navigator {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    z-index: 20;
+
+    @media screen and (max-width: 1000px) {
+        flex-direction: row;
+        top: 16px;
+        right: 50%;
+        transform: translateX(50%);
+    }
+}
+
+.carousel_navigator_item {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: $white;
+    opacity: 40%;
+
+    &:hover, &.active {
+        opacity: 100%;
+        cursor: pointer;
+        transition: opacity 0.3s ease-in-out;
+    }
 }

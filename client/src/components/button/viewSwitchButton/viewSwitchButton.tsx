@@ -1,6 +1,7 @@
 import React, { MouseEventHandler } from "react";
 import style from "./viewSwitchButton.module.scss";
 import Image from "next/image";
+import Button from "@/components/common/button/button";
 
 interface IProps {
     className: string
@@ -10,14 +11,14 @@ interface IProps {
 }
 
 const viewSwitchButton = ({className, disabled, isMeetingView, onClick}: IProps) => {
-    const buttonType = isMeetingView ? "meeting" : "map";
+    const buttonType = isMeetingView ? "ghost" : "solid";
     const icon = isMeetingView ? "/chevron_left.svg" : "/device-desktop.svg";
-    const text = isMeetingView ? "Return" : "Show Shared Screen";
+    const text = isMeetingView ? "돌아가기" : "화면 공유 보기";
+    const buttonWidth = isMeetingView ? 110 : 142
     return (
-        <button className={`${style.button} ${style[buttonType]} ${className}`} disabled={disabled} onClick={onClick}>
-            <Image src={icon} alt="show shared screen" width={18} height={18} className={style.icon}/>
-            {text}
-        </button>
+        <div className={className}>
+            <Button text={text} leftIcon={icon} look={buttonType} disabled={disabled} onClick={onClick} width={buttonWidth} />
+        </div>
     );
 };
 
