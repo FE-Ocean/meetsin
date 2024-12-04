@@ -14,7 +14,6 @@ import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
 import { useScreenShare } from "./hooks/useScreenShare";
 import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
 import { IScreenShareState } from "@/types/peer.type";
-import { useGetUserInfo } from "@/app/api/service/user.service";
 
 const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,
