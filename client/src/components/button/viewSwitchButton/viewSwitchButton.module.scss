@@ -10,21 +10,7 @@
     padding: 8px 16px;
     border-radius: 20px;
     width: fit-content;
-    
-    &.map {
-        background-color: $point-color;
-        color: $white;
 
-        .icon {
-            filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(301deg) brightness(105%) contrast(103%);
-        }
-    }
-
-    &.meeting {
-        background-color: transparent;
-        border: 1px solid $point-color;
-        color: $point-color;
-    }
 
     &:disabled {
         opacity: 25%;
