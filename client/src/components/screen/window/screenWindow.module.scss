@@ -3,21 +3,21 @@
 
 .screen_window {
     background-color: addOpacityToColor($gray, 40);
-    flex-grow: 1;
-    margin-right: 26px;
-    display: grid;
-    width: 100%;
-    padding: 88px 95px;
-    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.screens {
+    position: relative;
+    display: flex;
     justify-items: center;
     align-items: center;
-    max-height: 100%;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
 
-    &.over {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    &.under {
-        grid-template-columns: 1fr;
+    &.wrap {
+        flex-wrap: wrap;
     }
 }
