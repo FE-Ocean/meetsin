@@ -32,7 +32,7 @@ const CreateRoom = () => {
         <BaseModal onClose={onClose}>
             <form onSubmit={handleSubmit} className={style.modal_container}>
                 <button type="button" onClick={onClose} className={style.close_icon} />
-                <h2 className={style.title}>Create Room</h2>
+                <h2 className={style.title}>방 만들기</h2>
                 <input
                     type="text"
                     maxLength={20}

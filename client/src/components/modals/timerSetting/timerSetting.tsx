@@ -56,7 +56,7 @@ const TimerSetting = ({ onClose }: IModal) => {
         <BaseModal onClose={onClose}>
             <form onSubmit={handleSubmit} className={style.modal_container}>
                 <button type="button" onClick={onClose} className={style.close_icon} />
-                <h2 className={style.title}>Timer Setting</h2>
+                <h2 className={style.title}>타이머 설정하기</h2>
                 <div className={style.time_section}>
                     <span className={style.placeholder}>88:88</span>
                     <div className={style.inputs}>
