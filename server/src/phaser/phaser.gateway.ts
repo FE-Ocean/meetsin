@@ -61,8 +61,8 @@ export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGate
 
         const playerInfo = {
             rotation: 0,
-            x: 400,
-            y: 300,
+            x: 0,
+            y: 0,
             playerId: socket.id,
             user: socket.data.user,
         };

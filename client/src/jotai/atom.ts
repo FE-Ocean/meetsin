@@ -24,7 +24,8 @@ export const timerAtom = atom({
 
 export const isTimerVisibleAtom = atom(false);
 
-
 export const screenShareStateAtom = atom<IScreenShareState>(IScreenShareState.NOT_SHARING);
 
 export const roomIdAtom = atom("");
+
+export const isChatFocusedAtom = atom(false);

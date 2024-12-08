@@ -1,6 +1,7 @@
 export const phaserConfig = {
     type: Phaser.AUTO,
     backgroundColor: "black",
+    pixelArt: true,
     physics: {
         default: "arcade",
         arcade: {
@@ -12,7 +13,7 @@ export const phaserConfig = {
         parent: "gamediv",
         width: "100%",
         height: "100%",
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
 };
