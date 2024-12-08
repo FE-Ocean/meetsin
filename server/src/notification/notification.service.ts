@@ -40,7 +40,7 @@ export class NotificationService {
         return deletedSubscriptionObject;
     }
 
-    async createPushNotification(roomId: Types.ObjectId) {
+    async createPushNotification(userIds: string[]) {
         const message = JSON.stringify({
             title: "시간이 종료되었습니다.",
             body: "타이머 설정 시간이 종료되었습니다.",
@@ -48,7 +48,7 @@ export class NotificationService {
         });
 
         try {
-            const subscriptions = await this.roomsService.getRoomUserSubscriptions(roomId);
+            const subscriptions = await this.roomsService.getRoomUserSubscriptions(userIds);
 
             const promises = subscriptions.map((subscription) =>
                 webpush.sendNotification(subscription, message).catch((error: Error) => {

@@ -43,10 +43,7 @@ export class RoomsService {
         return await room.save();
     }
 
-    async getRoomUserSubscriptions(roomId: Types.ObjectId) {
-        const room = await this.getRoomById(roomId);
-        const userIds = room.userIds.map((user) => user._id);
-
+    async getRoomUserSubscriptions(userIds: string[]) {
         const users = await Promise.all(
             userIds.map((userId) => this.userRepository.findUserById(userId)),
         );
