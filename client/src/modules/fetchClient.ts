@@ -38,11 +38,18 @@ export class FetchClient {
         return this.request<T>(path, { ...config, method: "PATCH", body: requestBody });
     }
 
-    private async request<T>(path: string, config: RequestInit): Promise<T> {
+    protected async request<T>(path: string, config: RequestInit): Promise<T> {
         const url = this.baseURL + path;
+
+        const headers = {
+            ...this.config.headers,
+            ...config.headers,
+        };
+
         const requestConfig: RequestInit = {
             ...this.config,
             ...config,
+            headers,
         };
 
         try {
@@ -66,7 +73,7 @@ export class FetchClient {
 }
 
 export const baseClient = FetchClient.create({
-    baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+    baseURL: process.env.NEXT_PUBLIC_SERVER_URL ?? "",
     config: {
         headers: {
             "Content-Type": "application/json",
@@ -74,3 +81,27 @@ export const baseClient = FetchClient.create({
         credentials: "include",
     },
 });
+
+export const addAuthHeader = (accessToken: string, config: RequestInit = {}) => {
+    if (!accessToken) {
+        throw new Error("access token이 없거나 올바르지 않습니다.");
+    }
+
+    return {
+        ...config,
+        headers: {
+            ...config.headers,
+            Authorization: `Bearer ${accessToken}`,
+        },
+    };
+};
+
+export const createAuthHeader = (accessToken?: string) => {
+    const headers: { [key: string]: string } = {};
+
+    if (accessToken) {
+        headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return headers;
+};

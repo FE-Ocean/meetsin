@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { ChatsModule } from "./chats/chats.module";
 import { AuthModule } from "./auth/auth.module";
 import { RoomsModule } from "./rooms/rooms.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
+import { PhaserModule } from "./phaser/phaser.module";
+import { NotificationModule } from "./notification/notification.module";
 import * as mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -15,17 +16,18 @@ dotenv.config();
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         MongooseModule.forRoot(process.env.MONGODB_URI),
-        ChatsModule,
         AuthModule,
+        PhaserModule,
         RoomsModule,
+        NotificationModule,
     ],
     controllers: [AppController],
     providers: [AppService],
 })
 export class AppModule implements NestModule {
-    private readonly isDev: boolean = process.env.MODE === "dev" ? true : false;
+    private readonly isDEV: boolean = process.env.MODE === "DEV";
     configure(consumer: MiddlewareConsumer) {
-        mongoose.set("debug", this.isDev);
+        mongoose.set("debug", this.isDEV);
         mongoose.connect(process.env.MONGODB_URI);
     }
 }

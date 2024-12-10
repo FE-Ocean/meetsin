@@ -1,0 +1,18 @@
+@import "../../../styles/mixin";
+@import "../../../styles/variables";
+
+.button {
+    @include common_ui;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    width: fit-content;
+
+
+    &:disabled {
+        opacity: 25%;
+    }
+}

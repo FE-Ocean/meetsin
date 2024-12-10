@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { SOCIAL_LOGIN, SOCIAL_LOGIN_TYPE } from "@/constants/login.const";
 import style from "./loginButton.module.scss";
@@ -14,7 +14,6 @@ const LoginButton = ({ loginType }: IProps) => {
         window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login/${loginType}`;
 
     };
-
 
     return (
         <button className={`${style.button} ${style[loginType]}`} onClick={() => login(loginType)}>

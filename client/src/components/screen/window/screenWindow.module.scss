@@ -1,15 +1,23 @@
 @import "../../../styles/variables";
+@import "../../../styles/mixin";
 
 .screen_window {
-    background-color: $gray;
-    flex-grow: 1;
-    margin-right: 26px;
-    display: grid;
-    padding: 88px 95px;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 8px;
+    background-color: addOpacityToColor($gray, 40);
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+}
+
+.screens {
+    position: relative;
+    display: flex;
     justify-items: center;
-    align-items: stretch;
-    max-height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
+
+    &.wrap {
+        flex-wrap: wrap;
+    }
 }

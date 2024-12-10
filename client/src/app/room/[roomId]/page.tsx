@@ -1,72 +1,107 @@
 "use client";
 import style from "./style.module.scss";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import Menu from "@/components/menu/menu";
-import { screenShareAtom } from "@/jotai/atom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { screenShareStateAtom } from "@/jotai/atom";
 import Chat from "@/components/chat/chat";
 import ScreenWindow from "@/components/screen/window/screenWindow";
+import dynamic from "next/dynamic";
+import Skeleton from "@/components/common/skeleton/skeleton";
+import { useParams } from "next/navigation";
+import useChatSocket from "@/app/room/[roomId]/hooks/useChatSocket";
+import { useScreenShare } from "./hooks/useScreenShare";
+import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
+import { IScreenShareState } from "@/types/peer.type";
+import RoomGradientBackground from "@/components/background/room/roomGradientBackground";
+
+const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
+    ssr: false,
+    loading: () => <Skeleton />,
+});
 
 const Room = () => {
-    // 들어가자마자 get [roomId] 해야함
-    const [isScreenShare, setScreenShare] = useAtom(screenShareAtom);
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [currentStream, setCurrentStream] = useState(null);
+    const screenShareState = useAtomValue(screenShareStateAtom);
+
     const [chatOpen, setChatOpen] = useState<boolean>(true);
-    const stopScreenShare = () => {
-        currentStream.getTracks().forEach((track) => track.stop());
-        setCurrentStream(null);
-    };
+    const [isMeetingView, setMeetingView] = useState<boolean>(false);
+
+    const params = useParams();
+    const roomId = params.roomId as string;
+    const { roomUsers, messages } = useChatSocket({ roomId });
+    const { currentPeers, startScreenShare, stopScreenShare, setPeerId, setCurrentPeers } =
+        useScreenShare(roomId);
 
     const toggleChat = (shouldClose?: boolean) => {
         setChatOpen((prev) => (shouldClose ? false : !prev));
     };
 
-    // 공유 중지 시 화면 공유 창 꺼지게
-    useEffect(() => {
-        setScreenShare(!!currentStream);
-        currentStream?.addEventListener("inactive", () => {
-            setScreenShare(false);
-            setCurrentStream(null);
-        });
-    }, currentStream);
-
-    const startScreenShare = async () => {
-        try {
-            if (isScreenShare) {
-                return;
-            }
-            // 스크린 크기를 고정값으로 받고 있는데, 반응형으로 받을 수 있는 방법 고려
-            const stream = await navigator.mediaDevices.getDisplayMedia({
-                video: true,
-            });
-            setCurrentStream(stream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = currentStream;
-            }
-        } catch (error) {
-            console.error(error);
-            return;
-        }
+    const toggleView = () => {
+        setMeetingView(!isMeetingView);
     };
+
+    const handleScreenShare = () => {
+        screenShareState === IScreenShareState.SELF_SHARING
+            ? stopScreenShare()
+            : startScreenShare();
+    };
+
+    const isScreenSharing = useMemo(() => {
+        return screenShareState !== IScreenShareState.NOT_SHARING;
+    }, [screenShareState]);
+
+    useEffect(() => {
+        if (screenShareState === IScreenShareState.SELF_SHARING) {
+            setMeetingView(true);
+        } else if (screenShareState === IScreenShareState.NOT_SHARING) {
+            setMeetingView(false);
+        }
+    }, [screenShareState]);
+
+    useEffect(() => {
+        if (roomUsers.length !== 0) {
+            const tempPeers = new Map();
+            roomUsers.forEach((user) => {
+                tempPeers.set(setPeerId(user.userId), {
+                    user,
+                    peerId: setPeerId(user.userId),
+                    stream: undefined,
+                    connection: undefined,
+                });
+            });
+            setCurrentPeers(tempPeers);
+        }
+    }, [roomUsers, setCurrentPeers, setPeerId]);
+
+    // unmount 시 화면 공유 중지 및 모든 연결 해제
+    useEffect(() => {
+        return () => {
+            stopScreenShare();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
             <main className={style.main}>
+                <RoomGradientBackground className={style.gradient_background} />
                 <div className={style.container}>
-                    {/* 화면 공유하는 화면을 보이게 할 지, 통상의 맵을 보이게 할 지에 대한 atom 필요할 듯, 우선은 맵이 안 정해져서 화면 공유 화면이 보이도록 함 */}
-                    <ScreenWindow videoRef={videoRef} currentStream={currentStream} />
-                    {chatOpen && <Chat className={style.chat} toggleChat={toggleChat} />}
+                    <ViewSwitchButton className={style.switch} disabled={!isScreenSharing} isMeetingView={isMeetingView} onClick={toggleView} />
+                    <div className={style.map_container}>
+                        <PhaserMap />
+                        {isMeetingView && <ScreenWindow peerList={currentPeers} className={style.screen} />}
+                    </div>
+                    {chatOpen && <Chat messages={messages} className={style.chat} toggleChat={toggleChat} roomTitle={data?.roomName ?? ""} />}
                 </div>
                 <Menu
                     className={style.menu}
-                    onScreenShare={() => {
-                        isScreenShare ? stopScreenShare() : startScreenShare();
-                    }}
+                    onScreenShare={handleScreenShare}
                     toggleChat={toggleChat}
+                    roomUsers={roomUsers}
                 />
             </main>
         </>
     );
 };
+
 export default Room;

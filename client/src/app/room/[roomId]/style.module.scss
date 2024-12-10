@@ -4,19 +4,52 @@
     display: flex;
     flex-flow: column nowrap;
     row-gap: 23px;
+    width: 100%;
     min-width: 1000px;
+    overflow-x: auto;
 }
 
 .container {
+    position: relative;
     display: flex;
+    gap: 26px;
+    width: 100%;
     height: calc(100% - 73px);
+    flex: 1 0 auto;
 }
 
 .chat {
     margin-top: 52px;
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    display: flex;
 }
 
-.menu {
-    // margin-left: auto;
+.switch {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 5;
+}
+
+.map_container {
+    position: relative;
+    flex: 1 1 0%;
+    min-width: 0;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.gradient_background {
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

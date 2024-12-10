@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { cancelSubscription, getExistingSubscription, startSubscription } from "./notification";
+
+import {
+    startSubscription,
+    cancelSubscription,
+    getExistingSubscription,
+    useCreateSubscriptionToDB,
+    useDeleteSubscriptionFromDB,
+} from "@/apis/service/notification.service";
 import style from "./notificationSwitch.module.scss";
 
 const NotificationSwitch = () => {
@@ -13,12 +20,21 @@ const NotificationSwitch = () => {
         getActiveSubscription();
     }, []);
 
+    const { mutate: createSubscription } = useCreateSubscriptionToDB();
+    const { mutate: deleteSubscription } = useDeleteSubscriptionFromDB();
+
     const toggleNotificationSwitch = async (isOn: boolean) => {
         try {
             if (isOn) {
-                await startSubscription();
+                const subscription = (await startSubscription()) as PushSubscription;
+                if (subscription) {
+                    createSubscription({ subscription });
+                }
             } else {
-                await cancelSubscription();
+                const cancelSuccess = await cancelSubscription();
+                if (cancelSuccess) {
+                    deleteSubscription();
+                }
             }
 
             setHasSubscription(isOn);

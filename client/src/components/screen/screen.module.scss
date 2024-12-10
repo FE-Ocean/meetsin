@@ -1,27 +1,69 @@
 @import "../../styles/variables";
 
 .screen_container {
-    position: relative;
-    width: fit-content;
-    min-height: 0;
-    max-height: fit-content;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    border-radius: 15px;
+    aspect-ratio: 16 / 9;
+}
 
-    .screen {
-        border: 1px solid $border-color;
-        border-radius: 15px;
-        width: 100%;
-        min-height: 0;
-        max-height: 100%;
-    }
+.screen_container:first-child:nth-last-child(2),
+.screen_container:first-child:nth-last-child(2) ~ .screen_container {
+    width: 50%;
+    height: 100%;
+}
 
-    .user_name {
-        position: absolute;
-        top: 25px;
-        left: 25px;
-        background-color: $gray;
-        color: $white;
-        padding: 3px 14px;
-        border-radius: 5px;
-        font-size: 9px;
-    }
+.screen_container:first-child:nth-last-child(3),
+.screen_container:first-child:nth-last-child(3) ~ .screen_container:nth-child(-n + 2) {
+    width: calc(50% - 4px);
+    height: calc(50% - 4px);
+}
+.screen_container:first-child:nth-last-child(3) ~ .screen_container:last-child {
+    width: calc(50% - 4px);
+    height: calc(50% - 4px);
+}
+
+.screen_container:first-child:nth-last-child(4),
+.screen_container:first-child:nth-last-child(4) ~ .screen_container {
+    width: calc(50% - 4px);
+    height: calc(50% - 4px);
+}
+
+.screen_container:first-child:nth-last-child(5),
+.screen_container:first-child:nth-last-child(5) ~ .screen_container:nth-child(-n + 3) {
+    width: calc(33.33% - 6px);
+    height: calc(50% - 4px);
+}
+.screen_container:first-child:nth-last-child(5) ~ .screen_container:nth-child(n + 4) {
+    width: calc(33.33% - 6px);
+    height: calc(50% - 4px);
+}
+
+.screen_container:first-child:nth-last-child(6),
+.screen_container:first-child:nth-last-child(6) ~ .screen_container:nth-child(-n + 3) {
+    width: calc(33.33% - 6px);
+    height: calc(50% - 4px);
+}
+.screen_container:first-child:nth-last-child(6) ~ .screen_container:nth-child(n + 4) {
+    width: calc(33.33% - 6px);
+    height: calc(50% - 4px);
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    border: 1px solid $border-color;
+    border-radius: 15px;
+}
+
+.user_name {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    background-color: $gray;
+    color: $white;
+    padding: 3px 14px;
+    border-radius: 5px;
+    font-size: 9px;
 }

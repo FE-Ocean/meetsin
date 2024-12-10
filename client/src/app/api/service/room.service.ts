@@ -4,29 +4,46 @@ import {
     getRoomInfo,
     getUserRooms,
     patchRoom,
-    postRoom,
+    createRoom,
 } from "../repository/room.repository";
 import { IPatchRoom, IRoomModel } from "@/types/room";
 import { QUERY_KEY } from "@/constants/queryKey.const";
 import { queryClient } from "@/query/queryProvider";
+import { IUser } from "@/types/user.type";
 
-export const usePostRoom = async (roomNameInput: string, accessToken: string) => {
-    const res = await postRoom(roomNameInput, accessToken);
-    return {
-        roomId: res._id,
-        roomName: res.room_name,
-        admin: res.admin,
+interface ICreateRoom {
+    roomNameInput: string;
+}
+
+export const useCreateRoom = () => {
+    const formatRoomData = async ({ roomNameInput }: ICreateRoom) => {
+        const res = await createRoom(roomNameInput);
+        return {
+            roomId: res._id,
+            roomName: res.room_name,
+            admin: res.admin,
+        };
     };
+
+    return useMutation({ mutationFn: formatRoomData });
 };
 
-export const useGetRoomData = (roomId: string, accessToken: string) => {
+export const useGetRoomData = (roomId: string) => {
     const formatRoomData = async () => {
-        const res = (await getRoomInfo(roomId, accessToken)) as IRoomModel;
+        const res = (await getRoomInfo(roomId)) as IRoomModel;
         return {
             id: res._id,
             roomName: res.room_name,
             admin: res.admin,
             createdAt: res.created_at,
+            userIds: res.userIds.map(user => {
+                return {
+                    userName: user.user_name,
+                    userId: user._id,
+                    profileImg: user.profile_img,
+                    email: user.email
+                } as IUser;
+            }),
         };
     };
 
@@ -34,8 +51,8 @@ export const useGetRoomData = (roomId: string, accessToken: string) => {
 };
 
 export const usePatchRoomData = () => {
-    const formatRoomData = async ({ roomName, roomId, accessToken }: IPatchRoom) => {
-        const res = (await patchRoom({ roomName, roomId, accessToken })) as IRoomModel;
+    const formatRoomData = async ({ roomName, roomId }: IPatchRoom) => {
+        const res = (await patchRoom({ roomName, roomId })) as IRoomModel;
         return {
             id: res._id,
             roomName: res.room_name,
@@ -52,23 +69,24 @@ export const usePatchRoomData = () => {
     });
 };
 
-export const useGetUserRooms = (accessToken: string) => {
-    const formatRoomsData = async () => {
-        const res = (await getUserRooms(accessToken)) as IRoomModel[];
-        return res.map((room) => ({
-            id: room._id,
-            roomName: room.room_name,
-            admin: room.admin,
-            createdAt: room.created_at,
-        }));
-    };
-
-    return useQuery({ queryKey: QUERY_KEY.rooms, queryFn: formatRoomsData });
+export const formatRoomsData = async (accessToken?: string) => {
+    const res = (await getUserRooms(accessToken)) as IRoomModel[];
+    return res.map((room) => ({
+        id: room._id,
+        roomName: room.room_name,
+        admin: room.admin,
+        createdAt: room.created_at,
+        userIds: room.userIds,
+    }));
 };
 
-export const useDeleteRoom = (roomId: string, accessToken: string) => {
+export const useGetUserRooms = (accessToken?: string) => {
+    return useQuery({ queryKey: QUERY_KEY.rooms, queryFn: () => formatRoomsData(accessToken) });
+};
+
+export const useDeleteRoom = (roomId: string) => {
     return useMutation({
-        mutationFn: () => deleteRoom(roomId, accessToken),
+        mutationFn: () => deleteRoom(roomId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEY.rooms });
         },

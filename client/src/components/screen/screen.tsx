@@ -1,17 +1,23 @@
 import React, { useEffect, useRef } from "react";
 import style from "./screen.module.scss";
 
-const Screen = ({ videoRef, stream }) => {
+interface IProps {
+    currentStream: MediaStream
+    userName: string
+}
+
+const Screen = ({ currentStream, userName }: IProps) => {
+    const videoRef = useRef<HTMLVideoElement | null>(null);
     useEffect(() => {
-        if (videoRef && videoRef.current && stream) {
-            videoRef.current.srcObject = stream;
+        if (videoRef && videoRef.current && currentStream) {
+            videoRef.current.srcObject = currentStream;
         }
-    }, [videoRef, stream]);
+    }, [videoRef, currentStream]);
 
     return (
         <div className={style.screen_container}>
-            <video className={style.screen} autoPlay={true} ref={videoRef}></video>
-            <span className={style.user_name}>Username</span>
+            <video className={style.screen} autoPlay={true} ref={videoRef} />
+            <span className={style.user_name}>{userName}</span>
         </div>
     );
 };

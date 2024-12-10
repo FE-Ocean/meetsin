@@ -1,5 +1,5 @@
-import { BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { UserEntity } from "src/schema/user.schema";
+import { BadRequestException, ForbiddenException, Injectable } from "@nestjs/common";
+import { User } from "src/schema/user.schema";
 import { UsersRepository } from "src/users/users.repository";
 import dotenv from "dotenv";
 import { Response } from "express";
@@ -17,38 +17,41 @@ export class AuthService {
 
     async signIn(req: LoginRequest, res: Response) {
         try {
-            const userData = req.user as UserEntity
+            const userData = req.user as User;
 
-            let user: UserEntity;
+            let user: User;
 
-            if(!userData){
-                throw new BadRequestException('Unauthenticated');
+            if (!userData) {
+                throw new BadRequestException("Unauthenticated");
             }
 
-            user = await this.usersRepository.findUserById(userData.user_id);
+            user = await this.usersRepository.findUserByEmailAndProvider(
+                userData.email,
+                userData.provider,
+            );
 
-            if(!user) {
+            if (!user) {
                 user = await this.signUp(userData);
             }
-            
+
             const jwtPayload = {
-                id: user.user_id,
-                email: user.email
-            }
+                id: user.id,
+                email: user.email,
+            };
 
-            const accessToken = this.jwtService.sign(jwtPayload)
+            const accessToken = this.jwtService.sign(jwtPayload);
 
-            await this.usersRepository.updateAccessToken(user, accessToken)
-            
+            await this.usersRepository.updateAccessToken(user, accessToken);
+
             return {
-                access_token: accessToken
-            }
-        } catch(error) {
-            throw new ForbiddenException("Signin Failed");
+                access_token: accessToken,
+            };
+        } catch (error) {
+            throw new ForbiddenException(error);
         }
     }
 
-    async signUp(userData: UserEntity) {
+    async signUp(userData: User) {
         const user = this.usersRepository.createUser(userData);
         await this.usersRepository.saveUser(user);
         return user;
