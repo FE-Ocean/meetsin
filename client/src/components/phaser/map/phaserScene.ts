@@ -70,11 +70,11 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.isChatFocused = false;
     }
 
-    setIsChatFocused(value: boolean) {
+    setIsChatFocused(value: boolean): void {
         this.isChatFocused = value;
     }
 
-    preload() {
+    preload(): void {
         this.load.image("base", "/map/base.png");
         this.load.image("indoor", "/map/indoor.png");
         this.load.image("urban", "/map/urban.png");
@@ -87,7 +87,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         }
     }
 
-    create() {
+    create(): void {
         const map = this.make.tilemap({ key: "map" });
         const tileBase = map.addTilesetImage("base", "base")!;
         const tileIndoor = map.addTilesetImage("indoor", "indoor")!;
@@ -119,12 +119,12 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.input.keyboard!.disableGlobalCapture();
     }
 
-    update() {
+    update(): void {
         if (this.player) this.handlePlayerMovement(this.player);
         this.updateNameTags();
     }
 
-    private setupSocket() {
+    private setupSocket(): void {
         this.socket.emit("join_phaser_room", this.roomId);
         this.socket.on("roomInfo", (roomInfo: RoomInfo) => this.handleRoomInfo(roomInfo));
         this.socket.on("newPlayer", ({ playerInfo }: { playerInfo: PlayerInfo }) =>
@@ -137,14 +137,14 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         );
     }
 
-    private handleRoomInfo(roomInfo: RoomInfo) {
+    private handleRoomInfo(roomInfo: RoomInfo): void {
         const { players } = roomInfo;
         Object.entries(players).forEach(([id, playerInfo]) => {
             id === this.socket.id ? this.addPlayer(playerInfo) : this.addOtherPlayers(playerInfo);
         });
     }
 
-    private setupAnimations() {
+    private setupAnimations(): void {
         for (let i = 1; i <= 6; i++) {
             const spriteKey = `player${i}`;
 
@@ -184,7 +184,9 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         }
     }
 
-    private handlePlayerMovement(player: Phaser.Physics.Arcade.Sprite & { moving?: boolean }) {
+    private handlePlayerMovement(
+        player: Phaser.Physics.Arcade.Sprite & { moving?: boolean },
+    ): void {
         if (this.isChatFocused) return;
 
         player.setVelocity(0);
@@ -273,12 +275,12 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         );
     }
 
-    private emitPlayerMovement(player: Phaser.Physics.Arcade.Sprite, direction: Direction) {
+    private emitPlayerMovement(player: Phaser.Physics.Arcade.Sprite, direction: Direction): void {
         if (!player || !this.socket) return;
         this.socket.emit("move", { x: player.x, y: player.y, roomId: this.roomId, direction });
     }
 
-    private emitStopMovement() {
+    private emitStopMovement(): void {
         if (!this.socket) return;
         this.socket.emit("stop", { playerId: this.player.playerId, roomId: this.roomId });
     }
