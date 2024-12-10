@@ -1,20 +1,19 @@
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import useTimer from "./hooks/useTimer";
 import useStopTimer from "./hooks/useStopTimer";
 import { useCreatePushNotification } from "@/apis/service/notification.service";
 import { numberToString } from "@/utils";
 import timer_icon from "/public/timer.svg";
 import style from "./timer.module.scss";
+import { IRoomUser } from "@/types/chat";
 
 interface ITimer {
+    roomUsers: IRoomUser[];
     setIsTimerVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Timer = ({ setIsTimerVisible }: ITimer) => {
-    const param = useParams();
-    const roomId = param.roomId as string;
+const Timer = ({ roomUsers, setIsTimerVisible }: ITimer) => {
     const [confirmStop, setConfirmStop] = useState(false);
     const hasCalledMutate = useRef(false);
 
@@ -32,7 +31,8 @@ const Timer = ({ setIsTimerVisible }: ITimer) => {
         if (!hasCalledMutate.current) {
             hasCalledMutate.current = true;
             playSoundEffect();
-            mutate({ roomId });
+            const userIds = roomUsers.map((user) => user.userId);
+            mutate({ userIds });
         }
     };
 

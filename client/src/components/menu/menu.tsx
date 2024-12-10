@@ -25,7 +25,7 @@ interface IMenu {
 
 const Menu = (props: IMenu) => {
     const { className, onScreenShare, toggleChat, roomUsers } = props;
-    
+
     const [roomUserInfoOpen, setRoomUserInfoOpen] = useState(false);
     const screenShareState = useAtomValue(screenShareStateAtom);
     const [isTimerVisible, setIsTimerVisible] = useAtom(isTimerVisibleAtom);
@@ -76,7 +76,9 @@ const Menu = (props: IMenu) => {
             <LinkCopyButton className={style.link_copy_button} />
 
             <div className={style.right_container}>
-                {isTimerVisible && <Timer setIsTimerVisible={setIsTimerVisible} />}
+                {isTimerVisible && (
+                    <Timer roomUsers={roomUsers} setIsTimerVisible={setIsTimerVisible} />
+                )}
                 <ul className={style.menu_bar}>
                     <li>
                         <button
@@ -87,7 +89,9 @@ const Menu = (props: IMenu) => {
                     </li>
                     <li>
                         <button
-                            className={`${style.screen_share} ${screenShareState === IScreenShareState.SELF_SHARING && style.active}`}
+                            className={`${style.screen_share} ${
+                                screenShareState === IScreenShareState.SELF_SHARING && style.active
+                            }`}
                             onClick={onScreenShare}
                             aria-label="화면 공유하기"
                         ></button>

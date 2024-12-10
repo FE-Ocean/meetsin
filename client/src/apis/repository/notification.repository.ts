@@ -9,6 +9,8 @@ export const deleteSubscriptionFromDB = async () => {
     return await baseClient.delete("/notification");
 };
 
-export const createPushNotification = async (roomId: string) => {
-    return await baseClient.post(`/notification/${roomId}`);
+export const createPushNotification = async (userIds: string[]) => {
+    return await baseClient.post("/notification/push", {
+        userIds,
+    });
 };
