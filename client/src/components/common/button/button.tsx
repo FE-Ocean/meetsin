@@ -21,7 +21,7 @@ const Button = ({ type, onClick, look, width, text, bold, leftIcon, rightIcon, d
             className={`${style.common} ${style[look]} ${bold && style.bold}`}
             disabled={disabled}
             style={{
-                width: width ? `${width}px` : 'auto',
+                width: width ? `${width}px` : "auto",
             }}
         >
             {leftIcon && <Image src={leftIcon} alt={text} width={18} height={18} className={style.icon}/>}
