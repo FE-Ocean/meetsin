@@ -24,8 +24,8 @@ export class NotificationController {
         return this.notificationService.deleteSubscription(user.id);
     }
 
-    @Post(":roomId")
-    createPushNotification(@Param("roomId") roomId: Types.ObjectId) {
-        return this.notificationService.createPushNotification(roomId);
+    @Post("push")
+    createPushNotification(@Body("userIds") userIds: string[]) {
+        return this.notificationService.createPushNotification(userIds);
     }
 }

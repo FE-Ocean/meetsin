@@ -86,8 +86,8 @@ export const useDeleteSubscriptionFromDB = () => {
 
 export const useCreatePushNotification = () => {
     return useMutation({
-        mutationFn: async ({ roomId }: { roomId: string }) => {
-            return await createPushNotification(roomId);
+        mutationFn: async ({ userIds }: { userIds: string[] }) => {
+            return await createPushNotification(userIds);
         },
     });
 };

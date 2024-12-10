@@ -13,7 +13,7 @@ export class UsersRepository {
         } as User;
     }
 
-    async findUserById(id: Types.ObjectId) {
+    async findUserById(id: string) {
         const user = await this.userModel.findById(id);
         return user;
     }

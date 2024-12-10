@@ -43,10 +43,7 @@ export class RoomsService {
         return await room.save();
     }
 
-    async getRoomUserSubscriptions(roomId: Types.ObjectId) {
-        const room = await this.getRoomById(roomId);
-        const userIds = room.userIds.map((user) => user._id);
-
+    async getRoomUserSubscriptions(userIds: string[]) {
         const users = await Promise.all(
             userIds.map((userId) => this.userRepository.findUserById(userId)),
         );
@@ -55,37 +52,6 @@ export class RoomsService {
             .filter((user) => user.notification !== undefined)
             .flatMap((user) => user.notification!);
         return subscriptions;
-    }
-
-    async addUserToRoom(roomId: string, newUserId: Types.ObjectId) {
-        const newUserData = await this.userRepository.findUserById(newUserId);
-
-        const updatedRoomUserIds = await this.roomModel.updateOne(
-            { _id: roomId },
-            { $addToSet: { userIds: newUserData } },
-        );
-
-        if (!updatedRoomUserIds) {
-            throw new Error("Room에 사용자가 추가되지 않았습니다.");
-        }
-
-        return updatedRoomUserIds;
-    }
-
-    async removeUserFromRoom(roomId: string, removeUserId: Types.ObjectId) {
-        const updatedRoom = await this.roomModel
-            .findOneAndUpdate(
-                { _id: roomId },
-                { $pull: { userIds: { _id: new Types.ObjectId(removeUserId) } } },
-                { new: true },
-            )
-            .exec();
-
-        if (!updatedRoom) {
-            throw new Error("Room에 사용자가 제거되지 않았습니다.");
-        }
-
-        return updatedRoom;
     }
 
     async deleteRoom(roomId: Types.ObjectId) {

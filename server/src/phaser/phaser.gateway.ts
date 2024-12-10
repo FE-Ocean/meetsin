@@ -24,8 +24,22 @@ export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGate
     private gameRooms = {};
     private socketRoomMap: Map<string, string>;
 
+    private roomCharacters: Map<string, Set<number>>;
+
     constructor() {
         this.socketRoomMap = new Map<string, string>();
+        this.roomCharacters = new Map<string, Set<number>>();
+    }
+
+    // 사용 가능한 캐릭터 ID 가져오기
+    private getAvailableCharacterId(roomId: string): number {
+        const usedCharacters = this.roomCharacters.get(roomId) || new Set<number>();
+        for (let i = 1; i <= 6; i++) {
+            if (!usedCharacters.has(i)) {
+                return i;
+            }
+        }
+        return 1; // 모든 캐릭터가 사용 중인 경우 1 반환
     }
 
     @WebSocketServer() server: Server;
@@ -46,11 +60,24 @@ export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGate
 
     handleDisconnect(@ConnectedSocket() socket: Socket) {
         const roomId = this.socketRoomMap.get(socket.id);
+        const player = this.gameRooms[roomId]?.players[socket.id];
+
+        if (player) {
+            // 사용했던 캐릭터 ID 반환
+            const characterId = player.characterId;
+            this.roomCharacters.get(roomId)?.delete(characterId);
+        }
         this.server
             .to(roomId)
             .emit("userDisconnected", { user: { username: socket.data.user, userId: socket.id } });
 
         delete this.gameRooms[roomId]?.players[socket.id];
+
+        // 방에 더 이상 플레이어가 없으면 방 정보 정리
+        if (Object.keys(this.gameRooms[roomId]?.players || {}).length === 0) {
+            delete this.gameRooms[roomId];
+            this.roomCharacters.delete(roomId);
+        }
     }
 
     @SubscribeMessage("join_phaser_room")
@@ -59,12 +86,22 @@ export class PhaserGateway implements OnGatewayConnection, OnGatewayInit, OnGate
         socket.join(roomId);
         this.socketRoomMap.set(socket.id, roomId);
 
+        // 해당 방의 사용 중인 캐릭터 Set 가져오기 또는 생성
+        if (!this.roomCharacters.has(roomId)) {
+            this.roomCharacters.set(roomId, new Set<number>());
+        }
+
+        // 사용 가능한 캐릭터 ID 할당
+        const characterId = this.getAvailableCharacterId(roomId);
+        this.roomCharacters.get(roomId).add(characterId);
+
         const playerInfo = {
             rotation: 0,
             x: 360,
             y: 192,
             playerId: socket.id,
             user: socket.data.user,
+            characterId: characterId, // 캐릭터 ID 추가
         };
 
         if (this.gameRooms[roomId]) {
