@@ -12,13 +12,12 @@ interface IProps {
 const LoginButton = ({ loginType }: IProps) => {
     const login = async (loginType: SOCIAL_LOGIN_TYPE) => {
         window.location.href = `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login/${loginType}`;
-
     };
 
     return (
         <button className={`${style.button} ${style[loginType]}`} onClick={() => login(loginType)}>
             <Image
-                src={`/icon/login/${loginType}.svg`}
+                src={`/icons/login/${loginType}.svg`}
                 className={style.icon}
                 alt=""
                 width="32"

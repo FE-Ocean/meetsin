@@ -18,10 +18,10 @@
             gap: 5px;
 
             .rename_button {
-                @include hover_button(32px, url(/icon/pencil.svg));
+                @include hover_button(32px, url(/icons/pencil.svg));
             }
             .delete_button {
-                @include hover_button(32px, url(/icon/trash.svg));
+                @include hover_button(32px, url(/icons/trash.svg));
             }
         }
     }

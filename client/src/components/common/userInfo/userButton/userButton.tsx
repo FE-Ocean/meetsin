@@ -1,7 +1,7 @@
 import ProfileImage from "@/components/common/profileImage/profileImage";
 import style from "./userButton.module.scss";
 
-import { useGetUserInfo } from "@/app/api/service/user.service";
+import { useGetUserInfo } from "@/apis/service/user.service";
 
 interface IUserButton {
     onClick?: () => void;

@@ -5,7 +5,7 @@ import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query
 import { getUserRooms } from "../api/repository/room.repository";
 import { IRoomModel } from "@/types/room";
 import { getToken } from "@/utils/getToken";
-import { formatRoomsData } from "../api/service/room.service";
+import { formatRoomsData } from "../../apis/service/room.service";
 
 const Lobby = async () => {
     const queryClient = new QueryClient();

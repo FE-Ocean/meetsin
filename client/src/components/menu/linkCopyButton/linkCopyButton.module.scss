@@ -3,7 +3,7 @@
 .link_before_copy {
     @include round_button;
     &:after {
-        background-image: url(/circles-relation.svg);
+        background-image: url(/icons/circles_relation.svg);
     }
 }
 
@@ -11,6 +11,6 @@
     @include round_button;
     cursor: default;
     &:after {
-        background-image: url(/double-check.svg);
+        background-image: url(/icons/double_check.svg);
     }
 }

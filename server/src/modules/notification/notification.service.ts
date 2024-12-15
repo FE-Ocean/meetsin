@@ -44,7 +44,7 @@ export class NotificationService {
         const message = JSON.stringify({
             title: "시간이 종료되었습니다.",
             body: "타이머 설정 시간이 종료되었습니다.",
-            icon: "/timer.svg",
+            icon: "/icons/timer.svg",
         });
 
         try {

@@ -14,7 +14,7 @@ import { useScreenShare } from "./hooks/useScreenShare";
 import ViewSwitchButton from "@/components/button/viewSwitchButton/viewSwitchButton";
 import { IScreenShareState } from "@/types/peer.type";
 import RoomGradientBackground from "@/components/background/room/roomGradientBackground";
-import { useGetRoomData } from "@/app/api/service/room.service";
+import { useGetRoomData } from "@/apis/service/room.service";
 
 const PhaserMap = dynamic(() => import("../../../components/phaser/map/map"), {
     ssr: false,

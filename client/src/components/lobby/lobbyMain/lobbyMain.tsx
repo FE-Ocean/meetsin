@@ -1,7 +1,7 @@
 "use client";
 
 import style from "./lobbyMain.module.scss";
-import { useGetUserRooms } from "@/app/api/service/room.service";
+import { useGetUserRooms } from "@/apis/service/room.service";
 import RoomCard from "@/components/room/roomCard/roomCard";
 
 const LobbyMain = () => {

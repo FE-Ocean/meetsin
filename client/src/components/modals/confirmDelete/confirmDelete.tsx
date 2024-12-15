@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import { roomIdAtom } from "@/jotai/atom";
-import { useDeleteRoom } from "@/app/api/service/room.service";
+import { useDeleteRoom } from "@/apis/service/room.service";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 import Button from "@/components/common/button/button";
 import style from "./confirmDelete.module.scss";

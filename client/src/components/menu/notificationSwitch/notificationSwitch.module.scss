@@ -4,7 +4,7 @@
     @include round_button;
     margin-left: 10px;
     &::after {
-        background-image: url(/notification_on.svg);
+        background-image: url(/icons/notification_on.svg);
     }
 }
 
@@ -12,6 +12,6 @@
     @include round_button;
     margin-left: 10px;
     &::after {
-        background-image: url(/notification_off.svg);
+        background-image: url(/icons/notification_off.svg);
     }
 }

@@ -80,7 +80,7 @@ export class MeetsInPhaserScene extends Phaser.Scene {
         this.load.image("urban", "/map/urban.png");
         this.load.tilemapTiledJSON("map", "/map/map.json");
         for (let i = 1; i <= 6; i++) {
-            this.load.spritesheet(`player${i}`, `/player${i}.png`, {
+            this.load.spritesheet(`player${i}`, `/players/player${i}.png`, {
                 frameWidth: 16,
                 frameHeight: 16,
             });

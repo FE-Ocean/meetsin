@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import style from "./roomUserInfo.module.scss";
 import { IRoomUser } from "@/types/chat";
-import { useGetRoomData } from "@/app/api/service/room.service";
+import { useGetRoomData } from "@/apis/service/room.service";
 
 interface Props {
     roomUsers: IRoomUser[];

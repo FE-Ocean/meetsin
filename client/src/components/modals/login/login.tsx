@@ -8,13 +8,13 @@ import { BaseModal } from "@/components/modal/baseModal/baseModal";
 
 const Login = () => {
     const { onClose } = useModal("login");
-    
+
     return (
         <BaseModal onClose={onClose}>
             <div className={style.login_modal}>
                 <h2 className={style.title}>로그인</h2>
                 <button className={style.close_button} onClick={onClose}>
-                    <Image src={"close.svg"} alt="close button" width={24} height={24} />
+                    <Image src={"/icons/close.svg"} alt="close button" width={24} height={24} />
                 </button>
                 <ul className={style.button_list}>
                     {Object.keys(SOCIAL_LOGIN).map((loginType) => {

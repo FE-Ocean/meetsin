@@ -5,7 +5,7 @@ import { isTimerVisibleAtom, screenShareStateAtom, timerAtom } from "@/jotai/ato
 import Image from "next/image";
 import Timer from "../timer/timer";
 import useModal from "@/hooks/useModal";
-import active_user_icon from "/public/active_user.svg";
+import active_user_icon from "/public/icons/active_user.svg";
 import NotificationSwitch from "./notificationSwitch/notificationSwitch";
 import UserInfo from "../common/userInfo/userInfo";
 import LinkCopyButton from "./linkCopyButton/linkCopyButton";
