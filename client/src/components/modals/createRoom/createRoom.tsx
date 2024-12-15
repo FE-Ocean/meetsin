@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 import { useCreateRoom } from "@/apis/service/room.service";
-import useModal from "@/hooks/useModal";
+import useModal from "@/components/modal/hooks/useModal";
 import Button from "@/components/common/button/button";
 import style from "./createRoom.module.scss";
 

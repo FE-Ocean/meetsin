@@ -1,14 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/common/button/button";
-import useModal from "@/hooks/useModal";
+import useModal from "@/components/modal/hooks/useModal";
 import style from "./style.module.scss";
 import { LANDING_CONTENTS } from "@/constants/landing.const";
 import { motion, AnimatePresence } from "motion/react";
 
 const Home = () => {
     const { onOpen } = useModal("login");
-
 
     useEffect(() => {
         const registerServiceWorker = async () => {
@@ -31,7 +30,6 @@ const Home = () => {
             stopCarousel();
         };
     }, []);
-    
 
     const startCarousel = () => {
         intervalRef.current = setInterval(() => {
@@ -67,13 +65,25 @@ const Home = () => {
                             {/* TODO: 여기 img로 수정 */}
                             <div className={style.carousel_image} />
                             <div className={style.carousel_text}>
-                                <p className={style.carousel_text_title}>{LANDING_CONTENTS[currentIndex].title}</p>
-                                <p className={style.carousel_text_description}>{LANDING_CONTENTS[currentIndex].description}</p>
+                                <p className={style.carousel_text_title}>
+                                    {LANDING_CONTENTS[currentIndex].title}
+                                </p>
+                                <p className={style.carousel_text_description}>
+                                    {LANDING_CONTENTS[currentIndex].description}
+                                </p>
                             </div>
                         </motion.div>
                         <ol className={style.carousel_navigator}>
                             {LANDING_CONTENTS.map((content, index) => {
-                                return <li className={`${style.carousel_navigator_item} ${currentIndex === index && style.active}`} onClick={() => setCurrentIndex(index)} key={index}/>;
+                                return (
+                                    <li
+                                        className={`${style.carousel_navigator_item} ${
+                                            currentIndex === index && style.active
+                                        }`}
+                                        onClick={() => setCurrentIndex(index)}
+                                        key={index}
+                                    />
+                                );
                             })}
                         </ol>
                     </div>
@@ -82,6 +92,5 @@ const Home = () => {
         </div>
     );
 };
-
 
 export default Home;

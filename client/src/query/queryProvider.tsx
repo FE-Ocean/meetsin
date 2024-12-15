@@ -7,8 +7,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 export const queryClient = new QueryClient();
 
 export const QueryProvider = ({ children }: { children: ReactNode }) => {
-    return <QueryClientProvider client={queryClient}>
-        {children}
-        <ReactQueryDevtools />
-    </QueryClientProvider>;
+    return (
+        <QueryClientProvider client={queryClient}>
+            {children}
+            <ReactQueryDevtools />
+        </QueryClientProvider>
+    );
 };

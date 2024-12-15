@@ -1,5 +1,5 @@
 import { addAuthHeader, baseClient, createAuthHeader } from "@/modules/fetchClient";
-import { ICreateRoomResponse, IPatchRoom } from "@/types/room";
+import { ICreateRoomResponse, IPatchRoom } from "@/types/room.type";
 
 export const getRoomInfo = async (roomId: string, accessToken?: string) => {
     const headers = createAuthHeader(accessToken);

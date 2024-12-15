@@ -3,7 +3,7 @@ import style from "./login.module.scss";
 import LoginButton from "@/components/button/login/loginButton";
 import { SOCIAL_LOGIN } from "@/constants/login.const";
 import Image from "next/image";
-import useModal from "@/hooks/useModal";
+import useModal from "@/components/modal/hooks/useModal";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
 
 const Login = () => {

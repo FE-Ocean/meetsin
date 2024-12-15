@@ -1,4 +1,4 @@
-import useModal from "@/hooks/useModal";
+import useModal from "@/components/modal/hooks/useModal";
 import dynamic from "next/dynamic";
 
 interface ILazy {

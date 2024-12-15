@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { IRoom } from "@/types/room";
+import { IRoom } from "@/types/room.type";
 import { useSetAtom } from "jotai";
 import { roomIdAtom } from "@/jotai/atom";
-import useModal from "@/hooks/useModal";
+import useModal from "@/components/modal/hooks/useModal";
 import style from "./roomCard.module.scss";
 
 const ROOM_ACTION = {
