@@ -23,7 +23,7 @@ export class NotificationController {
         return this.notificationService.deleteSubscription(user.id);
     }
 
-    @Post("push")
+    @Post("/push")
     createPushNotification(@Body("userIds") userIds: string[]) {
         return this.notificationService.createPushNotification(userIds);
     }

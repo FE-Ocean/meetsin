@@ -17,7 +17,7 @@ export class RoomsController {
         return this.roomsService.createRoom(roomData, user);
     }
 
-    @Get("user")
+    @Get("/user")
     getRoomsByUserId(@CurrentUser() user: User) {
         return this.roomsService.getRoomsByUserId(user.id);
     }
@@ -32,7 +32,7 @@ export class RoomsController {
         return this.roomsService.updateRoom(roomId, roomData.roomName);
     }
 
-    @Delete(":roomId")
+    @Delete("/:roomId")
     deleteRoom(@Param("roomId") roomId: Types.ObjectId) {
         return this.roomsService.deleteRoom(roomId);
     }
