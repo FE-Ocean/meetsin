@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useGetUserInfo } from "@/app/api/service/user.service";
+import { useGetUserInfo } from "@/apis/service/user.service";
 import { roomSocket } from "@/socket";
-import { IRoomUser, IMessage } from "@/types/chat";
+import { IRoomUser, IMessage } from "@/types/chat.type";
 
 interface Params {
     roomId: string;

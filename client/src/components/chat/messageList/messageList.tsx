@@ -1,8 +1,8 @@
-import { IMessage } from "@/types/chat";
+import { IMessage } from "@/types/chat.type";
 import MyMessage from "../myMessage/myMessage";
 import ReceivedMessage from "../receivedMessage/receivedMessage";
 import style from "./messageList.module.scss";
-import { useGetUserInfo } from "@/app/api/service/user.service";
+import { useGetUserInfo } from "@/apis/service/user.service";
 
 interface Props {
     messages: IMessage[];

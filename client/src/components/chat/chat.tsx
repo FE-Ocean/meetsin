@@ -4,7 +4,7 @@ import style from "./chat.module.scss";
 import MessageInput from "./messageInput/messageInput";
 import MessageList from "./messageList/messageList";
 import ScrollToBottom from "./scrollToBottom/scrollToBottom";
-import { IMessage } from "@/types/chat";
+import { IMessage } from "@/types/chat.type";
 
 interface IChatProps {
     className: string;

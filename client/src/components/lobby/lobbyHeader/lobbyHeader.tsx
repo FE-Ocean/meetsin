@@ -2,7 +2,7 @@
 
 import UserInfo from "@/components/common/userInfo/userInfo";
 import style from "./lobbyHeader.module.scss";
-import useModal from "@/hooks/useModal";
+import useModal from "@/components/modal/hooks/useModal";
 import Button from "@/components/common/button/button";
 
 const LobbyHeader = () => {

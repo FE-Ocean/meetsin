@@ -14,7 +14,7 @@
 
     &:hover {
         .pre_stop_button {
-            @include hover_button(34px, url(/icon/stop.svg));
+            @include hover_button(34px, url(/icons/stop.svg));
             position: absolute;
             left: 12px;
         }
@@ -35,7 +35,7 @@
     width: 8px;
     height: 12px;
     left: -15px;
-    background: no-repeat center url(/icon/arrow.svg);
+    background: no-repeat center url(/icons/arrow.svg);
 }
 
 .stop_confirmation {
@@ -49,7 +49,7 @@
 }
 
 .stop_button {
-    @include hover_button(32px, url(/icon/stop_warning.svg));
+    @include hover_button(32px, url(/icons/stop_warning.svg));
     position: absolute;
     right: 7px;
 }

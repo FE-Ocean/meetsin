@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import useMessage from "@/components/chat/messageInput/hooks/useMessage";
 import useAdjustHeight from "@/components/chat/messageInput/hooks/useAdjustHeight";
 import useResetHeight from "@/components/chat/messageInput/hooks/useResetHeight";
-import { useGetUserInfo } from "@/app/api/service/user.service";
+import { useGetUserInfo } from "@/apis/service/user.service";
 import { useAtom } from "jotai";
 import { isChatFocusedAtom } from "@/jotai/atom";
 import style from "./messageInput.module.scss";

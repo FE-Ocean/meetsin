@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import { BaseModal } from "@/components/modal/baseModal/baseModal";
-import { useCreateRoom } from "@/app/api/service/room.service";
-import useModal from "@/hooks/useModal";
+import { useCreateRoom } from "@/apis/service/room.service";
+import useModal from "@/components/modal/hooks/useModal";
 import Button from "@/components/common/button/button";
 import style from "./createRoom.module.scss";
 
@@ -41,7 +41,14 @@ const CreateRoom = () => {
                     placeholder="방 이름을 입력하세요 (최대 20자)"
                 />
                 <div className={style.buttons}>
-                    <Button type="button" onClick={onClose} look="ghost" width={100} text="닫기" bold />
+                    <Button
+                        type="button"
+                        onClick={onClose}
+                        look="ghost"
+                        width={100}
+                        text="닫기"
+                        bold
+                    />
                     <Button type="submit" look="solid" width={100} text="만들기" bold />
                 </div>
             </form>
